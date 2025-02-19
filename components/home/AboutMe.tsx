@@ -12,13 +12,13 @@ export default async function AboutMe() {
           </h1>
           <div className="mt-6 max-w-7xl space-y-3 text-lg text-white/75 sm:text-xl md:mt-8 md:max-w-3xl">
             <p>
-              I am a passionate and results-driven Software Engineer with hands-on experience in backend development, system optimization, and scalable application design. Currently, I am enhancing user navigation and API performance as a Software Engineer Co-op at the Network Science Institute, Boston, where I’ve implemented tag-based systems and connection pooling to achieve measurable efficiency gains.
+              I am a passionate and results-driven Software Engineer with hands-on experience in backend development, system optimization, micro-services architecture and scalable application design. Currently, I am enhancing user navigation and API performance as a Software Engineer Co-op at the Network Science Institute, Boston.
             </p>
             <p>
-Previously, as a Backend Developer Intern in San Francisco, I developed an automated scheduler using Java Spring Boot, integrated messaging systems like Apache Kafka and RabbitMQ for seamless microservice communication, and deployed Redis caching to reduce database load by 35%. My work directly contributed to a 15% revenue increase through improved campaign targeting. Additionally, my tenure at Chance App, Mumbai honed my skills in full-stack development using React.js, Node.js, and MongoDB, where I optimized matchmaking algorithms and implemented CI/CD pipelines to enhance deployment efficiency.
+              I am currently pursuing a Master of Science in Computer Science at Northeastern University, where I additionally served as a Teaching Assistant in Full-Stack Web Development. I assist professors with grading, managing class assignments, hosting weekly office hours, and mentoring students.
             </p>
             <p>
-I specialize in designing robust systems using technologies like Java Spring Boot, React.js, Docker, Kubernetes, and databases such as Redis, MySQL, and MongoDB. My projects reflect my dedication to creating user-centric solutions—ranging from an image processing application with MVC architecture to scalable web applications deployed on AWS.
+I specialize in designing robust systems using technologies like Java Spring Boot, React.js, Docker, Kubernetes, Apache Kafka and databases such as Redis, MySQL, and MongoDB. My projects reflect my dedication to creating user-centric solutions—ranging from an image processing application with MVC architecture to scalable web applications deployed on AWS.
             </p>
             <p>
 Driven by a commitment to innovation and collaboration, I aim to build impactful software solutions that solve real-world problems while continuously advancing my technical expertise.
