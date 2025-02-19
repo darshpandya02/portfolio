@@ -12,21 +12,20 @@ export default async function AboutMe() {
           </h1>
           <div className="mt-6 max-w-7xl space-y-3 text-lg text-white/75 sm:text-xl md:mt-8 md:max-w-3xl">
             <p>
-              a senior-year Computer Science and Engineering student
-              specializing in full-stack development with a strong focus on
-              backend technologies. My expertise includes working with stacks
-              like FARM/P, ASP.NET, MERN, and PERN. I have professional
-              experience in C# (ASP.NET Core 8), PERN stack and basic Bash
-              scripting. Additionally, I have some foundational academic
-              experience in C and Java. When it comes to databases, SQL is my
-              jam, and I prefer it over NoSQL options.
+              I am a passionate and results-driven Software Engineer with hands-on experience in backend development, system optimization, and scalable application design. Currently, I am enhancing user navigation and API performance as a Software Engineer Co-op at the Network Science Institute, Boston, where I’ve implemented tag-based systems and connection pooling to achieve measurable efficiency gains.
             </p>
             <p>
-              I love designing, developing, and deploying apps from start to
-              finish. Whether it&apos;s creating something new or tweaking an
-              existing project, I&apos;m always up for it! When I&apos;m not
-              coding, you&apos;ll find me locked into Assassin&apos;s Creed or
-              Valorant.
+Previously, as a Backend Developer Intern in San Francisco, I developed an automated scheduler using Java Spring Boot, integrated messaging systems like Apache Kafka and RabbitMQ for seamless microservice communication, and deployed Redis caching to reduce database load by 35%. My work directly contributed to a 15% revenue increase through improved campaign targeting. Additionally, my tenure at Chance App, Mumbai honed my skills in full-stack development using React.js, Node.js, and MongoDB, where I optimized matchmaking algorithms and implemented CI/CD pipelines to enhance deployment efficiency.
+            </p>
+            <p>
+I specialize in designing robust systems using technologies like Java Spring Boot, React.js, Docker, Kubernetes, and databases such as Redis, MySQL, and MongoDB. My projects reflect my dedication to creating user-centric solutions—ranging from an image processing application with MVC architecture to scalable web applications deployed on AWS.
+            </p>
+            <p>
+Driven by a commitment to innovation and collaboration, I aim to build impactful software solutions that solve real-world problems while continuously advancing my technical expertise.
+            </p>
+            <p>
+              When I&apos;m not
+              coding, you&apos;ll find me travelling to new places around the world, or diving into valorant.
             </p>
             <p>
               If it&apos;s about solving problems and building cool stuff,
