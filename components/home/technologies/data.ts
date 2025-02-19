@@ -7,6 +7,8 @@ export default async function getTechnologies(): Promise<Technology[]> {
     throw new Error("Database connection failed");
   }
 
+  console.log("Requesting technologies from Database")
+
   return await client
       .db(process.env.DB_NAME as string)
       .collection<Technology>("technologies")
