@@ -22,7 +22,7 @@ export default async function TechnologyCard({
                 ? "Backend"
                 : category === "db"
                   ? "Databases"
-                  : "Tools"}
+                  : "Cloud Technologies & Tools"}
         </div>
       </div>
       <ul

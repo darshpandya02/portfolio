@@ -11,7 +11,6 @@ export default async function TechnologyDisplay() {
     "backend",
     "db",
     "tool",
-    "acad",
   ];
 
   return (
