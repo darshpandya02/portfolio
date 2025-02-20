@@ -10,7 +10,7 @@ export default function Navbar() {
     page === "" ? "Home" : page.charAt(0).toUpperCase() + page.slice(1);
 
   return (
-    <nav className="border-b-2 border-red-600 bg-neutral-950">
+    <nav className="border-b-2 border-blue-600 bg-neutral-950">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="relative flex h-20 justify-center sm:justify-between">
           <div className="relative mt-4 hidden max-h-12 sm:block">

@@ -22,7 +22,7 @@ export default async function ProjectCard({ project }: Props) {
         className="aspect-[3/2] rounded-lg object-contain"
         priority
       />
-      <div className="mt-6 flex max-w-7xl items-center justify-between border-b-2 border-red-500">
+      <div className="mt-6 flex max-w-7xl items-center justify-between border-b-2 border-blue-500">
         <div className="text-lg font-semibold leading-8 tracking-tight text-white">
           {project.name}{" "}
           {project.status === "wip" ? (

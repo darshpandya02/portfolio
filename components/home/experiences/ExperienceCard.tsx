@@ -17,7 +17,7 @@ export default async function ExperienceCard({ xp }: Props) {
       key={xp._id}
       className="mb-6 flex break-inside-avoid flex-col justify-between rounded-lg bg-neutral-800/50 p-5 hover:bg-neutral-800/75"
     >
-      <div className="flex max-w-7xl flex-col border-b-2 border-red-500 pb-2">
+      <div className="flex max-w-7xl flex-col border-b-2 border-blue-500 pb-2">
         <div className="flex max-w-7xl items-center justify-between">
           <div className="flex-1 text-lg font-semibold leading-tight tracking-tight text-white">
             {xp.position}
