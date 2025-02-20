@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import ProjectsDisplay from "@/components/projects/ProjectsDisplay";
+import ResumeDisplay from "@/components/resume/ResumeDisplay";
 
 export const revalidate = 600;
 
@@ -40,6 +41,7 @@ export default async function Projects() {
         description={"Here's a list of projects I have worked/working on."}
         featured={false}
       />
+      <ResumeDisplay />
     </div>
   );
 }

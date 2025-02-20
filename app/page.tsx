@@ -41,11 +41,11 @@ export default async function Home() {
       <AboutMe />
       <TechnologyDisplay />
       <ExperienceDisplay />
-      <ProjectsDisplay
+      {/* <ProjectsDisplay
         heading={"Featured Projects"}
         description={""}
         featured={true}
-      />
+      /> */}
     </div>
   );
 }
