@@ -41,7 +41,6 @@ export default async function Projects() {
         description={"Here's a list of projects I have worked/working on."}
         featured={false}
       />
-      <ResumeDisplay />
     </div>
   );
 }

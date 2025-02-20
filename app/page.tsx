@@ -4,6 +4,7 @@ import TechnologyDisplay from "@/components/home/technologies/TechnologyDisplay"
 import ProjectsDisplay from "@/components/projects/ProjectsDisplay";
 import ExperienceDisplay from "@/components/home/experiences/ExperienceDisplay";
 import AboutMe from "@/components/home/AboutMe";
+import ResumeDisplay from "@/components/resume/ResumeDisplay";
 
 export const revalidate = 600;
 
@@ -46,6 +47,7 @@ export default async function Home() {
         description={""}
         featured={true}
       /> */}
+      <ResumeDisplay />
     </div>
   );
 }
