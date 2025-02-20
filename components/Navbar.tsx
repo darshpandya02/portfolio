@@ -66,29 +66,28 @@ export default function Navbar() {
                 Projects
               </Link>
             </div>
-            <div
-              className={`relative ${
-                pathname !== "/contact" ? "hover:-translate-y-1" : "sm:hidden"
-              }`}
-            >
-              <div
-                className={
-                  pathname === "/contact"
-                    ? "absolute -inset-1.5 bg-blue-500 opacity-40 blur-md"
-                    : "hidden"
-                }
-              />
-              <Link
-                href="/contact"
-                className={`relative rounded-lg bg-neutral-950 px-3 py-2 text-xl font-medium ${
-                  pathname === "/contact"
-                    ? "border-2 border-blue-500 text-blue-100"
-                    : "text-white hover:text-sky-500"
-                }`}
-              >
-                Contact
-              </Link>
-            </div>
+            <div className={`relative ${pathname !== "/resume" ? "hover:-translate-y-1" : "sm:hidden"}`}>
+          <div className={pathname === "/resume" ? "absolute -inset-1.5 bg-blue-500 opacity-40 blur-md" : "hidden"} />
+          <Link
+            href="/resume"
+            className={`relative rounded-lg bg-neutral-950 px-3 py-2 text-xl font-medium ${
+              pathname === "/resume" ? "border-2 border-blue-500 text-blue-100" : "text-white hover:text-sky-500"
+            }`}
+          >
+            Resume
+          </Link>
+        </div>
+        <div className={`relative ${pathname !== "/contact" ? "hover:-translate-y-1" : "sm:hidden"}`}>
+          <div className={pathname === "/contact" ? "absolute -inset-1.5 bg-blue-500 opacity-40 blur-md" : "hidden"} />
+          <Link
+            href="/contact"
+            className={`relative rounded-lg bg-neutral-950 px-3 py-2 text-xl font-medium ${
+              pathname === "/contact" ? "border-2 border-blue-500 text-blue-100" : "text-white hover:text-sky-500"
+            }`}
+          >
+            Contact
+          </Link>
+        </div>
           </div>
         </div>
       </div>

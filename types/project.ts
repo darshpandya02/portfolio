@@ -20,7 +20,6 @@ export type Category =
   | "db"
   | "lang"
   | "tool"
-  | "acad"
   | "no";
 
 export interface TechnologyMetadata {
@@ -52,10 +51,13 @@ export interface Experience {
   _id: string;
   position: string;
   company: string;
+  location: string;
   start: string;
   end: string;
-  projects: ProjectMetadata[];
-  technologies: TechnologyMetadata[];
+  description: string;
+  imageUrl: string;
+  projectUrl: string;
+  status: "completed" | "wip";
 }
 
 export const MessageSchema = z.object({
