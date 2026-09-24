@@ -14,13 +14,15 @@ export const profile = {
   email: "da.pandya@northeastern.edu",
   altEmail: "pandya.dar@northeastern.edu",
   shell: "/bin/zsh",
+  avatar: "/images/darsh.jpg",
+  avatarAlt: "Darsh Pandya",
   tagline: "I build distributed systems and backend services.",
   summary:
     "Software Engineer working on public research infrastructure for reproducible cybersecurity experimentation. MSCS from Northeastern. Most of my time goes to backend design: message queues, sharded consumers, connection pooling, and the unglamorous work of making a system survive its own load.",
   bio: [
     "I'm a software engineer in Boston. I work on SPHERE, an NSF-backed public research infrastructure that lets security researchers run reproducible experiments on real hardware. The interesting part isn't any single service — it's that other people's science depends on the thing staying up and behaving identically on Tuesday as it did on Friday.",
     "Before that I was a Software Engineer Co-op at Northeastern's Network Science Institute, where I reworked fragment navigation into a tag-based system and cut API response times by pooling connections instead of re-paying for TLS handshakes. Prior to Boston I was a backend intern at Gupshup in San Francisco, wiring Kafka for client-facing messaging and RabbitMQ for internal traffic between microservices, and a software engineering intern at Chance App in Mumbai building a match-making service on MERN.",
-    "I finished my M.S. in Computer Science at Northeastern in August 2025 with a 3.95 GPA, and spent a year of it as a Teaching Assistant for Full-Stack Web Development — running tutorials, reviewing code, and writing the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
+    "I finished my M.S. in Computer Science at Northeastern in December 2025 with a 3.97 GPA, and spent a year of it as a Teaching Assistant for Full-Stack Web Development — running tutorials, reviewing code, and writing the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
     "My default stack is Python and TypeScript, with Java when the problem wants a type system with sharp edges. Postgres and Redis for state, Docker and Kubernetes for shipping, and a strong preference for boring, observable architecture over clever architecture.",
     "Away from the keyboard I travel whenever the calendar allows it, and I play an unreasonable amount of Valorant.",
   ],
@@ -64,7 +66,7 @@ export const experience: Experience[] = [
     company: "SPHERE Research Infrastructure",
     role: "Software Engineer",
     location: "Boston, MA",
-    start: "2025",
+    start: "Jan 2026",
     end: "Present",
     current: true,
     summary:
@@ -80,12 +82,29 @@ export const experience: Experience[] = [
     url: "https://sphere-project.net",
   },
   {
+    slug: "ubiwell",
+    company: "UbiWell Lab, Northeastern University",
+    role: "Software Engineer",
+    location: "Boston, MA",
+    start: "Jul 2025",
+    end: "Dec 2025",
+    summary:
+      "Backend and data-collection work for a mobile sensing study, where the research only works if the pipeline keeps running unattended for months.",
+    highlights: [
+      "Ran the Python data pipelines behind Flask, Gunicorn and Nginx on Linux for a study with 60+ active participants.",
+      "Raised dataset completeness by 10% by finding and closing the gaps where sensor uploads were being dropped silently.",
+      "Built the delivery-verification endpoint the team checked before each of 12 releases, so a broken notification path was caught before it cost a day of participant data.",
+      "The whole job is unattended reliability: nobody is watching at 3am, and a participant whose data went missing cannot be asked to re-live the week.",
+    ],
+    stack: ["Python", "Flask", "Gunicorn", "Nginx", "Linux", "PostgreSQL", "Mobile Sensing"],
+  },
+  {
     slug: "netsi",
     company: "Network Science Institute, Northeastern University",
     role: "Software Engineer Co-op",
     location: "Boston, MA",
     start: "Jan 2025",
-    end: "Aug 2025",
+    end: "Jun 2025",
     summary:
       "Backend and API work on research data platforms at Northeastern's Network Science Institute.",
     highlights: [
@@ -160,6 +179,47 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    slug: "farepath",
+    name: "FarePath",
+    tagline: "Offline Mumbai rail routes and fares, with every fare traceable to a source.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "Enter two stations, get the route and what it costs. No network access, no accounts, no ads, no data collection. The entire dataset ships inside the app.",
+      "People spend real money on the numbers this app prints, so fare correctness comes ahead of features. Every fare carries a confidence flag, a source URL and a verification date, and anything merely estimated is labelled that way on screen.",
+    ],
+    highlights: [
+      "Route queries run at p50 2.7 ms and p99 9.1 ms across 260 station pairs, with the graph built once at startup in 0.2 ms.",
+      "Fare is not edge-additive, so Dijkstra alone gives wrong answers. Fare depends on total distance of a contiguous run on one operator, and each operator change restarts that operator's minimum. The engine runs Yen's K-shortest-paths on distance and then prices every candidate exactly.",
+      "Distances are measured along real track geometry rather than straight lines, because on a distance-slab system a chord under-reports on curves and the measured distance is the fare.",
+      "The build fails rather than shipping quietly: pinned OSM relations are asserted against ref, name, stop count and published length, and the network must be fully connected.",
+      "218 stations and 300 edges fit in memory as one 95 KB JSON (14 KB gzipped), which is why there is no on-device SQLite costing 2 MB of native library for indexed queries nobody needs.",
+      "36 core tests and 18 pipeline tests, running on Node's native TypeScript with no build step and no dependencies.",
+    ],
+    stack: ["TypeScript", "Expo", "React Native", "Node", "OpenStreetMap", "Graph Algorithms", "Android"],
+  },
+  {
+    slug: "splitwit",
+    name: "Splitwit",
+    tagline: "Itemized bill splitting without the social network.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "Photograph a receipt, tap what you ordered, get exact numbers. No accounts, no bank linking, no feed.",
+      "Splitting locally makes zero network calls. The Cloudflare Worker is touched only for shared multi-device sessions and an opt-in cloud OCR fallback, so the common case never leaves the phone.",
+    ],
+    highlights: [
+      "Money is always integer cents, never floats. Shares are apportioned by flooring every share and handing leftover cents to the largest fractional remainders, deterministically, so two phones in the same group never disagree about who owes the extra cent.",
+      "Bad OCR degrades loudly instead of silently. The parser asserts items minus discount plus tax plus tip equals the total, and a mismatch is surfaced as low confidence with specific warnings before any money is computed.",
+      "Cut the release APK from 59 MB to 25.4 MB with R8, resource shrinking and dropping unused ML Kit script models. What is left is almost entirely the React Native framework floor.",
+      "Session polling runs only while the app is foregrounded and the screen is focused. It polls a single indexed version counter and fetches the full session only when that changes.",
+      "The core split math is pure TypeScript with zero dependencies, so it runs identically in Node, in a Cloudflare Worker and in the app's JS engine, and is unit-tested accordingly. 26 integration checks run against a live Worker.",
+    ],
+    stack: ["React Native", "TypeScript", "Cloudflare Workers", "D1", "Wrangler", "On-device OCR", "Android", "iOS"],
+  },
   {
     slug: "vate",
     name: "Vate",
@@ -482,8 +542,8 @@ export const education: Education[] = [
     degree: "M.S. in Computer Science",
     location: "Boston, MA",
     start: "Sep 2023",
-    end: "Aug 2025",
-    gpa: "3.95 / 4.0",
+    end: "Dec 2025",
+    gpa: "3.97 / 4.0",
     coursework: [
       "Program Design Paradigm",
       "Web Development",
@@ -500,7 +560,7 @@ export const education: Education[] = [
     location: "Mumbai, India",
     start: "Aug 2019",
     end: "May 2023",
-    gpa: "3.85 / 4.0",
+    gpa: "3.65 / 4.0",
     coursework: [
       "Data Structures",
       "Software Engineering",

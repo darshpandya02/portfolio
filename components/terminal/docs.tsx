@@ -12,6 +12,8 @@ import {
 } from "@/lib/content";
 import type { DocKey } from "@/lib/terminal/fs";
 
+import Avatar from "@/components/ui/Avatar";
+
 import { Bullet, ChipRow, Cmd, DocHeading, Ext, Field, Hint, Internal, Line, Rule } from "./atoms";
 
 function Doc({ children }: { children: ReactNode }) {
@@ -73,15 +75,28 @@ export function AboutDoc() {
   return (
     <Doc>
       <DocHeading level={1}>whoami</DocHeading>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+        <Avatar size={152} priority />
+        <div className="min-w-0 space-y-1.5 pt-1">
+          <div className="text-lg font-semibold text-term-fg sm:text-xl">{profile.fullName}</div>
+          <Line tone="green">{profile.tagline}</Line>
+          <div className="space-y-0.5 pt-1.5">
+            <Field k="currently">
+              {profile.role}, <Ext href={links.sphere}>{profile.company}</Ext>
+            </Field>
+            <Field k="based in">{profile.location}</Field>
+            <Field k="reach me">
+              <Ext href={links.email}>{profile.email}</Ext>
+            </Field>
+          </div>
+        </div>
+      </div>
+      <Rule />
       {profile.bio.map((paragraph, i) => (
         <Para key={i}>{paragraph}</Para>
       ))}
       <Rule />
       <div className="space-y-1">
-        <Field k="currently">
-          {profile.role}, <Ext href={links.sphere}>{profile.company}</Ext>
-        </Field>
-        <Field k="based in">{profile.location}</Field>
         <Field k="focus">{profile.interests.join(" · ")}</Field>
         <Field k="status">{profile.availability}</Field>
       </div>

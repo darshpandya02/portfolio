@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { education, experience, links, profile, projects, publications, skills } from "@/lib/content";
 import { Ascii, asciiName, Bullet, Cmd, Ext, Field, Hint, Line, Rule } from "@/components/terminal/atoms";
+import Avatar from "@/components/ui/Avatar";
 import { ProjectsDoc, renderDoc } from "@/components/terminal/docs";
 import { allFiles, getNode, HOME, listDir, prettyPath, resolvePath, type FsNode } from "./fs";
 import { defaultTheme, themes } from "./themes";
@@ -594,7 +595,7 @@ export const commands: Command[] = [
     group: "system",
     run: (_args, ctx) => (
       <div className="flex flex-col gap-4 text-sm sm:flex-row sm:items-start">
-        <Ascii art={asciiName} className="shrink-0" />
+        <Avatar size={150} className="shrink-0" priority />
         <div className="min-w-0 space-y-0.5">
           <Line tone="green">
             {profile.handle}@{profile.host}
@@ -606,8 +607,10 @@ export const commands: Command[] = [
           <Field k="Uptime">{uptimeString(ctx.bootedAt)} this session</Field>
           <Field k="Shell">{profile.shell}</Field>
           <Field k="Theme">{ctx.theme}</Field>
+          <Field k="Education">{education[0].degree}, {education[0].gpa}</Field>
           <Field k="Languages">{skills[0].items.slice(0, 5).join(", ")}</Field>
           <Field k="Infra">{skills[4].items.slice(0, 5).join(", ")}</Field>
+          <Field k="Experience">{experience.length} roles</Field>
           <Field k="Projects">{projects.length} public</Field>
           <Field k="Papers">{publications.length} published</Field>
         </div>
