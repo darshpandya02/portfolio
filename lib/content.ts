@@ -11,7 +11,7 @@ export const profile = {
   role: "Software Engineer",
   company: "SPHERE Research Infrastructure",
   location: "Boston, Massachusetts, USA",
-  email: "da.pandya@northeastern.edu",
+  email: "darshpandya02@gmail.com",
   altEmail: "pandya.dar@northeastern.edu",
   shell: "/bin/zsh",
   avatar: "/images/darsh.jpg",
