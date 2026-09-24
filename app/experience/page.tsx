@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Experience",
   description:
-    "Software engineering roles at SPHERE Research Infrastructure, Northeastern's Network Science Institute, Gupshup and Chance App — plus a year teaching full-stack web development.",
+    "Software engineering roles at SPHERE Research Infrastructure, Northeastern's UbiWell Lab and Network Science Institute, Gupshup and Chance App, plus a year teaching full-stack web development.",
   path: "/experience",
 });
 

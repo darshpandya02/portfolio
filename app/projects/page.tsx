@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Projects",
   description:
-    "Distributed systems, full-stack products and developer tooling — from a real-time group matching service to load-tested message queues and a Java image processing application.",
+    "Two apps shipped to Android, FarePath for offline Mumbai rail fares and Splitwit for itemized bill splitting, plus distributed systems work: load-tested message queues, sharded consumers and a real-time group matching service.",
   path: "/projects",
 });
 

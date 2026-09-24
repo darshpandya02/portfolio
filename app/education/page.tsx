@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Education",
   description:
-    "M.S. in Computer Science from Northeastern University (3.95 GPA) and a B.Tech in Information Technology from K. J. Somaiya College of Engineering.",
+    "M.S. in Computer Science from Northeastern University (3.97 GPA) and a B.Tech in Information Technology from K. J. Somaiya College of Engineering.",
   path: "/education",
 });
 
