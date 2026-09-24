@@ -12,7 +12,7 @@ export const profile = {
   company: "SPHERE Research Infrastructure",
   location: "Boston, Massachusetts, USA",
   email: "darshpandya02@gmail.com",
-  altEmail: "pandya.dar@northeastern.edu",
+  altEmail: "darshpandya02@gmail.com",
   shell: "/bin/zsh",
   avatar: "/images/darsh.jpg",
   avatarAlt: "Darsh Pandya",

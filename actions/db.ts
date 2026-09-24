@@ -56,7 +56,7 @@ export async function addMessage(message: UserMessage) {
     }
     await transporter.sendMail({
       from: "no-reply@website.com",
-      to: "pandya.dar@northeastern.edu",
+      to: "darshpandya02@gmail.com",
       subject: `New message from ${message.name} (${message.email})`,
       text: message.message,
     });
