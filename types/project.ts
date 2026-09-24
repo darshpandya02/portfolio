@@ -14,52 +14,6 @@ export interface DbMessage extends User {
   count: number;
 }
 
-export type Category =
-  | "frontend"
-  | "backend"
-  | "db"
-  | "lang"
-  | "tool"
-  | "no";
-
-export interface TechnologyMetadata {
-  _id: string;
-  name: string;
-  imageUrl: string;
-}
-
-export interface Technology extends TechnologyMetadata {
-  category: Category;
-}
-
-export interface ProjectMetadata {
-  _id: string;
-  name: string;
-}
-
-export interface Project extends ProjectMetadata {
-  description: string;
-  imageUrl: string;
-  projectUrl?: string;
-  githubUrl?: string;
-  technologies?: TechnologyMetadata[];
-  featured: boolean;
-  status: "completed" | "wip";
-}
-
-export interface Experience {
-  _id: string;
-  position: string;
-  company: string;
-  location: string;
-  start: string;
-  end: string;
-  description: string;
-  imageUrl: string;
-  projectUrl: string;
-  status: "completed" | "wip";
-}
-
 export const MessageSchema = z.object({
   name: z
     .string()

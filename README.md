@@ -1,48 +1,85 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with
-[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# darshpandya.com
 
-## Getting Started
+A terminal-style portfolio. The landing page is a working shell — visitors type
+`whoami`, `cat projects.md` or `ssh darsh@portfolio` instead of clicking nav
+links — and every command has a matching real page for people who'd rather just
+click (and for search engines).
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Next.js 14 (App Router) · TypeScript · Tailwind · JetBrains Mono. No CMS, no
+database for content.
+
+## Layout
+
+```
+lib/content.ts            Every piece of portfolio content. Single source of truth.
+lib/terminal/fs.ts        Virtual filesystem (~/about.md, ~/projects/*.md, …).
+lib/terminal/commands.tsx Command registry + dispatch + tab completion.
+lib/terminal/themes.ts    Colour schemes and the pre-paint theme boot script.
+lib/seo.ts                Per-page metadata helper.
+
+components/terminal/
+  Terminal.tsx            The shell: input, history, completion, key handling.
+  docs.tsx                Document renderers, shared by the terminal AND the pages.
+  atoms.tsx               Small presentational pieces (Line, Field, Chip, Ascii…).
+components/ui/            Window chrome, page shell, the prompt at the bottom of pages.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
+The important idea: `components/terminal/docs.tsx` renders each document once.
+`cat about.md` in the terminal and `/about` as a page both call `<AboutDoc />`,
+so the two can't drift apart.
 
-You can start editing the page by modifying `app/page.tsx`. The page
-auto-updates as you edit the file.
+## Editing content
 
-This project uses
-[`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
-automatically optimize and load Inter, a custom Google Font.
+Everything lives in `lib/content.ts` — profile, experience, projects, skills,
+publications, education, links. Adding a project to the `projects` array gives
+you, for free:
 
-## Learn More
+- an entry in `cat projects.md`
+- a file at `~/projects/<slug>.md` that `cat`, `ls`, `tree` and tab completion see
+- a static page at `/projects/<slug>`
+- a sitemap entry
+- coverage in `grep`
 
-To learn more about Next.js, take a look at the following resources:
+## Commands
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`help` lists them. Beyond the obvious (`ls`, `cd`, `cat`, `pwd`, `tree`, `clear`,
+`history`, `man`, `grep`, `find`) there's `whoami`, `ssh darsh@portfolio`,
+`neofetch`, `git log`, `theme <name>`, `open <page>`, and a handful of things
+that aren't in `help`.
 
-You can check out
-[the Next.js GitHub repository](https://github.com/vercel/next.js/) - your
-feedback and contributions are welcome!
+## Themes
 
-## Deploy on Vercel
+Seven palettes (`midnight`, `matrix`, `amber`, `dracula`, `nord`, `solarized`,
+`paper`), set via `theme <name>` or the footer picker, persisted in
+localStorage, applied before first paint to avoid a flash.
 
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
+Palette colours are defined as RGB channel triplets (`--t-green-rgb: 74 222 128`)
+so Tailwind opacity modifiers like `bg-term-green/20` actually work. Adding a
+theme means adding one block to `app/globals.css` and one entry to
+`lib/terminal/themes.ts`.
 
-Check out our
-[Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
-details.
+## Accessibility
+
+The terminal is a client component, so `app/page.tsx` also renders a visually
+hidden plain-text mirror of the full portfolio for crawlers and screen readers.
+Every terminal route exists as a real, statically rendered page. Boot animation
+and cursor blink respect `prefers-reduced-motion`.
+
+## Running it
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+npm run build
+```
+
+Only the contact form needs environment variables — see `.env.sample`. Without
+them the rest of the site works fine; the form just reports a failure to send.
+
+| Variable | Purpose |
+| --- | --- |
+| `DB_URL`, `DB_NAME` | MongoDB, stores contact form submissions |
+| `MAIL_HOST`, `MAIL_USER`, `MAIL_PASS` | SMTP for the notification email |
+| `G_TAG`, `CLARITY_KEY` | Optional analytics; omit to skip loading them |

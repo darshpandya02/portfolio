@@ -1,42 +1,54 @@
-import { Metadata } from "next";
-
 import { Toaster } from "sonner";
 
 import ContactForm from "@/components/contact/ContactForm";
+import { ContactDoc } from "@/components/terminal/docs";
+import NextPrompt from "@/components/ui/NextPrompt";
+import PageShell from "@/components/ui/PageShell";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact | Darsh Pandya",
-  description: "Contact me",
-  metadataBase: new URL("https://darshpandya.com/contact"),
-  openGraph: {
-    title: "Contact | Darsh Pandya",
-    description: "Contact me",
-    siteName: "Darsh Pandya",
-    type: "website",
-    url: "https://darshpandya.com/contact",
-    images: [
-      {
-        url: "https://res.cloudinary.com/dijxynt89/image/upload/v1725052376/Aditya_os4fzb.jpg",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contact | Darsh Pandya",
-    description: "Contact me",
-    images: [
-      {
-        url: "https://res.cloudinary.com/dijxynt89/image/upload/v1725052376/Aditya_os4fzb.jpg",
-      },
-    ],
-  },
-};
+export const metadata = pageMetadata({
+  title: "Contact",
+  description:
+    "Get in touch with Darsh Pandya — email, GitHub, LinkedIn, or send a message straight from the browser.",
+  path: "/contact",
+});
 
-export default function Contact() {
+export default function ContactPage() {
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-neutral-950 p-8">
-      <ContactForm />
-      <Toaster richColors expand position="top-right" />
-    </div>
+    <>
+      <PageShell
+        title="contact.md"
+        command="cat contact.md && mail darsh"
+        footer={
+          <NextPrompt
+            suggestions={[
+              { label: "cat about.md", href: "/about" },
+              { label: "cat projects.md", href: "/projects" },
+              { label: "open resume", href: "/resume" },
+            ]}
+          />
+        }
+      >
+        <div className="grid gap-8 lg:grid-cols-2">
+          <ContactDoc showFormHint={false} />
+          <div className="rounded border border-term-border bg-term-bg/40 p-4">
+            <ContactForm />
+          </div>
+        </div>
+      </PageShell>
+      <Toaster
+        theme="dark"
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            background: "var(--t-raised)",
+            border: "1px solid var(--t-border)",
+            color: "var(--t-fg)",
+            fontFamily: "var(--font-mono)",
+            fontSize: "13px",
+          },
+        }}
+      />
+    </>
   );
 }

@@ -2,31 +2,371 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* ---------------------------------------------------------------
+   Theme palettes. Swapped by `data-theme` on <html> via the
+   `theme` command in the terminal (persisted to localStorage).
+   --------------------------------------------------------------- */
+
+:root,
+[data-theme="midnight"] {
+  --t-bg-rgb: 11 14 20;
+  --t-bg: rgb(11 14 20);
+  --t-panel-rgb: 15 19 27;
+  --t-panel: rgb(15 19 27);
+  --t-raised-rgb: 21 26 35;
+  --t-raised: rgb(21 26 35);
+  --t-border-rgb: 31 38 50;
+  --t-border: rgb(31 38 50);
+  --t-fg-rgb: 200 211 224;
+  --t-fg: rgb(200 211 224);
+  --t-dim-rgb: 125 138 156;
+  --t-dim: rgb(125 138 156);
+  --t-faint-rgb: 74 86 102;
+  --t-faint: rgb(74 86 102);
+  --t-green-rgb: 74 222 128;
+  --t-green: rgb(74 222 128);
+  --t-cyan-rgb: 86 212 221;
+  --t-cyan: rgb(86 212 221);
+  --t-blue-rgb: 106 169 255;
+  --t-blue: rgb(106 169 255);
+  --t-yellow-rgb: 255 204 102;
+  --t-yellow: rgb(255 204 102);
+  --t-red-rgb: 255 107 107;
+  --t-red: rgb(255 107 107);
+  --t-magenta-rgb: 199 146 234;
+  --t-magenta: rgb(199 146 234);
+  --t-accent-rgb: var(--t-green-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.22);
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+[data-theme="matrix"] {
+  --t-bg-rgb: 0 6 0;
+  --t-bg: rgb(0 6 0);
+  --t-panel-rgb: 2 13 2;
+  --t-panel: rgb(2 13 2);
+  --t-raised-rgb: 4 22 4;
+  --t-raised: rgb(4 22 4);
+  --t-border-rgb: 13 61 22;
+  --t-border: rgb(13 61 22);
+  --t-fg-rgb: 56 224 122;
+  --t-fg: rgb(56 224 122);
+  --t-dim-rgb: 31 155 81;
+  --t-dim: rgb(31 155 81);
+  --t-faint-rgb: 20 102 58;
+  --t-faint: rgb(20 102 58);
+  --t-green-rgb: 87 255 143;
+  --t-green: rgb(87 255 143);
+  --t-cyan-rgb: 72 224 176;
+  --t-cyan: rgb(72 224 176);
+  --t-blue-rgb: 70 209 122;
+  --t-blue: rgb(70 209 122);
+  --t-yellow-rgb: 183 255 92;
+  --t-yellow: rgb(183 255 92);
+  --t-red-rgb: 255 122 92;
+  --t-red: rgb(255 122 92);
+  --t-magenta-rgb: 138 255 192;
+  --t-magenta: rgb(138 255 192);
+  --t-accent-rgb: var(--t-green-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.25);
+  color-scheme: dark;
+}
+
+[data-theme="amber"] {
+  --t-bg-rgb: 16 11 4;
+  --t-bg: rgb(16 11 4);
+  --t-panel-rgb: 23 16 6;
+  --t-panel: rgb(23 16 6);
+  --t-raised-rgb: 31 22 9;
+  --t-raised: rgb(31 22 9);
+  --t-border-rgb: 58 42 17;
+  --t-border: rgb(58 42 17);
+  --t-fg-rgb: 255 191 77;
+  --t-fg: rgb(255 191 77);
+  --t-dim-rgb: 184 132 45;
+  --t-dim: rgb(184 132 45);
+  --t-faint-rgb: 125 90 30;
+  --t-faint: rgb(125 90 30);
+  --t-green-rgb: 255 212 121;
+  --t-green: rgb(255 212 121);
+  --t-cyan-rgb: 255 202 99;
+  --t-cyan: rgb(255 202 99);
+  --t-blue-rgb: 255 179 71;
+  --t-blue: rgb(255 179 71);
+  --t-yellow-rgb: 255 224 163;
+  --t-yellow: rgb(255 224 163);
+  --t-red-rgb: 255 143 92;
+  --t-red: rgb(255 143 92);
+  --t-magenta-rgb: 255 169 107;
+  --t-magenta: rgb(255 169 107);
+  --t-accent-rgb: var(--t-yellow-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.25);
+  color-scheme: dark;
+}
+
+[data-theme="dracula"] {
+  --t-bg-rgb: 20 21 31;
+  --t-bg: rgb(20 21 31);
+  --t-panel-rgb: 27 28 42;
+  --t-panel: rgb(27 28 42);
+  --t-raised-rgb: 35 36 53;
+  --t-raised: rgb(35 36 53);
+  --t-border-rgb: 51 53 73;
+  --t-border: rgb(51 53 73);
+  --t-fg-rgb: 242 243 247;
+  --t-fg: rgb(242 243 247);
+  --t-dim-rgb: 154 160 189;
+  --t-dim: rgb(154 160 189);
+  --t-faint-rgb: 98 104 144;
+  --t-faint: rgb(98 104 144);
+  --t-green-rgb: 80 250 123;
+  --t-green: rgb(80 250 123);
+  --t-cyan-rgb: 139 233 253;
+  --t-cyan: rgb(139 233 253);
+  --t-blue-rgb: 122 162 247;
+  --t-blue: rgb(122 162 247);
+  --t-yellow-rgb: 241 250 140;
+  --t-yellow: rgb(241 250 140);
+  --t-red-rgb: 255 85 85;
+  --t-red: rgb(255 85 85);
+  --t-magenta-rgb: 255 121 198;
+  --t-magenta: rgb(255 121 198);
+  --t-accent-rgb: var(--t-magenta-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.24);
+  color-scheme: dark;
+}
+
+[data-theme="nord"] {
+  --t-bg-rgb: 33 38 47;
+  --t-bg: rgb(33 38 47);
+  --t-panel-rgb: 42 48 59;
+  --t-panel: rgb(42 48 59);
+  --t-raised-rgb: 51 58 71;
+  --t-raised: rgb(51 58 71);
+  --t-border-rgb: 65 74 89;
+  --t-border: rgb(65 74 89);
+  --t-fg-rgb: 224 229 238;
+  --t-fg: rgb(224 229 238);
+  --t-dim-rgb: 154 165 182;
+  --t-dim: rgb(154 165 182);
+  --t-faint-rgb: 107 118 136;
+  --t-faint: rgb(107 118 136);
+  --t-green-rgb: 163 190 140;
+  --t-green: rgb(163 190 140);
+  --t-cyan-rgb: 136 192 208;
+  --t-cyan: rgb(136 192 208);
+  --t-blue-rgb: 129 161 193;
+  --t-blue: rgb(129 161 193);
+  --t-yellow-rgb: 235 203 139;
+  --t-yellow: rgb(235 203 139);
+  --t-red-rgb: 191 97 106;
+  --t-red: rgb(191 97 106);
+  --t-magenta-rgb: 180 142 173;
+  --t-magenta: rgb(180 142 173);
+  --t-accent-rgb: var(--t-cyan-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.24);
+  color-scheme: dark;
+}
+
+[data-theme="solarized"] {
+  --t-bg-rgb: 0 33 43;
+  --t-bg: rgb(0 33 43);
+  --t-panel-rgb: 0 43 54;
+  --t-panel: rgb(0 43 54);
+  --t-raised-rgb: 7 54 66;
+  --t-raised: rgb(7 54 66);
+  --t-border-rgb: 15 68 81;
+  --t-border: rgb(15 68 81);
+  --t-fg-rgb: 207 216 211;
+  --t-fg: rgb(207 216 211);
+  --t-dim-rgb: 139 161 166;
+  --t-dim: rgb(139 161 166);
+  --t-faint-rgb: 91 114 121;
+  --t-faint: rgb(91 114 121);
+  --t-green-rgb: 133 153 0;
+  --t-green: rgb(133 153 0);
+  --t-cyan-rgb: 42 161 152;
+  --t-cyan: rgb(42 161 152);
+  --t-blue-rgb: 38 139 210;
+  --t-blue: rgb(38 139 210);
+  --t-yellow-rgb: 181 137 0;
+  --t-yellow: rgb(181 137 0);
+  --t-red-rgb: 220 50 47;
+  --t-red: rgb(220 50 47);
+  --t-magenta-rgb: 211 54 130;
+  --t-magenta: rgb(211 54 130);
+  --t-accent-rgb: var(--t-cyan-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.26);
+  color-scheme: dark;
+}
+
+[data-theme="paper"] {
+  --t-bg-rgb: 247 245 239;
+  --t-bg: rgb(247 245 239);
+  --t-panel-rgb: 239 236 226;
+  --t-panel: rgb(239 236 226);
+  --t-raised-rgb: 230 226 213;
+  --t-raised: rgb(230 226 213);
+  --t-border-rgb: 213 208 192;
+  --t-border: rgb(213 208 192);
+  --t-fg-rgb: 43 42 38;
+  --t-fg: rgb(43 42 38);
+  --t-dim-rgb: 106 103 93;
+  --t-dim: rgb(106 103 93);
+  --t-faint-rgb: 147 144 138;
+  --t-faint: rgb(147 144 138);
+  --t-green-rgb: 47 125 79;
+  --t-green: rgb(47 125 79);
+  --t-cyan-rgb: 15 124 138;
+  --t-cyan: rgb(15 124 138);
+  --t-blue-rgb: 33 96 196;
+  --t-blue: rgb(33 96 196);
+  --t-yellow-rgb: 154 107 0;
+  --t-yellow: rgb(154 107 0);
+  --t-red-rgb: 192 57 43;
+  --t-red: rgb(192 57 43);
+  --t-magenta-rgb: 142 68 173;
+  --t-magenta: rgb(142 68 173);
+  --t-accent-rgb: var(--t-green-rgb);
+  --t-accent: rgb(var(--t-accent-rgb));
+  --t-selection: rgb(var(--t-accent-rgb) / 0.2);
+  color-scheme: light;
+}
+
+html {
+  background-color: var(--t-bg);
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
+  background-color: var(--t-bg);
+  color: var(--t-fg);
+  font-variant-ligatures: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--t-selection);
+}
+
+mark {
+  background-color: transparent;
+  color: inherit;
+}
+
+/* Subtle scanline wash. Sits behind content, never intercepts clicks. */
+.crt-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: repeating-linear-gradient(
     to bottom,
-    transparent,
-    rgb(var(--background-end-rgb))
-  ) rgb(var(--background-start-rgb));
+    rgba(0, 0, 0, 0.13) 0px,
+    rgba(0, 0, 0, 0.13) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+[data-theme="paper"] .crt-overlay {
+  display: none;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(var(--t-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--t-border) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.28;
+}
+
+@layer components {
+  .term-link {
+    @apply text-term-cyan underline decoration-term-border underline-offset-[3px] transition-colors hover:decoration-term-cyan;
+  }
+
+  .term-chip {
+    @apply inline-flex items-center rounded border border-term-border bg-term-raised px-1.5 py-0.5 text-[11px] leading-4 text-term-dim;
+  }
+
+  .term-kbd {
+    @apply inline-flex items-center rounded border border-term-border bg-term-raised px-1.5 py-px text-[11px] text-term-dim;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
+
+/* Route transitions.
+   The outgoing page drops back and fades, the incoming page rises into place on
+   the page spring. The active nav pill is named, so the browser morphs the one
+   pill between tabs instead of cross fading two of them. Curves come from
+   lib/motion.ts through tailwind.config.ts, so there is a single definition of
+   what motion feels like on this site. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--spring-page-duration);
+  animation-timing-function: var(--spring-page);
+  animation-fill-mode: both;
+}
+
+::view-transition-old(root) {
+  animation-name: vt-leave;
+}
+
+::view-transition-new(root) {
+  animation-name: vt-enter;
+}
+
+::view-transition-group(nav-active) {
+  animation-duration: var(--spring-pill-duration);
+  animation-timing-function: var(--spring-pill);
+}
+
+@keyframes vt-leave {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes vt-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .crt-overlay {
+    display: none;
+  }
+  /* The universal selector does not reach view transition pseudo elements, so
+     they need saying out loud. ViewTransitions.tsx also refuses to start one. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

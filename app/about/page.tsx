@@ -1,31 +1,31 @@
-import { ProjectsDoc } from "@/components/terminal/docs";
+import { AboutDoc } from "@/components/terminal/docs";
 import NextPrompt from "@/components/ui/NextPrompt";
 import PageShell from "@/components/ui/PageShell";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
-  title: "Projects",
+  title: "About",
   description:
-    "Distributed systems, full-stack products and developer tooling — from a real-time group matching service to load-tested message queues and a Java image processing application.",
-  path: "/projects",
+    "Darsh Pandya — software engineer in Boston working on SPHERE, an NSF-backed public research infrastructure for reproducible cybersecurity experimentation.",
+  path: "/about",
 });
 
-export default function ProjectsPage() {
+export default function AboutPage() {
   return (
     <PageShell
-      title="projects.md"
-      command="cat projects.md"
+      title="about.md"
+      command="cat about.md"
       footer={
         <NextPrompt
           suggestions={[
-            { label: "cat skills.md", href: "/skills" },
             { label: "cat experience.md", href: "/experience" },
+            { label: "cat projects.md", href: "/projects" },
             { label: "cat contact.md", href: "/contact" },
           ]}
         />
       }
     >
-      <ProjectsDoc />
+      <AboutDoc />
     </PageShell>
   );
 }
