@@ -578,4 +578,4 @@ export function projectBySlug(slug: string) {
   return projects.find((p) => p.slug === slug);
 }
 
-export const SITE_URL = "https://portfolio-darshpandya.vercel.app";
+export const SITE_URL = "https://darshpandya.vercel.app";
