@@ -202,6 +202,28 @@ export const projects: Project[] = [
     demo: "https://image-moderation-platform.vercel.app",
   },
   {
+    slug: "ecommerce-analytics-pipeline",
+    name: "E-commerce Analytics Pipeline",
+    tagline: "Scheduled ELT with dbt, data-quality gates and a live health dashboard.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "A synthetic store emits sessions, carts, orders and refunds, including late, duplicate and deliberately broken events. Every 30 minutes a GitHub Actions job lands the batch as Parquet, loads it idempotently into Postgres, builds dbt models and gates the result on data-quality checks.",
+      "Rebuilt from scratch in 2026. The original 2024 version targeted Kafka, Spark, Airflow and Snowflake. This one runs Python, dbt, Great Expectations and Postgres, and the README maps each original component to what replaced it.",
+    ],
+    highlights: [
+      "Idempotent loads keyed by event ID with a watermark and load manifest in one transaction. A reload of the same batch inserts 0 rows.",
+      "dbt staging, incremental and mart layers (daily revenue, conversion funnel, cohort retention, top products, refund rate) with 39 tests and source freshness.",
+      "48 to 59 quality checks per run, including a revenue reconciliation between raw orders and published marts. They caught all 3 live injected anomalies and 8 of 9 anomaly types in an offline drill.",
+      "Median run of 22.4 s (p95 28.3 s over 12 runs). A failed run opens a GitHub issue and the next good run closes it.",
+      "Public read-only dashboard backed by a least-privilege Postgres role, showing run history, freshness and event-to-mart latency.",
+    ],
+    stack: ["Python", "dbt", "Great Expectations", "PostgreSQL", "Parquet", "GitHub Actions", "Next.js"],
+    github: "https://github.com/darshpandya02/ecommerce-analytics-pipeline",
+    demo: "https://ecommerce-analytics-pipeline.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
