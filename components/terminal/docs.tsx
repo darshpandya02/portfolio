@@ -195,6 +195,11 @@ export function ProjectsDoc({ featuredOnly = false }: { featuredOnly?: boolean }
                   <span className="text-xs">source ↗</span>
                 </Ext>
               ) : null}
+              {project.demo ? (
+                <Ext href={project.demo}>
+                  <span className="text-xs">live ↗</span>
+                </Ext>
+              ) : null}
             </div>
           </article>
         ))}
