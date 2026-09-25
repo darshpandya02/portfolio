@@ -421,6 +421,7 @@ export const projects: Project[] = [
     ],
     stack: ["React", "Node.js", "Express", "MongoDB", "OAuth", "Docker", "Kubernetes", "AWS EKS"],
     github: "https://github.com/darshpandya02/Rent-Roll",
+    demo: "https://rent-and-roll.vercel.app",
   },
   {
     slug: "webook",
@@ -457,6 +458,7 @@ export const projects: Project[] = [
     ],
     stack: ["JavaScript", "React", "Express", "MongoDB", "Jest", "Cypress"],
     github: "https://github.com/darshpandya02/fake-stack-overflow",
+    demo: "https://fake-stack-overflow.vercel.app",
   },
   {
     slug: "influencer-insight-dashboard",
