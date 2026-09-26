@@ -266,6 +266,27 @@ export const projects: Project[] = [
     demo: "https://brain-tumor-classification-five.vercel.app",
   },
   {
+    slug: "activity-recognition",
+    name: "Activity Recognition",
+    tagline: "Accelerometer activity classifier, honestly evaluated on people it never saw.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "Classifies walking, jogging, stairs, sitting and standing from phone accelerometer windows. The demo runs the model in your browser: replay held-out recordings on a laptop, or use your own phone's motion sensor.",
+      "Rebuilt from scratch in 2026. The original 2023 project code was not preserved.",
+    ],
+    highlights: [
+      "LSTM reaches 86.3% accuracy and 82.4% macro-F1 on 7 held-out subjects. The same model scores 98.4% on a random split, and the write-up shows that gap is overlap leakage, not skill.",
+      "Grouped 5-fold cross-validation by person shows a random forest on 95 hand-crafted features (85.2%) matches or beats the neural networks on unseen users.",
+      "Exported to TensorFlow Lite (108 KB int8, 86.2% accuracy) and ONNX. Browser outputs match Python within 4.2e-7.",
+      "An Android LiteRT build reproduced 86.33% on all 5,237 test windows on an emulator.",
+    ],
+    stack: ["Python", "TensorFlow", "Keras", "TensorFlow Lite", "ONNX Runtime Web", "Android"],
+    github: "https://github.com/darshpandya02/activity-recognition",
+    demo: "https://activity-recognition.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
