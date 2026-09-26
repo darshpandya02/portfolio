@@ -392,6 +392,27 @@ export const projects: Project[] = [
     demo: "https://project-demos-gamma.vercel.app/data-structures/",
   },
   {
+    slug: "ptsd-text-screening",
+    name: "PTSD-Related Language Detection",
+    tagline: "Word2Vec and voting-ensemble NLP, evaluated on authors it never saw.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "Detects PTSD-related language in forum posts with the original project's method: NLTK preprocessing, Gensim Word2Vec, and logistic regression, random forest and a PyTorch BiLSTM combined by vote. Type text into the demo and all three models score it in your browser; nothing is sent anywhere.",
+      "Rebuilt from scratch in 2026. The original 2024 project used postnatal clinical notes, which cannot be published, so this version uses public Reddit posts and a different, clearly stated task. Not a diagnostic tool.",
+    ],
+    highlights: [
+      "10,180 public posts with an author-grouped split and the condition's name masked out, so the model cannot score by spotting the word \"PTSD\" (that shortcut would add about 4 points).",
+      "Soft-vote ensemble reaches 87.3% accuracy and 0.947 ROC-AUC on held-out authors. McNemar tests show it is not better than the TF-IDF logistic regression alone, and a fine-tuned DistilRoBERTa beats it by 5 points.",
+      "Error analysis by community: 17.1% false positives on other mental-health forums against 4.5% on general ones.",
+      "All three models run in the browser via ONNX Runtime Web and match Python within 2.4e-7, and Playwright confirms no typed text ever leaves the page.",
+    ],
+    stack: ["Python", "NLTK", "Gensim", "PyTorch", "scikit-learn", "ONNX Runtime Web"],
+    github: "https://github.com/darshpandya02/ptsd-text-screening",
+    demo: "https://ptsd-text-screening.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
