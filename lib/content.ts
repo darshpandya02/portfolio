@@ -413,6 +413,27 @@ export const projects: Project[] = [
     demo: "https://ptsd-text-screening.vercel.app",
   },
   {
+    slug: "behavior-forecasting",
+    name: "Human Behavior Forecasting",
+    tagline: "Forecasting daily routines from smartphone sensors, with calibrated uncertainty.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "Smartphone GPS, accelerometer and charging streams from 60 people, turned into a 24-token behavior vocabulary and forecast 3 hours ahead. The dashboard shows each person's routine heatmap, forecasts with uncertainty bands and flagged deviations from their usual days.",
+      "Rebuilt from scratch in 2026. The original 2022-23 project code was not preserved.",
+    ],
+    highlights: [
+      "Transformer, TCN and LSTM compared against 5 routine baselines under 5-fold held-out-user and per-user temporal splits, with CIs bootstrapped over users.",
+      "The transformer cuts NLL by 0.45 nats and lifts top-3 accuracy from 66.8% to 70.8% on unseen users, but only ties the simple persistence baseline on top-1, and the write-up says so.",
+      "MC Dropout cuts calibration error from 0.077 to 0.018, and the 25% most confident forecasts are 72.6% accurate against 42.4% overall.",
+      "Deviation detection tested on 1,314 user-days with injected routine changes: the per-user profile baseline (AUROC 0.68 pooled) beat the transformer's surprisal score (0.59).",
+    ],
+    stack: ["Python", "PyTorch", "Transformers", "scikit-learn", "DBSCAN", "JavaScript"],
+    github: "https://github.com/darshpandya02/behavior-forecasting",
+    demo: "https://behavior-forecasting.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
