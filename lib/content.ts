@@ -287,6 +287,27 @@ export const projects: Project[] = [
     demo: "https://activity-recognition.vercel.app",
   },
   {
+    slug: "used-car-price",
+    name: "Used Car Price Estimator",
+    tagline: "Price estimates with calibrated intervals for 6,926 Indian used-car listings.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "Pick a brand, model, year, mileage and specs and get an estimated asking price with a 90% interval. The trees run in your browser, and the market-trends charts show how price falls with age and kilometres.",
+      "Started as a 2022 notebook and rebuilt in 2026 as a tested package. An audit of the original notebook is in the repo.",
+    ],
+    highlights: [
+      "Compared median, ridge, random forest and gradient-boosting models on 6,926 CarDekho listings with 12 features, with bootstrap confidence intervals on every metric.",
+      "Gradient boosting reaches test R² 0.837 and 15.7% MAPE (MAE ₹0.73 lakh). Error analysis shows 10 luxury cars account for 76% of its squared error.",
+      "Conformalized quantile intervals covered 90.6% of held-out prices at a 90% target.",
+      "Trees exported to JSON and evaluated in JavaScript match scikit-learn to within 2e-16, checked in CI.",
+    ],
+    stack: ["Python", "scikit-learn", "pandas", "JavaScript", "Chart.js", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/Second-Hand-Car-Price-Prediction",
+    demo: "https://used-car-price-india.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
