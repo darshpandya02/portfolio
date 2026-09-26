@@ -308,6 +308,27 @@ export const projects: Project[] = [
     demo: "https://used-car-price-india.vercel.app",
   },
   {
+    slug: "insureus",
+    name: "InsureUs",
+    tagline: "Health and auto insurance pricing API with explainable GLM quotes.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "A FastAPI quote service backed by models trained on 699,351 public records. Ask for a health or auto quote and every estimate comes with the exact per-feature contributions that produce it.",
+      "Rebuilt from scratch in 2026. The original 2022 project code was not preserved. Estimates are pure premium only, not a real insurance quote.",
+    ],
+    highlights: [
+      "Adding smoker × obesity and age-squared terms to multiple linear regression cut held-out RMSE by 26.5% (95% CI 16.9% to 37.8%) and lifted R² from 0.784 to 0.883.",
+      "Claim frequency and severity on 678,013 French motor policies with Poisson and Gamma GLMs, benchmarked against OLS and gradient boosting. OLS produced negative premiums for 1.6% of policies, which is why a multiplicative GLM tariff is served.",
+      "Pydantic validation (bad input returns 422 naming the field), OpenAPI docs and a privacy-preserving Postgres quote log that stores only coarse bands.",
+      "98 tests in GitHub Actions CI, including golden-prediction parity and contributions that sum exactly to each quote.",
+    ],
+    stack: ["Python", "FastAPI", "Pydantic", "scikit-learn", "PostgreSQL", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/insureus",
+    demo: "https://insureus.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
