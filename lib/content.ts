@@ -263,6 +263,7 @@ export const projects: Project[] = [
     ],
     stack: ["C++20", "TCP Sockets", "Raft", "Multithreading", "ThreadSanitizer", "Linux"],
     github: "https://github.com/darshpandya02/raft-cluster-monitor",
+    demo: "https://project-demos-gamma.vercel.app/raft/",
   },
   {
     slug: "farepath",
@@ -345,6 +346,7 @@ export const projects: Project[] = [
     ],
     stack: ["C++", "TCP Sockets", "RPC", "Multithreading", "Replication", "Linux"],
     github: "https://github.com/darshpandya02/BSDS",
+    demo: "https://project-demos-gamma.vercel.app/robot-factory/",
   },
   {
     slug: "ceekay-dashboard",
@@ -444,6 +446,7 @@ export const projects: Project[] = [
     ],
     stack: ["Java", "Swing", "JUnit", "MVC", "Design Patterns"],
     github: "https://github.com/darshpandya02/image-processing-application",
+    demo: "https://project-demos-gamma.vercel.app/image-processing/",
   },
   {
     slug: "rent-and-roll",
