@@ -371,6 +371,27 @@ export const projects: Project[] = [
     demo: "https://project-demos-gamma.vercel.app/meditrack/",
   },
   {
+    slug: "cpp-data-structures",
+    name: "C++ Data Structure Library",
+    tagline: "Header-only C++20 containers, sanitizer-clean and benchmarked against std.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "Ten containers written from scratch with manual memory management done properly: RAII, rule-of-five move semantics, allocator support and exception-safety guarantees. Every one is benchmarked against its standard-library counterpart, including the cases where std wins.",
+      "Rebuilt from scratch in 2026. The original 2023 project code was not preserved.",
+    ],
+    highlights: [
+      "Dynamic array, singly and doubly linked lists, ring buffer, stack, queue, BST, AVL tree, Robin Hood hash map and binary heap.",
+      "64 test cases and 978,254 assertions, including randomized checks against std containers and a throw-on-Nth-copy element for exception safety. Clean under AddressSanitizer, UBSan and ThreadSanitizer with 0 leaks.",
+      "The Robin Hood hash map erased 1M keys 12x faster and iterated 9x faster than std::unordered_map, and inserted 3.3x faster when reserved.",
+      "Honest benchmarks: std::queue is still 1.5x to 3.8x faster than dsl::Queue, and the README explains why libc++ wins on local-vector push_back.",
+    ],
+    stack: ["C++20", "Templates", "doctest", "AddressSanitizer", "ThreadSanitizer", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/cpp-data-structures",
+    demo: "https://project-demos-gamma.vercel.app/data-structures/",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
