@@ -224,6 +224,27 @@ export const projects: Project[] = [
     demo: "https://ecommerce-analytics-pipeline.vercel.app",
   },
   {
+    slug: "stock-clustering",
+    name: "Stock Clustering",
+    tagline: "K-means++ and DBSCAN over 499 S&P 500 stocks, refreshed every weekday.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "Five years of daily prices for the S&P 500, turned into 14 features per stock and clustered two ways. The site shows the PCA projection, lets you switch models, search a ticker for its nearest neighbours, and re-cluster at any k in the browser.",
+      "Rebuilt from scratch in 2026. The original 2024 project code was not preserved.",
+    ],
+    highlights: [
+      "14 standardized features per stock: multi-window returns, volatility, moving-average ratios, beta vs SPY and max drawdown.",
+      "K-means++ with k chosen by silhouette (k=4, score 0.260) and DBSCAN with eps from the k-distance knee. PCA to 2D keeps 67% of the variance.",
+      "Measured honestly: clusters barely track GICS sectors (adjusted Rand 0.038), and a walk-forward next-week direction model scored 53.1% on 73,530 predictions against a 53.9% majority baseline, so it adds no signal.",
+      "In-browser K-means++ matches the Python version label for label on a fixed seed, checked in CI. A weekday GitHub Actions job refreshes the data and redeploys.",
+    ],
+    stack: ["Python", "scikit-learn", "pandas", "yfinance", "JavaScript", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/stock-clustering",
+    demo: "https://stock-clustering.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
