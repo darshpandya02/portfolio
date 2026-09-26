@@ -350,6 +350,27 @@ export const projects: Project[] = [
     demo: "https://fraudcheck-darshpandya.vercel.app",
   },
   {
+    slug: "meditrack",
+    name: "MediTrack",
+    tagline: "ASP.NET Core medical inventory with FEFO issuing and race-safe stock.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "A medical inventory system for hospital departments: lots with expiry dates, stock per location, an append-only movement ledger, purchase approvals and low-stock and near-expiry alerts. It ships as a REST API with JWT and a Razor Pages app with Identity sign-in, over the same services and policies.",
+      "Rebuilt from scratch in 2026. The original 2022 project code was not preserved. It runs on PostgreSQL or SQLite rather than SQL Server, and the demo page shows a recorded walkthrough because the app is not hosted live yet.",
+    ],
+    highlights: [
+      "Optimistic concurrency tokens with retry stop overselling: in a 50-request race for 150 units against 100 on hand, exactly 33 succeed and no unit is lost. The same race without the token issues all 150.",
+      "First-expiry-first-out allocation splits an issue across lots, and every movement lands in an append-only audit ledger.",
+      "Four roles enforced with policy-based authorization on both API and pages, with department staff scoped to their own department. A 68-case role-by-endpoint test proves it.",
+      "Composite indexes plus AsNoTracking projections cut the audit-trail query from 15.94 ms to 3.26 ms median on 50,000 movements. 156 xUnit tests run on Postgres and SQLite in CI.",
+    ],
+    stack: ["C#", "ASP.NET Core", "EF Core", "PostgreSQL", "JWT", "Razor Pages", "xUnit", "Docker"],
+    github: "https://github.com/darshpandya02/meditrack",
+    demo: "https://project-demos-gamma.vercel.app/meditrack/",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
