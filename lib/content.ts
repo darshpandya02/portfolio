@@ -329,6 +329,27 @@ export const projects: Project[] = [
     demo: "https://insureus.vercel.app",
   },
   {
+    slug: "fraudcheck",
+    name: "FraudCheck",
+    tagline: "Nine fraud classifiers compared honestly, with a live threshold and cost panel.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "A comparison of nine classifiers on 284,807 card transactions with 0.17% fraud, evaluated on a time-based holdout. The demo scores held-out transactions in your browser, explains each score feature by feature, and lets you move the decision threshold to see caught frauds, false alarms and cost change live.",
+      "Rebuilt from scratch in 2026. The original 2022-23 research code, behind the paper \"Classification of Machine and Deep Learning Techniques for Financial Fraud Detection in the Healthcare Industry\", was not preserved.",
+    ],
+    highlights: [
+      "PR-AUC as the headline metric, since ROC-AUC flatters imbalanced data: Naive Bayes scores 0.967 ROC-AUC but only 0.063 PR-AUC.",
+      "Gradient boosting, chosen by CV PR-AUC before looking at the test set, reaches 0.807 test PR-AUC and catches 59 of 75 held-out frauds at 60.8% precision, cutting modeled fraud cost by 62.7%.",
+      "Bootstrap intervals show the top models are statistically tied, and the write-up says so rather than crowning a winner.",
+      "The 300-tree model and exact TreeSHAP run in the browser, matching Python to within 1e-18 in CI parity tests.",
+    ],
+    stack: ["Python", "scikit-learn", "PyTorch", "SHAP", "JavaScript", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/fraudcheck",
+    demo: "https://fraudcheck-darshpandya.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
