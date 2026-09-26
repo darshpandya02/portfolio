@@ -245,6 +245,27 @@ export const projects: Project[] = [
     demo: "https://stock-clustering.vercel.app",
   },
   {
+    slug: "brain-tumor-classification",
+    name: "Brain Tumor Classification",
+    tagline: "MRI tumor classifier with leak-free splits and an in-browser Grad-CAM demo.",
+    year: "2026",
+    featured: false,
+    status: "shipped",
+    description: [
+      "A small CNN trained from scratch and a MobileNetV2 transfer model, compared on a public brain MRI dataset after removing the duplicates that make most published numbers on it look better than they are. The demo runs entirely in your browser and never uploads an image.",
+      "Rebuilt from scratch in 2026. The original 2022 project code was not preserved. Research and education demo only, not a medical device.",
+    ],
+    highlights: [
+      "Found that 66% of the dataset's own test images had copies in its training set. Perceptual hashing removed 566 duplicate or conflicting images, and group-aware splits keep near-duplicate slices out of different splits.",
+      "Both models reach 94.6% accuracy on 386 held-out images, with ROC-AUC of 0.978 (0.4M-parameter CNN) and 0.993 (MobileNetV2).",
+      "TensorFlow.js demo with Grad-CAM heatmaps, whose browser predictions stay within 5e-6 of the Python model, checked in CI.",
+      "Limitations are stated plainly: only 42 healthy test images, no patient IDs, no external validation, weak calibration.",
+    ],
+    stack: ["Python", "TensorFlow", "Keras", "TensorFlow.js", "Grad-CAM", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/brain-tumor-classification",
+    demo: "https://brain-tumor-classification-five.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
