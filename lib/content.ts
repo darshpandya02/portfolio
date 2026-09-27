@@ -455,6 +455,27 @@ export const projects: Project[] = [
     demo: "https://wewrite-vert.vercel.app",
   },
   {
+    slug: "fittrack",
+    name: "FitTrack",
+    tagline: "Idempotent health-data ingestion and recommendation API in TypeScript.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "A Fastify and Postgres API that ingests step, heart-rate and workout data in large batches without ever storing a duplicate, aggregates it by day and week in each user's time zone, and recommends the next workout. A web app and an Android build (syncing from Health Connect) sit on top.",
+      "Rebuilt from scratch in 2026. The original 2024 project code was not preserved.",
+    ],
+    highlights: [
+      "Batch ingestion deduplicates on client-assigned IDs and natural keys in a single SQL statement, sustaining 18,609 rows/s. 8 concurrent overlapping batches of 3,200 items stored exactly the 960 unique rows.",
+      "A covering index turns the bucketed aggregation into index-only scans, cutting a 30-day query from 3.81 ms to 0.31 ms p50 at about 1.06M rows. Live endpoints run at 8.1 ms p50 server time.",
+      "argon2id passwords, rotating refresh tokens with reuse detection, and Postgres-backed rate limiting that holds across serverless instances.",
+      "79 unit and integration tests against PostgreSQL in GitHub Actions, and a live end-to-end run that also synced from Health Connect on an Android 14 emulator.",
+    ],
+    stack: ["TypeScript", "Fastify", "PostgreSQL", "JWT", "React Native", "Expo", "GitHub Actions"],
+    github: "https://github.com/darshpandya02/fittrack",
+    demo: "https://fittrack-darshpandya.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
