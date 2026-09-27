@@ -803,20 +803,24 @@ export const projects: Project[] = [
   },
   {
     slug: "customer-support-app",
-    name: "Customer Support Chatbot",
-    tagline: "Web application fronting an NLP-driven support assistant.",
-    year: "2024",
-    featured: false,
+    name: "Customer Support Assistant",
+    tagline: "Retrieval-augmented support chat with cited answers and routed tickets.",
+    year: "2026",
+    featured: true,
     status: "shipped",
     description: [
-      "A customer support web app backed by a chatbot, built while working through NLP coursework on summarization and generation.",
+      "Ask a question about the Nextcloud user manual and get an answer citing the exact manual sections. Out-of-scope questions are refused, and anything the assistant can't solve escalates to a ticket, with the transcript attached, that is routed to billing, technical or account queues on an agent dashboard.",
+      "Built out in 2026. The original 2023 code was not preserved. Llama-generated answers are implemented and tested but switched off until the AI Gateway is enabled, so the live chat currently returns the top cited passages.",
     ],
     highlights: [
-      "Conversational interface over a support knowledge base.",
-      "Companion work on text summarization and title generation models.",
+      "Hybrid FAISS and BM25 search with a cross-encoder reranker. Reranking raised recall@1 from 0.62 to 0.75 and MRR from 0.71 to 0.82 on a 52-question hand-labeled set.",
+      "Keyword rules plus an embedding classifier route escalated tickets with 98.3% accuracy on 60 held-out tickets, against 71.7% for rules alone.",
+      "Cost controls before any LLM call: Postgres-backed idempotency keys, per-client rate limits, a daily answer cap, a circuit breaker and a refusal gate that stops 62.5% of out-of-scope questions while wrongly refusing 3.8% of in-scope ones.",
+      "FastAPI and Postgres backend with OpenAPI docs and 35 CI tests. 1.2 s p50 end to end live in retrieval mode.",
     ],
-    stack: ["Python", "NLP", "Flask"],
+    stack: ["Python", "FastAPI", "FAISS", "ONNX Runtime", "PostgreSQL", "Llama", "GitHub Actions"],
     github: "https://github.com/darshpandya02/CustomerSupportApp",
+    demo: "https://customer-support-app-woad.vercel.app",
   },
 ];
 
