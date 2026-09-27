@@ -434,6 +434,27 @@ export const projects: Project[] = [
     demo: "https://behavior-forecasting.vercel.app",
   },
   {
+    slug: "wewrite",
+    name: "WeWrite",
+    tagline: "Draw ten letters, download a font in your own handwriting.",
+    year: "2026",
+    featured: true,
+    status: "shipped",
+    description: [
+      "Draw ten characters with a mouse, trackpad or finger, or upload a photo of your handwriting. A style-conditioned LSTM writes the other 68 glyphs in your style, and a Django API assembles them into an installable TrueType font you can preview, type or dictate into, and download.",
+      "Rebuilt from scratch in 2026. The original 2022-23 research code, behind the paper \"Personalized Font Generation using Deep Learning Neural Networks\", was not preserved.",
+    ],
+    highlights: [
+      "LSTM with a 20-component mixture-density output over pen offsets, conditioned on character and a BiLSTM style encoding, trained on 34 writers of UJI Pen Characters v2 and evaluated on 20 held-out writers.",
+      "Ablations: early stopping improved test NLL from -0.707 to -2.297 nats per point, and dropping input dropout improved the tuned 1.07M-parameter model to -4.272.",
+      "Best-of-8 reranking raised glyph recognisability from 61.6% to 87.2%. Generated sets identify their writer 23.7% of the time per glyph (chance 5%), against 8.5% for a nearest-writer baseline.",
+      "Model ported to NumPy to fit Vercel's function limit. Generation plus font build takes about 2.2 s end to end on the live site, and the downloaded TTF is verified with fontTools.",
+    ],
+    stack: ["Python", "PyTorch", "NumPy", "Django", "fontTools", "JavaScript"],
+    github: "https://github.com/darshpandya02/wewrite",
+    demo: "https://wewrite-vert.vercel.app",
+  },
+  {
     slug: "raft-cluster-monitor",
     name: "Raft Cluster Monitor",
     tagline: "Raft consensus in C++20, from scratch, replicating a cluster health store.",
