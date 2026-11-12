@@ -1,4 +1,5 @@
 import { chatNotes, education, experience, journey, links, profile, projects, publications, skills } from "@/lib/content";
+import { articles, articleText } from "@/lib/writing";
 
 /**
  * Everything the chat assistant is allowed to know, serialized from content.ts.
@@ -53,6 +54,9 @@ function knowledge(): string {
       (e) => `- ${e.degree}, ${e.school} (${e.location}), ${e.start} to ${e.end}, GPA ${e.gpa}. Coursework: ${e.coursework.join(", ")}.`,
     ),
   );
+
+  lines.push("", "## Deep-dive articles he wrote (on this site under /writing/<slug>)");
+  for (const a of articles) lines.push("", `Link: /writing/${a.slug}`, articleText(a));
 
   lines.push("", "## Timeline", ...journey.map((j) => `- ${j.year}: ${j.title}, ${j.detail}`));
   if (chatNotes.length) lines.push("", "## More about him", ...chatNotes.map((n) => `- ${n}`));

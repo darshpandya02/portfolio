@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { projects, SITE_URL } from "@/lib/content";
+import { articles } from "@/lib/writing";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
@@ -24,6 +25,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: page.changeFrequency,
       priority: page.priority,
+    })),
+    ...articles.map((article) => ({
+      url: `${SITE_URL}/writing/${article.slug}`,
+      lastModified,
+      changeFrequency: "yearly" as const,
+      priority: 0.8,
     })),
     ...projects.map((project) => ({
       url: `${SITE_URL}/projects/${project.slug}`,

@@ -23,6 +23,15 @@ export default function Navbar() {
       className="sticky top-0 z-40 border-b border-term-border bg-term-bg/95 backdrop-blur"
     >
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-3 sm:px-6">
+        {/* Way back to the main site; the terminal pages are a side door. */}
+        <Link
+          href="/"
+          title="Back to the main site"
+          className="flex shrink-0 items-center gap-1.5 rounded border border-term-accent/50 bg-term-accent/10 px-2.5 py-1 text-xs font-semibold text-term-accent transition-colors hover:bg-term-accent/20"
+        >
+          <span aria-hidden>←</span>
+          <span>main site</span>
+        </Link>
         <Link
           href="/terminal"
           className="shrink-0 py-2.5 text-sm font-semibold text-term-accent transition-opacity hover:opacity-80"

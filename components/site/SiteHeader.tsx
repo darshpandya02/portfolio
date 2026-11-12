@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { links, profile } from "@/lib/content";
@@ -10,6 +11,7 @@ const nav = [
   { href: "#skills", label: "Skills" },
   { href: "#experience", label: "Experience" },
   { href: "#projects", label: "Projects" },
+  { href: "#writing", label: "Writing" },
   { href: "#research", label: "Research" },
   { href: "#contact", label: "Contact" },
 ];
@@ -17,6 +19,10 @@ const nav = [
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // Section links are in-page anchors on the home page and full links elsewhere
+  // (article pages), so they always land on the right section.
+  const onHome = usePathname() === "/";
+  const to = (hash: string) => (onHome ? hash : `/${hash}`);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -32,7 +38,7 @@ export default function SiteHeader() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <a href="#home" className="flex shrink-0 items-center gap-2.5" onClick={() => setOpen(false)}>
+        <a href={to("#home")} className="flex shrink-0 items-center gap-2.5" onClick={() => setOpen(false)}>
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[var(--c1)] via-[var(--c2)] to-[var(--c3)] text-xs font-bold text-white shadow-[0_0_24px_-4px_var(--c1)]">
             DP
           </span>
@@ -47,7 +53,7 @@ export default function SiteHeader() {
             {nav.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={to(item.href)}
                   className="group/nav relative rounded-full px-3 py-1.5 text-sm text-ed-muted transition-colors hover:text-ed-ink"
                 >
                   {item.label}
@@ -103,7 +109,7 @@ export default function SiteHeader() {
             {nav.map((item) => (
               <li key={item.href}>
                 <a
-                  href={item.href}
+                  href={to(item.href)}
                   onClick={() => setOpen(false)}
                   className="block rounded-lg px-3 py-2.5 text-base hover:bg-ed-sunken"
                 >

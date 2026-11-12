@@ -446,14 +446,12 @@ html[data-type="system"] .ed {
   --ed-display-tracking: -0.035em;
 }
 
-html:has(.ed-page),
-body:has(.ed-page) {
+/* Child combinators keep :has() cheap: only changes to <body>'s own children re-run it. */
+html:has(> body > .ed-page),
+body:has(> .ed-page) {
   background-color: var(--ed-bg);
 }
 
-html:has(.ed-page) {
-  scroll-behavior: smooth;
-}
 
 /* The floating chat carries the theme tokens but paints nothing itself. */
 .ed.ed-float {
@@ -605,6 +603,13 @@ html.fx-pointer .fx-spotlight { opacity: 1; }
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+/* The shimmer runs only on big headline text. Animating every small gradient
+   (metrics, years, GPA) meant a style recalc and repaint of all of them each frame. */
+h1 .fx-gradient-text,
+h2 .fx-gradient-text,
+.fx-rotator .fx-gradient-text {
   animation: fx-shimmer 9s linear infinite;
 }
 
@@ -650,11 +655,11 @@ html.fx-pointer .fx-spotlight { opacity: 1; }
 
 html.fx-ready .ed [data-reveal] {
   opacity: 0;
-  transform: translateY(32px) scale(0.985);
+  transform: translateY(28px) scale(0.985);
   transition:
-    opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
-    transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-  transition-delay: calc(var(--d, 0) * 70ms);
+    opacity 0.65s cubic-bezier(0.2, 0.8, 0.2, 1),
+    transform 0.65s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: calc(var(--d, 0) * 50ms);
 }
 html.fx-ready .ed [data-reveal].in {
   opacity: 1;
@@ -848,7 +853,6 @@ html:not([data-mode="light"]) .ed .ed-logo {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html:has(.ed-page) { scroll-behavior: auto; }
   .ed *,
   .ed *::before,
   .ed *::after {
@@ -867,11 +871,11 @@ html:not([data-mode="light"]) .ed .ed-logo {
 html.fx-ready .ed .fx-card[data-reveal].in {
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
   transition:
-    opacity 0.9s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.65s cubic-bezier(0.2, 0.8, 0.2, 1),
     transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
     border-color 0.3s,
     box-shadow 0.3s;
-  transition-delay: calc(var(--d, 0) * 70ms), 0s, 0s, 0s;
+  transition-delay: calc(var(--d, 0) * 50ms), 0s, 0s, 0s;
 }
 
 /* ---------- Scroll-driven pieces (positions are written by FxRuntime) ---------- */
@@ -992,4 +996,98 @@ html:not(.fx-ready) .fx-word { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   [data-stack] { position: static; }
   .fx-word { opacity: 1 !important; }
+}
+
+/* Content in a section you just jumped to appears with the arrival, not after it. */
+html.fx-ready .ed [data-reveal].fx-now {
+  transition-duration: 0.3s !important;
+  transition-delay: 0s !important;
+}
+
+/* ---------- Deep dives ([data-dive], driven by FxRuntime) ---------- */
+
+/* Always a dark scene, in light mode too: the backdrop image is a night sky. */
+.dive {
+  background: #05040d;
+}
+.dive-bg {
+  transform-origin: 50% 46%;
+  will-change: transform;
+}
+.dive-shade {
+  opacity: 0.6;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgb(5 4 13 / 0.15), rgb(5 4 13 / 0.9)),
+    linear-gradient(rgb(5 4 13 / 0.4), transparent 30%, transparent 70%, rgb(5 4 13 / 0.6));
+  will-change: opacity;
+}
+/* Soft edges so the scene melts into the page above and below. */
+.dive-pin::before,
+.dive-pin::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18vh;
+  z-index: -5;
+  pointer-events: none;
+}
+.dive-pin::before { top: 0; background: linear-gradient(var(--ed-bg), transparent); }
+.dive-pin::after { bottom: 0; background: linear-gradient(transparent, var(--ed-bg)); }
+
+.dive-card {
+  /* Solid-ish rather than backdrop-blurred: a blur over a zooming image would repaint every frame. */
+  background: rgb(10 9 24 / 0.8);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s, box-shadow 0.3s;
+}
+.dive-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(400px circle at 0% 0%, rgb(139 92 246 / 0.18), transparent 60%);
+  pointer-events: none;
+}
+.dive-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--c2) 60%, transparent);
+  box-shadow: 0 24px 60px -24px var(--c1), 0 0 0 1px color-mix(in srgb, var(--c2) 30%, transparent);
+}
+
+/* Unpinned layout (phones, short screens, reduced motion, no JS). */
+.dive-pin { padding-bottom: 4rem; }
+.dive-cards { position: relative; margin-top: 3rem; }
+.dive-hint { display: none; }
+/* Keeps the intro legible over the brightest parts of the scene. */
+.dive-intro { text-shadow: 0 2px 30px rgb(5 4 13 / 0.9), 0 0 2px rgb(5 4 13 / 0.6); }
+.dive-intro .fx-gradient-text { text-shadow: none; filter: drop-shadow(0 2px 18px rgb(5 4 13 / 0.8)); }
+/* Unpinned, the section clips its own zooming backdrop. */
+.dive:not(.dive-on) { overflow: hidden; }
+
+/* Pinned layout. */
+.dive-on .dive-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  padding-bottom: 0;
+}
+.dive-on .dive-intro {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 22vh;
+  will-change: transform, opacity;
+}
+.dive-on .dive-hint { display: block; }
+.dive-on .dive-cards {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  margin-top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0) scale(0.86);
+  will-change: transform, opacity;
 }

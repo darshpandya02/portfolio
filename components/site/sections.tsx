@@ -1,7 +1,11 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 
+import Link from "next/link";
+
+import MoreDetail from "@/components/site/MoreDetail";
 import WordRotator from "@/components/site/WordRotator";
+import { articles, readMinutes } from "@/lib/writing";
 import {
   education,
   experience,
@@ -11,9 +15,11 @@ import {
   profile,
   projects,
   publications,
+  showcase,
   skills,
   type Experience,
   type Project,
+  type ProjectArea,
 } from "@/lib/content";
 
 /* ------------------------------------------------------------------ */
@@ -281,8 +287,8 @@ export function Hero() {
               <Image
                 src={profile.avatar}
                 alt={profile.avatarAlt}
-                width={560}
-                height={560}
+                width={800}
+                height={800}
                 priority
                 sizes="(min-width: 1024px) 360px, 70vw"
                 className="aspect-square w-full rounded-[2.1rem] object-cover"
@@ -752,7 +758,22 @@ export function ExperienceSection() {
 /* Projects                                                            */
 /* ------------------------------------------------------------------ */
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+const areaStyle: Record<ProjectArea, string> = {
+  "Distributed systems": "text-[var(--c2)]",
+  "Low-level": "text-[var(--c2)]",
+  "AI / ML": "text-[var(--c3)]",
+  Product: "text-ed-muted",
+};
+
+function ProjectCard({
+  project,
+  index,
+  area,
+}: {
+  project: Project;
+  index: number;
+  area: ProjectArea;
+}) {
   return (
     <article
       className="fx-card flex flex-col rounded-3xl p-6"
@@ -761,11 +782,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       style={delay(index % 3)}
     >
       <div className="font-label mb-4 flex items-center justify-between text-xs text-ed-faint">
-        <span className="rounded-full border border-ed-line px-2 py-0.5">
-          {project.year}
+        <span
+          className={`rounded-full border border-ed-line px-2 py-0.5 font-semibold ${areaStyle[area]}`}
+        >
+          {area}
         </span>
         <span className="truncate pl-3">
-          {project.stack.slice(0, 2).join(" · ")}
+          {project.year} · {project.stack[0]}
         </span>
       </div>
       <h3 className="font-display text-2xl leading-snug">{project.name}</h3>
@@ -781,28 +804,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {project.highlights[0]}
       </p>
 
-      <details className="group mt-3">
-        <summary className="cursor-pointer list-none text-sm text-ed-muted transition-colors hover:text-ed-ink [&::-webkit-details-marker]:hidden">
-          <span className="group-open:hidden">More detail +</span>
-          <span className="hidden group-open:inline">Less detail −</span>
-        </summary>
-        <div className="mt-3 space-y-3 text-sm leading-relaxed text-ed-muted">
-          {project.description.map((d) => (
-            <p key={d}>{d}</p>
+      <MoreDetail>
+        {project.description.map((d) => (
+          <p key={d}>{d}</p>
+        ))}
+        <ul className="space-y-2">
+          {project.highlights.slice(1).map((h) => (
+            <li key={h} className="flex gap-2.5">
+              <span
+                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--c2)]"
+                aria-hidden
+              />
+              <span>{h}</span>
+            </li>
           ))}
-          <ul className="space-y-2">
-            {project.highlights.slice(1).map((h) => (
-              <li key={h} className="flex gap-2.5">
-                <span
-                  className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--c2)]"
-                  aria-hidden
-                />
-                <span>{h}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </details>
+        </ul>
+      </MoreDetail>
 
       <ul className="mt-5 flex flex-wrap gap-1.5" aria-label="Stack">
         {project.stack.map((tech) => (
@@ -827,8 +844,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 export function ProjectsSection() {
-  const featured = projects.filter((p) => p.featured);
-  const archive = projects.filter((p) => !p.featured);
+  // Gallery order comes from `showcase`: distributed systems and low-level first, AI next.
+  const featured = showcase.flatMap(({ slug, area }) => {
+    const project = projects.find((p) => p.slug === slug);
+    return project ? [{ project, area }] : [];
+  });
+  const shown = new Set(showcase.map((s) => s.slug));
+  const archive = projects.filter((p) => !shown.has(p.slug));
 
   return (
     <section id="projects">
@@ -845,11 +867,16 @@ export function ProjectsSection() {
                 <SectionHeading
                   eyebrow="Projects"
                   title="Things I built, |with the numbers to back them."
-                  lede="Most are live. Each card leads with its headline measurement. Keep scrolling to move through them."
+                  lede="Distributed systems and low-level work first, then AI and ML. Each card leads with its headline measurement. Keep scrolling to move through them."
                 />
               </div>
-              {featured.map((project, i) => (
-                <ProjectCard key={project.slug} project={project} index={i} />
+              {featured.map(({ project, area }, i) => (
+                <ProjectCard
+                  key={project.slug}
+                  project={project}
+                  area={area}
+                  index={i}
+                />
               ))}
             </div>
           </div>
@@ -858,7 +885,7 @@ export function ProjectsSection() {
               data-hscroll-counter
               className="font-label w-16 text-xs tabular-nums text-ed-muted"
             >
-              01 / {String(featured.length).padStart(2, "0")}
+              {`01 / ${String(featured.length).padStart(2, "0")}`}
             </span>
             <span className="relative h-px flex-1 overflow-hidden bg-ed-line">
               <span className="hs-bar absolute inset-0 bg-gradient-to-r from-[var(--c1)] via-[var(--c2)] to-[var(--c3)]" />
@@ -904,6 +931,119 @@ export function ProjectsSection() {
               <TextLink href={links.github}>More on GitHub</TextLink>
             </li>
           </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Writing (deep dives)                                                */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Pinned "dive": the futuristic backdrop zooms in as you scroll, the title
+ * fades away, and every deep dive rises into view at the same time. FxRuntime
+ * drives it ([data-dive]); on small screens, with reduced motion or without
+ * JS, it is a normal section with all cards visible and a gently zooming
+ * backdrop.
+ */
+export function Writing() {
+  return (
+    <section id="writing">
+      <div data-dive className="dive relative isolate">
+        <div data-dive-pin className="dive-pin relative">
+          {/* Backdrop: the image, a colour wash and a vignette that deepens as the cards arrive. */}
+          <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
+            <div data-dive-bg className="dive-bg absolute inset-0">
+              <Image
+                src="/images/deep-dive-bg.jpg"
+                alt=""
+                fill
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
+            <div data-dive-shade className="dive-shade absolute inset-0" />
+          </div>
+
+          <div
+            data-dive-intro
+            className="dive-intro mx-auto w-full max-w-6xl px-4 pt-24 text-center sm:px-6 sm:pt-28"
+          >
+            <p className="font-label fx-eyebrow justify-center text-xs font-medium uppercase tracking-[0.22em] text-white/70">
+              Deep dives
+            </p>
+            <h2 className="font-display mx-auto mt-5 max-w-4xl text-5xl leading-[1.02] text-white sm:text-7xl">
+              Where the deep work{" "}
+              <span className="fx-gradient-text">shows up.</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg">
+              Engineering write-ups on the hardest problems in my systems:
+              distributed consensus, event-driven pipelines, database
+              concurrency, routing engines and applied AI.
+            </p>
+            <p className="dive-hint font-label mt-10 text-[11px] uppercase tracking-[0.2em] text-white/50">
+              Scroll to dive in ↓
+            </p>
+          </div>
+
+          <div
+            data-dive-cards
+            className="dive-cards mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6"
+          >
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+              {articles.map((article, i) => (
+                <Link
+                  key={article.slug}
+                  href={`/writing/${article.slug}`}
+                  data-tilt="off"
+                  className={`dive-card group/dive relative flex flex-col overflow-hidden rounded-3xl p-6 ${
+                    i < 3 ? "lg:col-span-2" : "lg:col-span-3"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="font-label rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-[var(--c2)]">
+                      {article.category}
+                    </span>
+                    <span className="font-display fx-gradient-text text-2xl leading-none">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="font-display mt-5 text-xl leading-snug text-white sm:text-[1.35rem]">
+                    {article.title}
+                  </h3>
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-white/65">
+                    {article.dek}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {article.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="font-label rounded-full border border-white/10 px-2 py-0.5 text-[10px] text-white/60"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="mt-auto flex items-center justify-between pt-5 text-sm">
+                    <span className="font-label text-[11px] text-white/45">
+                      {readMinutes(article)} min read
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--c2)]">
+                      Read the deep dive
+                      <span
+                        aria-hidden
+                        className="transition-transform duration-300 group-hover/dive:translate-x-1"
+                      >
+                        →
+                      </span>
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

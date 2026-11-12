@@ -32,13 +32,19 @@ export default function FxRuntime() {
     const countUp = (el: HTMLElement) => {
       const target = Number(el.dataset.count);
       if (!Number.isFinite(target) || reduced) return;
+      // Update the existing text node in place: replacing it (textContent) inserts
+      // a node every frame, which re-runs :has() checks and forces a layout.
+      if (!el.firstChild) el.textContent = "0";
+      const node = el.firstChild as Text;
       const start = performance.now();
+      let shown = "";
       const tick = (now: number) => {
         const t = Math.min(1, (now - start) / 1400);
-        el.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 4))));
+        const next = String(Math.round(target * (1 - Math.pow(1 - t, 4))));
+        if (next !== shown) node.data = shown = next;
         if (t < 1) requestAnimationFrame(tick);
       };
-      el.textContent = "0";
+      node.data = "0";
       requestAnimationFrame(tick);
     };
 
@@ -62,6 +68,17 @@ export default function FxRuntime() {
     type Stack = { el: HTMLElement; inner: HTMLElement; shade: HTMLElement | null; top: number; height: number; stickTop: number };
     type HScroll = { el: HTMLElement; track: HTMLElement; counter: HTMLElement | null; items: number; top: number; distance: number };
     type Scrub = { el: HTMLElement; words: HTMLElement[]; top: number; height: number; lit: number };
+    type Dive = {
+      el: HTMLElement;
+      pinned: boolean;
+      bg: HTMLElement | null;
+      shade: HTMLElement | null;
+      intro: HTMLElement | null;
+      cards: HTMLElement | null;
+      top: number;
+      height: number;
+      distance: number;
+    };
     type Drift = { el: HTMLElement; dir: number; top: number; base: number };
 
     let vh = window.innerHeight;
@@ -70,6 +87,8 @@ export default function FxRuntime() {
     let hscrolls: HScroll[] = [];
     let scrubs: Scrub[] = [];
     let drifts: Drift[] = [];
+    let dives: Dive[] = [];
+    let narrow = window.innerWidth < 640;
     let heroOut: HTMLElement[] = [];
     let heroHeight = 1;
     const progressBar = document.querySelector<HTMLElement>(".fx-progress");
@@ -108,6 +127,7 @@ export default function FxRuntime() {
 
     const measure = () => {
       vh = window.innerHeight;
+      narrow = window.innerWidth < 640;
 
       // Horizontal sections first: they set their own height, which moves everything below.
       hscrolls = [];
@@ -138,6 +158,35 @@ export default function FxRuntime() {
 
       // A stuck sticky element reports its stuck offset, so flow positions come from
       // the (non-sticky) container plus the heights of the cards before it.
+      // Deep-dive reveal. Pinned only where the whole card grid fits on one screen.
+      dives = [];
+      document.querySelectorAll<HTMLElement>("[data-dive]").forEach((el) => {
+        const pinned = !reduced && window.innerWidth >= 1024 && vh >= 680;
+        el.classList.toggle("dive-on", pinned);
+        const distance = pinned ? vh * 1.6 : 0;
+        el.style.height = pinned ? `${distance + vh}px` : "";
+        const dive: Dive = {
+          el,
+          pinned,
+          bg: el.querySelector<HTMLElement>("[data-dive-bg]"),
+          shade: el.querySelector<HTMLElement>("[data-dive-shade]"),
+          intro: el.querySelector<HTMLElement>("[data-dive-intro]"),
+          cards: el.querySelector<HTMLElement>("[data-dive-cards]"),
+          top: pageTop(el),
+          height: el.offsetHeight,
+          distance,
+        };
+        if (!pinned) {
+          [dive.intro, dive.cards, dive.shade].forEach((n) => {
+            if (n) {
+              n.style.transform = "";
+              n.style.opacity = "";
+            }
+          });
+        }
+        dives.push(dive);
+      });
+
       stacks = [];
       document.querySelectorAll<HTMLElement>("[data-stack-group]").forEach((group) => {
         let flowTop = pageTop(group);
@@ -248,13 +297,43 @@ export default function FxRuntime() {
         if (card.shade) card.shade.style.opacity = (p * 0.6).toFixed(3);
       }
 
+      for (const d of dives) {
+        if (y < d.top - vh || y > d.top + d.height + vh) continue;
+        if (!d.pinned) {
+          // Unpinned: the backdrop still zooms in as the section scrolls through the screen.
+          const p = clamp((y + vh - d.top) / (d.height + vh));
+          if (d.bg) d.bg.style.transform = `scale(${(1.05 + p * 0.35).toFixed(4)})`;
+          continue;
+        }
+        const p = clamp((y - d.top) / d.distance);
+        const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+        // Zoom into the scene for the first 60% of the scroll, then keep drifting gently.
+        const zoom = 1 + ease(clamp(p / 0.6)) * 1.15 + p * 0.15;
+        if (d.bg) d.bg.style.transform = `scale(${zoom.toFixed(4)}) translate3d(0, ${(p * -2).toFixed(2)}%, 0)`;
+        // Title lifts away and fades as the dive starts.
+        const out = clamp((p - 0.04) / 0.24);
+        if (d.intro) {
+          d.intro.style.opacity = (1 - out).toFixed(3);
+          d.intro.style.transform = `translate3d(0, ${(-out * 90).toFixed(1)}px, 0) scale(${(1 - out * 0.12).toFixed(4)})`;
+        }
+        // All cards arrive together once the zoom is well under way.
+        const inn = ease(clamp((p - 0.3) / 0.3));
+        if (d.cards) {
+          d.cards.style.opacity = inn.toFixed(3);
+          d.cards.style.transform = `translate3d(-50%, calc(-50% + ${((1 - inn) * 70).toFixed(1)}px), 0) scale(${(0.86 + inn * 0.14).toFixed(4)})`;
+          d.cards.style.pointerEvents = inn > 0.6 ? "auto" : "none";
+        }
+        if (d.shade) d.shade.style.opacity = (0.6 + inn * 0.3 - out * 0.15).toFixed(3);
+      }
+
       for (const hs of hscrolls) {
         const p = clamp((y - hs.top) / Math.max(1, hs.distance));
         hs.track.style.transform = `translate3d(${(-p * hs.distance).toFixed(1)}px, 0, 0)`;
         if (hs.counter) {
           const n = Math.min(hs.items, Math.max(1, Math.round(p * (hs.items - 1)) + 1));
           const label = `${String(n).padStart(2, "0")} / ${String(hs.items).padStart(2, "0")}`;
-          if (hs.counter.textContent !== label) hs.counter.textContent = label;
+          const text = hs.counter.firstChild as Text | null;
+          if (text && text.data !== label) text.data = label;
           hs.el.style.setProperty("--hs", p.toFixed(4));
         }
       }
@@ -285,6 +364,50 @@ export default function FxRuntime() {
     window.addEventListener("resize", onResize);
     wide.addEventListener("change", measure);
     document.fonts?.ready.then(measure).catch(() => undefined);
+
+    /* ================= in-page navigation ================= */
+    // Native smooth scrolling slows down with distance (over 1.5s to reach the
+    // bottom here). Jumps get a fixed, short glide instead, and the target's
+    // content is revealed on arrival rather than fading in after it.
+    let jumpFrame = 0;
+    const onAnchorClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = (e.target as Element | null)?.closest<HTMLAnchorElement>('a[href^="#"]');
+      const hash = link?.getAttribute("href");
+      if (!hash || hash === "#") return;
+      const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (!target) return;
+      e.preventDefault();
+
+      target.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
+        el.classList.add("fx-now", "in");
+        window.setTimeout(() => el.classList.remove("fx-now"), 600);
+      });
+
+      const header = 72;
+      const to = hash === "#home" ? 0 : Math.max(0, pageTop(target) - header);
+      const from = window.scrollY;
+      history.pushState(null, "", hash);
+      cancelAnimationFrame(jumpFrame);
+      if (reduced || Math.abs(to - from) < 2) {
+        window.scrollTo({ top: to, behavior: "instant" as ScrollBehavior });
+        return;
+      }
+      const start = performance.now();
+      const duration = Math.min(650, 320 + Math.abs(to - from) / 40);
+      const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        window.scrollTo({ top: from + (to - from) * ease(t), behavior: "instant" as ScrollBehavior });
+        if (t < 1) jumpFrame = requestAnimationFrame(step);
+      };
+      jumpFrame = requestAnimationFrame(step);
+    };
+    // A wheel or touch during a glide hands control straight back to the user.
+    const cancelJump = () => cancelAnimationFrame(jumpFrame);
+    document.addEventListener("click", onAnchorClick);
+    window.addEventListener("wheel", cancelJump, { passive: true });
+    window.addEventListener("touchstart", cancelJump, { passive: true });
 
     /* ================= pointer effects ================= */
     let pointerFrame = 0;
@@ -358,6 +481,10 @@ export default function FxRuntime() {
 
     return () => {
       revealer.disconnect();
+      document.removeEventListener("click", onAnchorClick);
+      window.removeEventListener("wheel", cancelJump);
+      window.removeEventListener("touchstart", cancelJump);
+      cancelAnimationFrame(jumpFrame);
       resizeObserver.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);

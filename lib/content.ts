@@ -14,7 +14,7 @@ export const profile = {
   email: "darshpandya02@gmail.com",
   altEmail: "darshpandya02@gmail.com",
   shell: "/bin/zsh",
-  avatar: "/images/darsh.jpg",
+  avatar: "/images/darsh-headshot.jpg",
   avatarAlt: "Darsh Pandya",
   tagline: "I build distributed systems and backend services.",
   summary:
@@ -434,7 +434,7 @@ export const projects: Project[] = [
     ],
     highlights: [
       "10,180 public posts with an author-grouped split and the condition's name masked out, so the model cannot score by spotting the word \"PTSD\" (that shortcut would add about 4 points).",
-      "Soft-vote ensemble reaches 87.3% accuracy and 0.947 ROC-AUC on held-out authors. McNemar tests show it is not better than the TF-IDF logistic regression alone, and a fine-tuned DistilRoBERTa beats it by 5 points.",
+      "Soft-vote ensemble reaches 87.3% accuracy and 0.947 ROC-AUC on held-out authors. McNemar tests show it is not better than the TF-IDF logistic regression alone, and a fine-tuned DistilRoBERTa beats the majority-vote ensemble by 5 points.",
       "Error analysis by community: 17.1% false positives on other mental-health forums against 4.5% on general ones.",
       "All three models run in the browser via ONNX Runtime Web and match Python within 2.4e-7, and Playwright confirms no typed text ever leaves the page.",
     ],
@@ -1011,6 +1011,33 @@ export const principles: { title: string; body: string }[] = [
  * here becomes something the assistant can tell visitors, so keep it public.
  */
 export const chatNotes: string[] = [];
+
+/**
+ * Order and grouping of the home page project gallery. Distributed systems and
+ * low-level work lead, AI/ML follows, then product builds. Anything not listed
+ * goes to the archive below the gallery.
+ */
+export type ProjectArea = "Distributed systems" | "Low-level" | "AI / ML" | "Product";
+
+export const showcase: { slug: string; area: ProjectArea }[] = [
+  { slug: "raft-cluster-monitor", area: "Distributed systems" },
+  { slug: "bsds", area: "Distributed systems" },
+  { slug: "image-moderation-platform", area: "Distributed systems" },
+  { slug: "ecommerce-analytics-pipeline", area: "Distributed systems" },
+  { slug: "fittrack", area: "Distributed systems" },
+  { slug: "webook", area: "Distributed systems" },
+  { slug: "meditrack", area: "Distributed systems" },
+  { slug: "cpp-data-structures", area: "Low-level" },
+  { slug: "customer-support-app", area: "AI / ML" },
+  { slug: "wewrite", area: "AI / ML" },
+  { slug: "brain-tumor-classification", area: "AI / ML" },
+  { slug: "ptsd-text-screening", area: "AI / ML" },
+  { slug: "fraudcheck", area: "AI / ML" },
+  { slug: "farepath", area: "Product" },
+  { slug: "insureus", area: "Product" },
+  { slug: "splitwit", area: "Product" },
+  { slug: "rent-and-roll", area: "Product" },
+];
 
 export const featuredProjects = projects.filter((p) => p.featured);
 

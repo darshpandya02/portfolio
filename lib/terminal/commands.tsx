@@ -35,6 +35,8 @@ const err = (text: string) => <Line tone="red">{text}</Line>;
 export const routes: Record<string, string> = {
   home: "/terminal",
   "~": "/terminal",
+  site: "/",
+  main: "/",
   about: "/about",
   whoami: "/about",
   experience: "/experience",
@@ -753,16 +755,18 @@ export const commands: Command[] = [
     name: "exit",
     aliases: ["logout", "quit", ":q"],
     usage: "exit",
-    summary: "end the session",
+    summary: "leave the terminal and go back to the main site",
     group: "system",
-    hidden: true,
-    run: () => (
-      <div className="space-y-1 text-sm">
-        <Line tone="dim">logout</Line>
-        <Line tone="faint">Connection to portfolio closed.</Line>
-        <Hint>…except it isn&apos;t. Close the tab if you really mean it.</Hint>
-      </div>
-    ),
+    run: (_args, ctx) => {
+      // Short pause so the logout line is visible before the page changes.
+      window.setTimeout(() => ctx.navigate("/"), 600);
+      return (
+        <div className="space-y-1 text-sm">
+          <Line tone="dim">logout</Line>
+          <Line tone="faint">Connection to portfolio closed. Back to the main site…</Line>
+        </div>
+      );
+    },
   },
 
   /* ------------------------------- easter eggs ------------------------------ */
