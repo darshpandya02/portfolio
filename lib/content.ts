@@ -8,7 +8,7 @@ export const profile = {
   fullName: "Darsh Chetan Pandya",
   handle: "darsh",
   host: "portfolio",
-  role: "Software Engineer",
+  role: "Research Software Engineer",
   company: "SPHERE Research Infrastructure",
   location: "Boston, Massachusetts, USA",
   email: "darshpandya02@gmail.com",
@@ -21,7 +21,7 @@ export const profile = {
     "Software Engineer working on public research infrastructure for reproducible cybersecurity experimentation. MSCS from Northeastern. Most of my time goes to backend design: message queues, sharded consumers, connection pooling, and the unglamorous work of making a system survive its own load.",
   bio: [
     "I'm a software engineer in Boston. I work on SPHERE, an NSF-backed public research infrastructure that lets security researchers run reproducible experiments on real hardware. The interesting part isn't any single service. It's that other people's science depends on the thing staying up and behaving identically on Tuesday as it did on Friday.",
-    "Before that I was a Software Engineer Co-op at Northeastern's Network Science Institute, where I reworked fragment navigation into a tag-based system and cut API response times by pooling connections instead of re-paying for TLS handshakes. Prior to Boston I was a backend intern at Gupshup in San Francisco, wiring Kafka for client-facing messaging and RabbitMQ for internal traffic between microservices, and a software engineering intern at Chance App in Mumbai building a match-making service on MERN.",
+    "Before that I built health data pipelines at Northeastern's UbiWell Lab, and before that I was a Software Engineer at Northeastern's Network Science Institute, where I reworked fragment navigation into a tag-based system and cut API response times by pooling connections instead of re-paying for TLS handshakes. In summer 2024 I was a backend intern at Gupshup, wiring Kafka for client-facing messaging and RabbitMQ for internal traffic between microservices. Before moving to Boston I was a software engineer at Chance App in Mumbai, building a match-making service on MERN.",
     "I finished my M.S. in Computer Science at Northeastern in December 2025 with a 3.97 GPA, and spent a year of it as a Teaching Assistant for Full-Stack Web Development. I ran tutorials, reviewed code, and wrote the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
     "My default stack is Python and TypeScript, with Java when the problem wants a type system with sharp edges. Postgres and Redis for state, Docker and Kubernetes for shipping, and a strong preference for boring, observable architecture over clever architecture.",
     "Away from the keyboard I travel whenever the calendar allows it, and I play an unreasonable amount of Valorant.",
@@ -66,7 +66,7 @@ export const experience: Experience[] = [
   {
     slug: "sphere",
     company: "SPHERE Research Infrastructure",
-    role: "Software Engineer",
+    role: "Research Software Engineer",
     location: "Boston, MA",
     start: "Jan 2026",
     end: "Present",
@@ -91,7 +91,7 @@ export const experience: Experience[] = [
   {
     slug: "ubiwell",
     company: "UbiWell Lab, Northeastern University",
-    role: "Software Engineer",
+    role: "Research Software Engineer",
     location: "Boston, MA",
     start: "Jul 2025",
     end: "Dec 2025",
@@ -113,7 +113,7 @@ export const experience: Experience[] = [
   {
     slug: "netsi",
     company: "Network Science Institute, Northeastern University",
-    role: "Software Engineer Co-op",
+    role: "Software Engineer",
     location: "Boston, MA",
     start: "Jan 2025",
     end: "Jun 2025",
@@ -174,7 +174,7 @@ export const experience: Experience[] = [
   {
     slug: "chance-app",
     company: "Chance App",
-    role: "Software Engineering Intern",
+    role: "Software Engineer",
     location: "Mumbai, India",
     start: "May 2022",
     end: "Oct 2022",
@@ -585,7 +585,7 @@ export const projects: Project[] = [
       "Distances are measured along real track geometry rather than straight lines, because on a distance-slab system a chord under-reports on curves and the measured distance is the fare.",
       "The build fails rather than shipping quietly: pinned OSM relations are asserted against ref, name, stop count and published length, and the network must be fully connected.",
       "218 stations and 300 edges fit in memory as one 95 KB JSON (14 KB gzipped), which is why there is no on-device SQLite costing 2 MB of native library for indexed queries nobody needs.",
-      "36 core tests and 18 pipeline tests, running on Node's native TypeScript with no build step and no dependencies.",
+      "71 tests across the core and data pipeline, running on Node's native TypeScript with no build step and no dependencies.",
     ],
     stack: ["TypeScript", "Expo", "React Native", "Node", "OpenStreetMap", "Graph Algorithms", "Android"],
   },
@@ -613,7 +613,7 @@ export const projects: Project[] = [
     slug: "vate",
     name: "Vate",
     tagline: "Swipe-to-match restaurant picking with real-time group consensus.",
-    year: "2026",
+    year: "2025",
     featured: true,
     status: "shipped",
     description: [
@@ -963,7 +963,7 @@ export const education: Education[] = [
     ],
   },
   {
-    school: "K. J. Somaiya College of Engineering",
+    school: "K. J. Somaiya College of Engineering (University of Mumbai)",
     degree: "B.Tech in Information Technology",
     location: "Mumbai, India",
     start: "Aug 2019",
@@ -983,11 +983,11 @@ export const education: Education[] = [
 /** Year-by-year path shown in the home page hero. */
 export const journey: { year: string; title: string; detail: string }[] = [
   { year: "2019", title: "K. J. Somaiya", detail: "B.Tech, Information Technology" },
-  { year: "2022", title: "Chance App", detail: "Full-stack intern, Mumbai" },
+  { year: "2022", title: "Chance App", detail: "Full-stack engineer, Mumbai" },
   { year: "2023", title: "Northeastern", detail: "M.S. Computer Science, Boston" },
   { year: "2024", title: "Gupshup", detail: "Backend intern, Kafka + RabbitMQ" },
   { year: "2025", title: "NetSI + UbiWell", detail: "Research data platforms" },
-  { year: "Now", title: "SPHERE", detail: "Software Engineer" },
+  { year: "Now", title: "SPHERE", detail: "Research Software Engineer" },
 ];
 
 /** "How I work" steps on the home page. */

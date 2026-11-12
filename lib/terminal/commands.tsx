@@ -375,7 +375,7 @@ export const commands: Command[] = [
               {profile.role} @ {profile.company}
             </Field>
             <Field k="location">{profile.location}</Field>
-            <Field k="uptime">{new Date().getFullYear() - 2019} years of shipping</Field>
+            <Field k="uptime">{new Date().getFullYear() - 2021} years of shipping</Field>
           </div>
           <Hint>
             You&apos;re in. <Cmd>ls</Cmd> to look around, <Cmd>help</Cmd> for the full command list.

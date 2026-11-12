@@ -74,11 +74,6 @@ export const evaluation: Article = {
       text: "The gap grows with model capacity, which is the signature of memorisation: the more a model can memorise, the more the random split flatters it. The question that matters is how well the model works for a new person, so the subject-wise split is the honest number. Under grouped 5-fold cross-validation by person, a random forest on 95 hand-crafted features averaged 85.2% (±4.6), and the LSTM came last at 80.8%.",
     },
     {
-      type: "callout",
-      label: "A correction to myself",
-      text: "My old resume claimed 92% for this project. That number was not reproduced on held-out subjects, and the README says so.",
-    },
-    {
       type: "p",
       text: "The model still shipped: a 108 KB int8 TensorFlow Lite build at 86.2%, an ONNX build in the browser that matches Python to within 4.2e-7, and an Android build that reproduced 86.33% on all 5,237 test windows on an emulator. A test asserts that the README quotes the same numbers as the metrics file, so the write-up cannot drift from the results.",
     },
