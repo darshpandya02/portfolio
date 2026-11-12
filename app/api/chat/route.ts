@@ -166,14 +166,14 @@ export async function POST(req: Request) {
     });
   } catch (err) {
     clearTimeout(timer);
-    logUpstream({ stage: "connect", ms: Date.now() - started, error: errorKind(err), timedOut: upstream.signal.aborted });
+    logUpstream({ stage: "connect", model, ms: Date.now() - started, error: errorKind(err), timedOut: upstream.signal.aborted });
     return new Response(offlineReply, { headers: plain });
   }
   const headersMs = Date.now() - started;
 
   if (!res.ok || !res.body) {
     clearTimeout(timer);
-    logUpstream({ stage: "status", status: res.status, ms: headersMs });
+    logUpstream({ stage: "status", status: res.status, model, ms: headersMs });
     // Deliberately generic: the upstream body is never echoed to the browser.
     const reply = res.status === 429 ? "The assistant is busy right now. Try again in a minute." : offlineReply;
     return new Response(reply, { headers: plain });
