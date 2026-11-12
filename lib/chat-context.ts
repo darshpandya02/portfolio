@@ -45,7 +45,7 @@ interface Passage {
 }
 
 const STOP = new Set(
-  "the a an and or of to in on for with at by from is are was were be been his he him what which who how does did do about tell me you your this that it its as has have had can could would should into over than then them they their there".split(
+  "the a an and or of to in on for with at by from is are was were be been his he him what which who how does did do about tell me you your this that it its as has have had can could would should into over than then them they their there any anything something some built build building made make work worked working use used using know knows done ever also much many like get got give".split(
     " ",
   ),
 );
@@ -61,7 +61,7 @@ function tokenize(text: string): string[] {
 
 function passage(title: string, body: string[]): Passage {
   const text = [title, ...body].join("\n");
-  const words = tokenize(`${title} ${title} ${body.join(" ")}`); // title counts double
+  const words = tokenize(`${title} ${title} ${title} ${body.join(" ")}`); // title words weigh three times
   const terms = new Map<string, number>();
   for (const w of words) terms.set(w, (terms.get(w) ?? 0) + 1);
   return { title, text, terms, length: words.length };
@@ -134,8 +134,36 @@ function bm25(query: string[], p: Passage): number {
   return score;
 }
 
-/** The best-matching passages for a question, within a character budget. */
-export function retrieve(question: string, maxPassages = 4, budget = 5000): Passage[] {
+/**
+ * Keeps a long passage to its title plus the lines that mention the query
+ * terms, so one big article section doesn't eat the whole budget.
+ */
+function trimPassage(p: Passage, query: string[], maxChars: number): string {
+  if (p.text.length <= maxChars) return p.text;
+  const [title, ...lines] = p.text.split("\n");
+  const scored = lines.map((line, i) => {
+    const words = new Set(tokenize(line));
+    return { line, i, hits: query.filter((q) => words.has(q)).length };
+  });
+  const keep = scored
+    .filter((l) => l.hits > 0)
+    .sort((a, b) => b.hits - a.hits || a.i - b.i);
+  const chosen: typeof scored = [];
+  let used = title.length;
+  for (const l of keep.length ? keep : scored) {
+    if (used + l.line.length > maxChars) continue;
+    chosen.push(l);
+    used += l.line.length + 1;
+  }
+  return [title, ...chosen.sort((a, b) => a.i - b.i).map((l) => l.line)].join("\n");
+}
+
+/**
+ * The best-matching passages for a question, within a character budget. The
+ * budget is small on purpose: every extra token of detail costs the laptop
+ * model roughly 25 ms before it can start answering.
+ */
+export function retrieve(question: string, maxPassages = 3, budget = 2400): Passage[] {
   const query = Array.from(new Set(tokenize(question)));
   if (!query.length) return [];
   const ranked = PASSAGES.map((p) => ({ p, s: bm25(query, p) }))
@@ -144,10 +172,11 @@ export function retrieve(question: string, maxPassages = 4, budget = 5000): Pass
   const picked: Passage[] = [];
   let used = 0;
   for (const { p } of ranked) {
-    if (picked.length >= maxPassages) break;
-    if (used + p.text.length > budget && picked.length) continue;
-    picked.push(p);
-    used += p.text.length;
+    if (picked.length >= maxPassages || used >= budget) break;
+    const text = trimPassage(p, query, Math.min(1000, budget - used));
+    if (text.length < 80) continue;
+    picked.push({ ...p, text });
+    used += text.length;
   }
   return picked;
 }

@@ -21,7 +21,8 @@ const DEFAULT_BASE_URL = "https://darsh-windows-laptop.tail635357.ts.net";
 const DEFAULT_MODEL = "qwen2.5-coder:3b";
 const MAX_TURNS = 12;
 const MAX_CHARS = 1000;
-const UPSTREAM_TIMEOUT_MS = 45_000;
+// Vercel stops the function at 60 s (maxDuration); leave room to send the reply.
+const UPSTREAM_TIMEOUT_MS = 55_000;
 
 // Best-effort per-instance limiter. Serverless instances don't share it, so it
 // only blunts bursts; the endpoint itself should still enforce its own limits.
