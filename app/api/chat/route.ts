@@ -103,6 +103,21 @@ function makeThinkFilter() {
   };
 }
 
+/**
+ * One line per request in the Vercel logs: timings, upstream status and error
+ * type only. Never the key, the prompt, the visitor's text or the reply.
+ */
+function logUpstream(fields: Record<string, string | number | boolean | undefined>) {
+  // eslint-disable-next-line no-console
+  console.info(JSON.stringify({ evt: "chat_upstream", ...fields }));
+}
+
+function errorKind(err: unknown): string {
+  if (!(err instanceof Error)) return "unknown";
+  const cause = (err as Error & { cause?: { code?: unknown } }).cause;
+  return [err.name, typeof cause?.code === "string" ? cause.code : ""].filter(Boolean).join(":");
+}
+
 const offlineReply = "The assistant is offline right now. Try again later, or email Darsh directly.";
 const plain = { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" };
 
@@ -128,6 +143,7 @@ export async function POST(req: Request) {
   const userTurns = turns.filter((t) => t.role === "user");
   const systemPrompt = buildSystemPrompt(userTurns.slice(-2).map((t) => t.content).join(" "));
 
+  const started = Date.now();
   const upstream = new AbortController();
   const timer = setTimeout(() => upstream.abort(), UPSTREAM_TIMEOUT_MS);
   req.signal.addEventListener("abort", () => upstream.abort());
@@ -147,13 +163,16 @@ export async function POST(req: Request) {
       signal: upstream.signal,
       cache: "no-store",
     });
-  } catch {
+  } catch (err) {
     clearTimeout(timer);
+    logUpstream({ stage: "connect", ms: Date.now() - started, error: errorKind(err), timedOut: upstream.signal.aborted });
     return new Response(offlineReply, { headers: plain });
   }
+  const headersMs = Date.now() - started;
 
   if (!res.ok || !res.body) {
     clearTimeout(timer);
+    logUpstream({ stage: "status", status: res.status, ms: headersMs });
     // Deliberately generic: the upstream body is never echoed to the browser.
     const reply = res.status === 429 ? "The assistant is busy right now. Try again in a minute." : offlineReply;
     return new Response(reply, { headers: plain });
@@ -170,9 +189,11 @@ export async function POST(req: Request) {
     async start(controller) {
       let buffer = "";
       let sent = false;
+      let firstTokenMs: number | undefined;
       const emit = (text: string) => {
         const visible = clean(stripThink(text));
         if (visible) {
+          firstTokenMs ??= Date.now() - started;
           sent = true;
           controller.enqueue(encoder.encode(visible));
         }
@@ -206,7 +227,9 @@ export async function POST(req: Request) {
         }
         handleLine(buffer);
         if (!sent) controller.enqueue(encoder.encode("I couldn't come up with an answer. Try rephrasing?"));
-      } catch {
+        logUpstream({ stage: "done", status: res.status, headersMs, firstTokenMs, ms: Date.now() - started, sent });
+      } catch (err) {
+        logUpstream({ stage: "stream", headersMs, firstTokenMs, ms: Date.now() - started, error: errorKind(err), timedOut: upstream.signal.aborted, sent });
         controller.enqueue(encoder.encode(sent ? "\n\nThe connection dropped. Try again." : offlineReply));
       } finally {
         clearTimeout(timer);
