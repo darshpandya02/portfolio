@@ -1,77 +1,174 @@
 import { chatNotes, education, experience, journey, links, profile, projects, publications, skills } from "@/lib/content";
-import { articles, articleText } from "@/lib/writing";
+import { articles } from "@/lib/writing";
 
 /**
- * Everything the chat assistant is allowed to know, serialized from content.ts.
- * Built once per server instance and kept byte-stable so the prompt prefix caches.
+ * What the chat assistant is told, built per question.
+ *
+ * The model is a small one running on a laptop with a short context window, so
+ * the full profile (all projects, jobs and deep dives, ~20k tokens) cannot be
+ * sent every time: it would be slow to read and would be truncated. Instead the
+ * prompt is a compact core profile plus the few detailed passages that best
+ * match the visitor's question, found with simple keyword scoring (BM25).
  */
-function knowledge(): string {
+
+/* ------------------------------------------------------------------ */
+/* Core profile: always sent, kept short                               */
+/* ------------------------------------------------------------------ */
+
+function coreProfile(): string {
   const lines: string[] = [];
-
-  lines.push(`# ${profile.name}`, `${profile.role} at ${profile.company}. Based in ${profile.location}.`, profile.summary);
-  lines.push("", "## Bio", ...profile.bio);
-  lines.push("", `Availability: ${profile.availability}`);
-  lines.push(
-    "",
-    "## Links",
-    `Email: ${profile.email}`,
-    `GitHub: ${links.github}`,
-    `LinkedIn: ${links.linkedin}`,
-    `Resume PDF: on this site at ${links.resume}`,
-  );
-
-  lines.push("", "## Experience");
-  for (const job of experience) {
-    lines.push(
-      "",
-      `### ${job.role}, ${job.company} (${job.location}), ${job.start} to ${job.end}`,
-      job.summary,
-      ...job.highlights.map((h) => `- ${h}`),
-      `Stack: ${job.stack.join(", ")}`,
-    );
-  }
-
-  lines.push("", "## Projects");
-  for (const p of projects) {
-    lines.push(
-      "",
-      `### ${p.name} (${p.year})`,
-      p.tagline,
-      ...p.description,
-      ...p.highlights.map((h) => `- ${h}`),
-      `Stack: ${p.stack.join(", ")}`,
-      ...(p.demo ? [`Demo: ${p.demo}`] : []),
-      ...(p.github ? [`Code: ${p.github}`] : []),
-    );
-  }
-
-  lines.push("", "## Skills", ...skills.map((g) => `${g.name}: ${g.items.join(", ")}`));
-  lines.push("", "## Publications", ...publications.map((p) => `- ${p.title}. ${p.venue}, ${p.year}.${p.note ? ` ${p.note}` : ""}`));
-  lines.push(
-    "",
-    "## Education",
-    ...education.map(
-      (e) => `- ${e.degree}, ${e.school} (${e.location}), ${e.start} to ${e.end}, GPA ${e.gpa}. Coursework: ${e.coursework.join(", ")}.`,
-    ),
-  );
-
-  lines.push("", "## Deep-dive articles he wrote (on this site under /writing/<slug>)");
-  for (const a of articles) lines.push("", `Link: /writing/${a.slug}`, articleText(a));
-
-  lines.push("", "## Timeline", ...journey.map((j) => `- ${j.year}: ${j.title}, ${j.detail}`));
-  if (chatNotes.length) lines.push("", "## More about him", ...chatNotes.map((n) => `- ${n}`));
-
+  lines.push(`${profile.name}: ${profile.role} at ${profile.company}, based in ${profile.location}.`, profile.summary);
+  lines.push(`Availability: ${profile.availability}`);
+  lines.push(`Contact: ${profile.email} | GitHub ${links.github} | LinkedIn ${links.linkedin} | Resume: /files/resume.pdf on this site`);
+  lines.push("", "Experience (newest first):");
+  for (const j of experience) lines.push(`- ${j.role}, ${j.company} (${j.location}), ${j.start} to ${j.end}: ${j.summary}`);
+  lines.push("", "Education:");
+  for (const e of education) lines.push(`- ${e.degree}, ${e.school}, ${e.start} to ${e.end}, GPA ${e.gpa}`);
+  lines.push("", "Skills:", ...skills.map((g) => `- ${g.name}: ${g.items.join(", ")}`));
+  lines.push("", "Projects (name: one-line summary):", ...projects.map((p) => `- ${p.name} (${p.year}): ${p.tagline}`));
+  lines.push("", "Deep-dive articles on this site:", ...articles.map((a) => `- ${a.title} (/writing/${a.slug})`));
+  lines.push("", "Publications:", ...publications.map((p) => `- ${p.title}. ${p.venue}, ${p.year}.`));
+  lines.push("", "Timeline:", journey.map((j) => `${j.year} ${j.title}`).join("; "));
+  if (chatNotes.length) lines.push("", "More about him:", ...chatNotes.map((n) => `- ${n}`));
   return lines.join("\n");
 }
 
-export const CHAT_SYSTEM_PROMPT = `You are the assistant on ${profile.name}'s portfolio website. Visitors are usually recruiters, hiring managers and engineers who want to know about his work.
+/* ------------------------------------------------------------------ */
+/* Detailed passages: retrieved per question                           */
+/* ------------------------------------------------------------------ */
 
-Answer only from the profile below. Refer to him in the third person, by name or as "he". If the profile doesn't answer the question, say that you don't know and suggest emailing him at ${profile.email}. Never guess at facts that are not in the profile, such as salary expectations, visa or work authorization, references, or anything personal beyond what is written. Send those questions to email as well.
+interface Passage {
+  title: string;
+  text: string;
+  terms: Map<string, number>;
+  length: number;
+}
 
-Visitors may ask anything about him: his background, jobs, projects, skills, research, education, interests, or how to get in touch. Answer all of those from the profile.
+const STOP = new Set(
+  "the a an and or of to in on for with at by from is are was were be been his he him what which who how does did do about tell me you your this that it its as has have had can could would should into over than then them they their there".split(
+    " ",
+  ),
+);
 
-Keep replies short: two to five sentences, or a brief list when comparing several items. Write plain text with no markdown headings, bold or tables. Do not use em dashes or en dashes; use commas, colons or separate sentences instead. When a project has a live demo or source link, include the URL. Stay on the topic of his work. Politely decline unrelated requests, such as writing code for the visitor or general trivia.
+function tokenize(text: string): string[] {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9+#.]+/g, " ")
+    .split(" ")
+    .map((w) => w.replace(/^\.+|\.+$/g, ""))
+    .filter((w) => w.length > 1 && !STOP.has(w));
+}
 
-<profile>
-${knowledge()}
-</profile>`;
+function passage(title: string, body: string[]): Passage {
+  const text = [title, ...body].join("\n");
+  const words = tokenize(`${title} ${title} ${body.join(" ")}`); // title counts double
+  const terms = new Map<string, number>();
+  for (const w of words) terms.set(w, (terms.get(w) ?? 0) + 1);
+  return { title, text, terms, length: words.length };
+}
+
+function buildPassages(): Passage[] {
+  const out: Passage[] = [];
+  for (const j of experience) {
+    out.push(
+      passage(`Job: ${j.role}, ${j.company}, ${j.start} to ${j.end}`, [
+        j.summary,
+        ...j.highlights.map((h) => `- ${h}`),
+        `Stack: ${j.stack.join(", ")}`,
+      ]),
+    );
+  }
+  for (const p of projects) {
+    out.push(
+      passage(`Project: ${p.name} (${p.year})`, [
+        p.tagline,
+        ...p.description,
+        ...p.highlights.map((h) => `- ${h}`),
+        `Stack: ${p.stack.join(", ")}`,
+        ...(p.demo ? [`Demo: ${p.demo}`] : []),
+        ...(p.github ? [`Code: ${p.github}`] : []),
+      ]),
+    );
+  }
+  for (const a of articles) {
+    // One passage per section, so a question about one detail pulls only that part.
+    let heading = "Introduction";
+    let buf: string[] = [a.dek];
+    const flush = () => {
+      if (buf.length) out.push(passage(`Article "${a.title}" (/writing/${a.slug}), section: ${heading}`, buf));
+      buf = [];
+    };
+    for (const b of a.body) {
+      if (b.type === "h2") {
+        flush();
+        heading = b.text;
+      } else if (b.type === "p" || b.type === "callout" || b.type === "h3") buf.push(b.text);
+      else if (b.type === "list") buf.push(...b.items.map((i) => `- ${i}`));
+      else if (b.type === "stats") buf.push(...b.items.map((s) => `- ${s.value}: ${s.label}`));
+      else if (b.type === "table") buf.push(b.head.join(" | "), ...b.rows.map((r) => r.join(" | ")));
+    }
+    flush();
+  }
+  out.push(passage("Full bio", profile.bio));
+  out.push(passage("Education and coursework", education.map((e) => `${e.degree}, ${e.school} (${e.location}). Coursework: ${e.coursework.join(", ")}.`)));
+  out.push(passage("Publications", publications.map((p) => `${p.title}. ${p.venue}, ${p.year}. ${p.note ?? ""}`)));
+  return out.map((p) => ({ ...p, text: p.text.replace(/`/g, "") }));
+}
+
+const PASSAGES = buildPassages();
+const AVG_LEN = PASSAGES.reduce((s, p) => s + p.length, 0) / PASSAGES.length;
+const DOC_FREQ = new Map<string, number>();
+for (const p of PASSAGES) p.terms.forEach((_, t) => DOC_FREQ.set(t, (DOC_FREQ.get(t) ?? 0) + 1));
+
+function bm25(query: string[], p: Passage): number {
+  const k1 = 1.4;
+  const b = 0.75;
+  let score = 0;
+  for (const q of query) {
+    const tf = p.terms.get(q);
+    if (!tf) continue;
+    const df = DOC_FREQ.get(q) ?? 0;
+    const idf = Math.log(1 + (PASSAGES.length - df + 0.5) / (df + 0.5));
+    score += idf * ((tf * (k1 + 1)) / (tf + k1 * (1 - b + (b * p.length) / AVG_LEN)));
+  }
+  return score;
+}
+
+/** The best-matching passages for a question, within a character budget. */
+export function retrieve(question: string, maxPassages = 4, budget = 5000): Passage[] {
+  const query = Array.from(new Set(tokenize(question)));
+  if (!query.length) return [];
+  const ranked = PASSAGES.map((p) => ({ p, s: bm25(query, p) }))
+    .filter((r) => r.s > 0)
+    .sort((a, b) => b.s - a.s);
+  const picked: Passage[] = [];
+  let used = 0;
+  for (const { p } of ranked) {
+    if (picked.length >= maxPassages) break;
+    if (used + p.text.length > budget && picked.length) continue;
+    picked.push(p);
+    used += p.text.length;
+  }
+  return picked;
+}
+
+/* ------------------------------------------------------------------ */
+/* System prompt                                                       */
+/* ------------------------------------------------------------------ */
+
+const CORE = coreProfile();
+
+const RULES = `You are the assistant on ${profile.name}'s portfolio website. Visitors are usually recruiters, hiring managers and engineers who want to know about his work.
+
+Answer only from the profile and details below. Refer to him in the third person, by name or as "he". If they don't answer the question, say you don't know and suggest emailing him at ${profile.email}. Never guess at facts that are not written below, such as salary expectations, visa or work authorization, references, or anything personal. Send those questions to email as well.
+
+Keep replies short: two to five sentences, or a brief list when comparing items. Plain text only, no markdown headings, bold or tables. Do not use em dashes or en dashes. When a project has a live demo or source link, include the URL. Stay on the topic of his work and politely decline unrelated requests, such as writing code for the visitor.`;
+
+/** System prompt for one question: rules, core profile, and the matching details. */
+export function buildSystemPrompt(question: string): string {
+  const details = retrieve(question);
+  const detailBlock = details.length
+    ? `\n\n<details>\n${details.map((d) => d.text).join("\n\n")}\n</details>`
+    : "";
+  return `${RULES}\n\n<profile>\n${CORE}\n</profile>${detailBlock}`;
+}

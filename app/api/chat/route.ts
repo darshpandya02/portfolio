@@ -1,4 +1,4 @@
-import { CHAT_SYSTEM_PROMPT } from "@/lib/chat-context";
+import { buildSystemPrompt } from "@/lib/chat-context";
 
 /**
  * Chat assistant backed by a self-hosted, OpenAI-compatible endpoint.
@@ -123,6 +123,10 @@ export async function POST(req: Request) {
   }
 
   const model = process.env.LLM_MODEL || DEFAULT_MODEL;
+  // Retrieval uses the latest question plus the one before it, so follow-ups
+  // like "and what stack did it use?" still find the right project.
+  const userTurns = turns.filter((t) => t.role === "user");
+  const systemPrompt = buildSystemPrompt(userTurns.slice(-2).map((t) => t.content).join(" "));
 
   const upstream = new AbortController();
   const timer = setTimeout(() => upstream.abort(), UPSTREAM_TIMEOUT_MS);
@@ -136,9 +140,9 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         model,
         stream: true,
-        max_tokens: 1024,
+        max_tokens: 400,
         temperature: 0.3,
-        messages: [{ role: "system", content: CHAT_SYSTEM_PROMPT }, ...turns],
+        messages: [{ role: "system", content: systemPrompt }, ...turns],
       }),
       signal: upstream.signal,
       cache: "no-store",
