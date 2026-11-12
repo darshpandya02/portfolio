@@ -8,7 +8,8 @@ const IMAGE = `${SITE_URL}/images/social/leetcode-card.jpg`;
 /**
  * Link-preview shim for the LeetCode profile. LeetCode blocks link-preview
  * crawlers (LinkedIn, Slack), so this serves the preview tags itself and
- * sends people straight on to the profile.
+ * sends people straight on to the profile. The forward is JavaScript only: a
+ * canonical link or meta refresh would send the crawler back to LeetCode.
  */
 export function GET() {
   const html = `<!doctype html>
@@ -26,8 +27,6 @@ export function GET() {
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="noindex">
-<link rel="canonical" href="${TARGET}">
-<meta http-equiv="refresh" content="0; url=${TARGET}">
 </head>
 <body style="background:#06060c;color:#eeedf9;font-family:system-ui,sans-serif">
 <p>Taking you to <a href="${TARGET}" style="color:#22d3ee">${TARGET}</a>…</p>
