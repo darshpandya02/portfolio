@@ -10,10 +10,18 @@ Both read from `lib/content.ts`.
 
 ## Chat assistant
 
-`app/api/chat/route.ts` answers visitor questions from `lib/content.ts` (see
-`lib/chat-context.ts`). It needs `ANTHROPIC_API_KEY` in the environment; without
-it the widget shows a contact email instead. `chatNotes` in `lib/content.ts`
-holds extra facts for the assistant only, so keep them public.
+`app/api/chat/route.ts` answers visitor questions from `lib/content.ts` and the
+deep dives (see `lib/chat-context.ts`) by calling a self-hosted,
+OpenAI-compatible `/v1/chat/completions` endpoint and streaming the reply.
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `LLM_KEY` | yes | Bearer token for the endpoint. Server-only: never prefix it with `NEXT_PUBLIC_`. |
+| `LLM_BASE_URL` | no | Defaults to the Tailscale Funnel host in the route. |
+| `LLM_MODEL` | no | Defaults to `qwen2.5-coder:3b`. |
+
+Without `LLM_KEY` the widget shows a contact email instead. `chatNotes` in
+`lib/content.ts` holds extra facts for the assistant only, so keep them public.
 
 ## Stack
 
