@@ -191,6 +191,7 @@ export async function POST(req: Request) {
       let buffer = "";
       let sent = false;
       let firstTokenMs: number | undefined;
+      let servedBy: string | undefined; // model name the endpoint reports in its reply
       const emit = (text: string) => {
         const visible = clean(stripThink(text));
         if (visible) {
@@ -206,8 +207,10 @@ export async function POST(req: Request) {
         if (!data || data === "[DONE]") return;
         try {
           const json = JSON.parse(data) as {
+            model?: unknown;
             choices?: { delta?: { content?: unknown }; message?: { content?: unknown } }[];
           };
+          if (!servedBy && typeof json.model === "string") servedBy = json.model;
           const choice = json.choices?.[0];
           const text = choice?.delta?.content ?? choice?.message?.content;
           if (typeof text === "string") emit(text);
@@ -228,7 +231,7 @@ export async function POST(req: Request) {
         }
         handleLine(buffer);
         if (!sent) controller.enqueue(encoder.encode("I couldn't come up with an answer. Try rephrasing?"));
-        logUpstream({ stage: "done", status: res.status, headersMs, firstTokenMs, ms: Date.now() - started, sent });
+        logUpstream({ stage: "done", status: res.status, model, servedBy, headersMs, firstTokenMs, ms: Date.now() - started, sent });
       } catch (err) {
         logUpstream({ stage: "stream", headersMs, firstTokenMs, ms: Date.now() - started, error: errorKind(err), timedOut: upstream.signal.aborted, sent });
         controller.enqueue(encoder.encode(sent ? "\n\nThe connection dropped. Try again." : offlineReply));
