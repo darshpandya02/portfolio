@@ -568,7 +568,7 @@ export const commands: Command[] = [
         { hash: "c0d94ae", when: "2025", msg: "chore: graduate, M.S. Computer Science, Northeastern" },
         { hash: "7e1b830", when: "2024", msg: "feat(gupshup): kafka for external, rabbitmq for internal" },
         { hash: "51a2df6", when: "2024", msg: "perf(gupshup): redis cache, -35% database load" },
-        { hash: "b8c4e27", when: "2024", msg: "feat(neu): teach full-stack web development for a year" },
+        { hash: "b8c4e27", when: "2024", msg: "feat(neu): teach web development (CS 5610) for two semesters" },
         { hash: "3a9f6d0", when: "2023", msg: "feat: relocate Mumbai -> Boston" },
         { hash: "e42c1b8", when: "2022", msg: "feat(chance): match-making on heaps and hash maps, +20%" },
         { hash: "1d70f93", when: "2019", msg: "init: B.Tech, Information Technology" },

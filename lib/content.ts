@@ -22,7 +22,7 @@ export const profile = {
   bio: [
     "I'm a software engineer in Boston. I work on SPHERE, an NSF-backed public research infrastructure that lets security researchers run reproducible experiments on real hardware. The interesting part isn't any single service. It's that other people's science depends on the thing staying up and behaving identically on Tuesday as it did on Friday.",
     "Before that I built health data pipelines at Northeastern's UbiWell Lab, and before that I was a Software Engineer at Northeastern's Network Science Institute, where I reworked fragment navigation into a tag-based system and cut API response times by pooling connections instead of re-paying for TLS handshakes. In summer 2024 I was a backend intern at Gupshup, wiring Kafka for client-facing messaging and RabbitMQ for internal traffic between microservices. Before moving to Boston I was a software engineer at Chance App in Mumbai, building a match-making service on MERN.",
-    "I finished my M.S. in Computer Science at Northeastern in December 2025 with a 3.97 GPA, and spent a year of it as a Teaching Assistant for Full-Stack Web Development. I ran tutorials, reviewed code, and wrote the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
+    "I finished my M.S. in Computer Science at Northeastern in December 2025 with a 3.97 GPA, and spent two semesters of it as a Teaching Assistant for Web Development (CS 5610). I ran tutorials, reviewed code, and wrote the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
     "My default stack is Python and TypeScript, with Java when the problem wants a type system with sharp edges. Postgres and Redis for state, Docker and Kubernetes for shipping, and a strong preference for boring, observable architecture over clever architecture.",
     "Away from the keyboard I travel whenever the calendar allows it, and I play an unreasonable amount of Valorant.",
   ],
@@ -142,7 +142,7 @@ export const experience: Experience[] = [
       "Developed an automated weekly scheduler in Java Spring Boot that analyzed ad spend and click-ratio metrics, contributing to a 15% revenue increase through better campaign targeting.",
       "Integrated Apache Kafka for external client messaging and RabbitMQ for internal inter-service messaging, raising message processing efficiency by 15%.",
       "Deployed Redis caching that cut database load by 35% and improved application scalability.",
-      "Ran Agile sprints through Jira, streamlining delivery and increasing team throughput by 22% while keeping SDLC compliance intact.",
+      "Worked in Agile sprints tracked in Jira, raising team throughput by 22%.",
     ],
     stack: ["Java", "Spring Boot", "Apache Kafka", "RabbitMQ", "Redis", "Jira"],
     metrics: [
@@ -154,12 +154,12 @@ export const experience: Experience[] = [
   {
     slug: "neu-ta",
     company: "Northeastern University",
-    role: "Teaching Assistant, Full-Stack Web Development",
+    role: "Teaching Assistant, Web Development (CS 5610)",
     location: "Boston, MA",
     start: "Jan 2024",
     end: "Dec 2024",
     summary:
-      "Taught and supported students through Northeastern's full-stack web development course.",
+      "Taught and supported students through Northeastern's full-stack web development course (CS 5610) in the Spring and Fall 2024 semesters.",
     highlights: [
       "Ran tutorials on React.js, Node.js, TypeScript, Express.js, Jest, Cypress, MongoDB, Docker, JWT and Git.",
       "Performed code review and one-on-one office hours for students working through full-stack projects.",
