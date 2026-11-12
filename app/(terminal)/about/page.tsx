@@ -6,7 +6,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "About",
   description:
-    "Darsh Pandya — software engineer in Boston working on SPHERE, an NSF-backed public research infrastructure for reproducible cybersecurity experimentation.",
+    "Darsh Pandya - software engineer in Boston working on SPHERE, an NSF-backed public research infrastructure for reproducible cybersecurity experimentation.",
   path: "/about",
 });
 

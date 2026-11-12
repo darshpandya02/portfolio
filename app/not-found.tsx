@@ -11,7 +11,7 @@ const art = String.raw`
 
 export default function NotFound() {
   return (
-    <div className="relative flex flex-1 items-center justify-center px-4 py-16">
+    <div className="relative flex min-h-screen items-center justify-center bg-term-bg px-4 py-16 font-mono text-term-fg">
       <div className="pointer-events-none absolute inset-0 grid-bg" aria-hidden />
       <div className="relative w-full max-w-xl overflow-hidden rounded-lg border border-term-border bg-term-panel shadow-2xl shadow-black/40">
         <header className="flex items-center gap-3 border-b border-term-border bg-term-raised px-3 py-2">
@@ -20,7 +20,7 @@ export default function NotFound() {
             <span className="h-3 w-3 rounded-full bg-term-yellow/80" />
             <span className="h-3 w-3 rounded-full bg-term-green/80" />
           </div>
-          <div className="min-w-0 flex-1 truncate text-center text-xs text-term-dim">darsh@portfolio — error</div>
+          <div className="min-w-0 flex-1 truncate text-center text-xs text-term-dim">darsh@portfolio - error</div>
           <div className="w-10 shrink-0" aria-hidden />
         </header>
         <div className="space-y-4 p-5 text-sm sm:p-6">

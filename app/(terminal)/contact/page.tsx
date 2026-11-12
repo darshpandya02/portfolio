@@ -9,7 +9,7 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata = pageMetadata({
   title: "Contact",
   description:
-    "Get in touch with Darsh Pandya — email, GitHub, LinkedIn, or send a message straight from the browser.",
+    "Get in touch with Darsh Pandya by email, GitHub or LinkedIn, or send a message straight from the browser.",
   path: "/contact",
 });
 

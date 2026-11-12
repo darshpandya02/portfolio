@@ -55,7 +55,7 @@ export const root: FsNode = {
           size: 0,
           modified: "2026",
           children: [
-            { name: "README.md", type: "file", doc: "readme", route: "/", size: 940, modified: "2026" },
+            { name: "README.md", type: "file", doc: "readme", route: "/terminal", size: 940, modified: "2026" },
             { name: "about.md", type: "file", doc: "about", route: "/about", size: 2480, modified: "2026" },
             { name: "experience.md", type: "file", doc: "experience", route: "/experience", size: 3310, modified: "2026" },
             { name: "projects.md", type: "file", doc: "projects", route: "/projects", size: 4120, modified: "2026" },

@@ -4,7 +4,8 @@ import Terminal from "@/components/terminal/Terminal";
 import { education, experience, links, profile, projects, SITE_URL, skills } from "@/lib/content";
 
 export const metadata: Metadata = {
-  alternates: { canonical: SITE_URL },
+  title: "Terminal",
+  alternates: { canonical: `${SITE_URL}/terminal` },
 };
 
 /**
@@ -15,7 +16,7 @@ function StaticFallback() {
   return (
     <div className="sr-only">
       <h1>
-        {profile.name} — {profile.role} at {profile.company}
+        {profile.name}, {profile.role} at {profile.company}
       </h1>
       <p>{profile.summary}</p>
       {profile.bio.map((paragraph, i) => (
@@ -25,7 +26,7 @@ function StaticFallback() {
       <ul>
         {experience.map((job) => (
           <li key={job.slug}>
-            {job.role}, {job.company} ({job.start} — {job.end}): {job.summary}
+            {job.role}, {job.company} ({job.start} to {job.end}): {job.summary}
           </li>
         ))}
       </ul>
@@ -49,7 +50,7 @@ function StaticFallback() {
       <ul>
         {education.map((entry) => (
           <li key={entry.school}>
-            {entry.degree}, {entry.school} ({entry.start} — {entry.end})
+            {entry.degree}, {entry.school} ({entry.start} to {entry.end})
           </li>
         ))}
       </ul>
@@ -69,7 +70,7 @@ function StaticFallback() {
   );
 }
 
-export default function Home() {
+export default function TerminalHome() {
   return (
     <div className="relative flex flex-1 flex-col">
       <div className="pointer-events-none absolute inset-0 grid-bg" aria-hidden />
@@ -83,7 +84,7 @@ export default function Home() {
               <span className="h-3 w-3 rounded-full bg-term-green/80" />
             </div>
             <div className="min-w-0 flex-1 truncate text-center text-xs text-term-dim">
-              {profile.handle}@{profile.host} — zsh — 120×40
+              {profile.handle}@{profile.host} - zsh - 120×40
             </div>
             <div className="w-10 shrink-0" aria-hidden />
           </header>

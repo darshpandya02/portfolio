@@ -1,9 +1,19 @@
-# darshpandya.com
+# darshpandya.vercel.app
 
-A terminal-style portfolio. The landing page is a working shell — visitors type
-`whoami`, `cat projects.md` or `ssh darsh@portfolio` instead of clicking nav
-links — and every command has a matching real page for people who'd rather just
-click (and for search engines).
+The landing page (`/`) is a single scrolling page with scroll-driven effects:
+stacked experience cards, a pinned sideways project gallery, parallax and a
+floating chat assistant. The original terminal-style portfolio lives at
+`/terminal`, where visitors type `whoami`, `cat projects.md` or
+`ssh darsh@portfolio`, and every command has a matching real page.
+
+Both read from `lib/content.ts`.
+
+## Chat assistant
+
+`app/api/chat/route.ts` answers visitor questions from `lib/content.ts` (see
+`lib/chat-context.ts`). It needs `ANTHROPIC_API_KEY` in the environment; without
+it the widget shows a contact email instead. `chatNotes` in `lib/content.ts`
+holds extra facts for the assistant only, so keep them public.
 
 ## Stack
 

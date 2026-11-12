@@ -280,7 +280,7 @@ export default function Terminal() {
             <Ascii art={asciiName} />
             <div className="space-y-1">
               <Line tone="dim">
-                {profile.role} @ {profile.company} — {profile.location}
+                {profile.role} @ {profile.company} - {profile.location}
               </Line>
               <Line tone="faint">{profile.tagline}</Line>
             </div>

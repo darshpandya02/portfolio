@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const tabs = [
-  { href: "/", label: "~" },
+  { href: "/terminal", label: "~" },
   { href: "/about", label: "about" },
   { href: "/experience", label: "experience" },
   { href: "/projects", label: "projects" },
@@ -24,7 +24,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-3 sm:px-6">
         <Link
-          href="/"
+          href="/terminal"
           className="shrink-0 py-2.5 text-sm font-semibold text-term-accent transition-opacity hover:opacity-80"
         >
           darsh<span className="text-term-faint">@</span>portfolio
@@ -32,7 +32,7 @@ export default function Navbar() {
 
         <ul className="flex flex-1 items-center gap-0.5 overflow-x-auto py-1.5 scrollbar-none">
           {tabs.map((tab) => {
-            const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
+            const active = tab.href === "/terminal" ? pathname === "/terminal" : pathname.startsWith(tab.href);
             return (
               <li key={tab.href} className="shrink-0">
                 <Link

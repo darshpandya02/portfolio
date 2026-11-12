@@ -13,6 +13,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        ed: {
+          bg: "var(--ed-bg)",
+          surface: "var(--ed-surface)",
+          sunken: "var(--ed-sunken)",
+          ink: "var(--ed-ink)",
+          muted: "var(--ed-muted)",
+          faint: "var(--ed-faint)",
+          line: "var(--ed-line)",
+          accent: "var(--ed-accent)",
+          "accent-ink": "var(--ed-accent-ink)",
+          "accent-soft": "var(--ed-accent-soft)",
+          good: "var(--ed-good)",
+        },
         term: {
           bg: "rgb(var(--t-bg-rgb) / <alpha-value>)",
           panel: "rgb(var(--t-panel-rgb) / <alpha-value>)",

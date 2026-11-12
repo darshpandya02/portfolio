@@ -31,7 +31,7 @@ export default function Window({
           <span className="h-3 w-3 rounded-full bg-term-green/80" />
         </div>
         <div className="min-w-0 flex-1 truncate text-center text-xs text-term-dim">
-          {profile.handle}@{profile.host} — {title}
+          {profile.handle}@{profile.host} - {title}
         </div>
         <div className="w-10 shrink-0" aria-hidden />
       </header>

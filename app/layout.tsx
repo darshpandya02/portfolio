@@ -1,15 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Newsreader, Space_Grotesk } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
 
-import Navbar from "@/components/Navbar";
-import ViewTransitions from "@/components/ViewTransitions";
-import Footer from "@/components/Footer";
 import { profile, SITE_URL } from "@/lib/content";
 import { themeBootScript } from "@/lib/terminal/themes";
+import { siteBootScript } from "@/lib/site-prefs";
+import ChatWidget from "@/components/site/ChatWidget";
 
 const mono = JetBrains_Mono({
   subsets: ["latin"],
@@ -17,10 +16,30 @@ const mono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
+const serif = Newsreader({
+  subsets: ["latin"],
+  display: "swap",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  adjustFontFallback: false,
+});
+
+const sans = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+});
+
+const grotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-grotesk",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${profile.name} — ${profile.role}`,
+    default: `${profile.name} | ${profile.role}`,
     template: `%s | ${profile.name}`,
   },
   description: profile.summary,
@@ -35,7 +54,6 @@ export const metadata: Metadata = {
     "Northeastern University",
     "Boston",
     "Portfolio",
-    "Terminal Portfolio",
     "Python",
     "TypeScript",
     "Kubernetes",
@@ -45,12 +63,12 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: profile.name,
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} | ${profile.role}`,
     description: profile.summary,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} | ${profile.role}`,
     description: profile.summary,
   },
 };
@@ -59,7 +77,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1.0,
   viewportFit: "cover",
-  themeColor: "#0b0e14",
+  themeColor: "#06060c",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -67,9 +85,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const clarity = process.env.CLARITY_KEY;
 
   return (
-    <html lang="en" className={mono.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${mono.variable} ${serif.variable} ${sans.variable} ${grotesk.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript + siteBootScript }} />
         {gtag ? (
           <>
             <Script async src={`https://www.googletagmanager.com/gtag/js?id=${gtag}`} />
@@ -91,20 +113,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </Script>
         ) : null}
       </head>
-      <body className="flex min-h-screen flex-col bg-term-bg font-mono text-term-fg antialiased">
-        <div className="crt-overlay" aria-hidden />
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded focus:bg-term-raised focus:px-3 focus:py-2 focus:text-term-accent"
-        >
-          Skip to content
-        </a>
-        <ViewTransitions />
-        <Navbar />
-        <main id="main" className="flex flex-1 flex-col">
-          {children}
-        </main>
-        <Footer />
+      <body>
+        {children}
+        {/* Own .ed scope so the widget keeps the site theme on the terminal pages too. */}
+        <div className="ed ed-float">
+          <ChatWidget />
+        </div>
         <SpeedInsights />
       </body>
     </html>

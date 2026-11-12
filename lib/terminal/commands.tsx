@@ -33,8 +33,8 @@ const err = (text: string) => <Line tone="red">{text}</Line>;
 
 /** Routes reachable via `open`. */
 export const routes: Record<string, string> = {
-  home: "/",
-  "~": "/",
+  home: "/terminal",
+  "~": "/terminal",
   about: "/about",
   whoami: "/about",
   experience: "/experience",
@@ -159,7 +159,7 @@ export const commands: Command[] = [
               </div>
             </div>
           ))}
-          <Hint>There are a few commands not on this list. Poke around — it&apos;s a real shell, mostly.</Hint>
+          <Hint>There are a few commands not on this list. Poke around, it&apos;s a real shell, mostly.</Hint>
         </div>
       );
     },
@@ -262,7 +262,7 @@ export const commands: Command[] = [
     name: "cat",
     aliases: ["less", "more", "bat", "read"],
     usage: "cat <file>",
-    summary: "read a file — about.md, projects.md, experience.md …",
+    summary: "read a file - about.md, projects.md, experience.md …",
     group: "read",
     run: (args, ctx) => {
       if (args.length === 0) return err("cat: missing file operand. Try `ls` to see what's here.");
@@ -305,7 +305,7 @@ export const commands: Command[] = [
     name: "open",
     aliases: ["goto", "xdg-open"],
     usage: "open <page>",
-    summary: "jump to a full page — about, projects, contact …",
+    summary: "jump to a full page - about, projects, contact …",
     group: "navigate",
     run: (args, ctx) => {
       const key = (args[0] ?? "").toLowerCase().replace(/^\/+/, "").replace(/\.md$/, "");
@@ -563,7 +563,7 @@ export const commands: Command[] = [
         { hash: "4d8e02b", when: "2026", msg: "docs: co-author ACSAC 2026 paper on SPHERE" },
         { hash: "9b3c7f1", when: "2025", msg: "perf(netsi): pool connections, -25% API latency" },
         { hash: "2f6a415", when: "2025", msg: "refactor(netsi): tag-based fragments, -30% duplicates" },
-        { hash: "c0d94ae", when: "2025", msg: "chore: graduate — M.S. Computer Science, Northeastern" },
+        { hash: "c0d94ae", when: "2025", msg: "chore: graduate, M.S. Computer Science, Northeastern" },
         { hash: "7e1b830", when: "2024", msg: "feat(gupshup): kafka for external, rabbitmq for internal" },
         { hash: "51a2df6", when: "2024", msg: "perf(gupshup): redis cache, -35% database load" },
         { hash: "b8c4e27", when: "2024", msg: "feat(neu): teach full-stack web development for a year" },
@@ -736,7 +736,7 @@ export const commands: Command[] = [
       <div className="space-y-2">
         <Ascii art={asciiName} />
         <Line tone="dim">
-          {profile.role} @ {profile.company} — {profile.location}
+          {profile.role} @ {profile.company} - {profile.location}
         </Line>
       </div>
     ),
@@ -967,7 +967,7 @@ function manPage(name: string): ReactNode {
       <div>
         <div className="text-term-accent">NAME</div>
         <div className="pl-4 text-term-dim">
-          {command.name} — {command.summary}
+          {command.name} - {command.summary}
         </div>
       </div>
       <div>

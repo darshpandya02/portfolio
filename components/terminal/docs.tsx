@@ -43,27 +43,27 @@ export function ReadmeDoc() {
       <Rule />
       <Line tone="dim">Files in this directory:</Line>
       <ul className="space-y-1">
-        <Bullet marker="—">
-          <Cmd>cat about.md</Cmd> — who I am and what I work on
+        <Bullet marker="-">
+          <Cmd>cat about.md</Cmd> - who I am and what I work on
         </Bullet>
-        <Bullet marker="—">
-          <Cmd>cat experience.md</Cmd> — where I&apos;ve worked
+        <Bullet marker="-">
+          <Cmd>cat experience.md</Cmd> - where I&apos;ve worked
         </Bullet>
-        <Bullet marker="—">
-          <Cmd>cat projects.md</Cmd> — things I&apos;ve built
+        <Bullet marker="-">
+          <Cmd>cat projects.md</Cmd> - things I&apos;ve built
         </Bullet>
-        <Bullet marker="—">
-          <Cmd>cat skills.md</Cmd> — the toolkit
+        <Bullet marker="-">
+          <Cmd>cat skills.md</Cmd> - the toolkit
         </Bullet>
-        <Bullet marker="—">
-          <Cmd>cat publications.md</Cmd> — papers
+        <Bullet marker="-">
+          <Cmd>cat publications.md</Cmd> - papers
         </Bullet>
-        <Bullet marker="—">
-          <Cmd>cat contact.md</Cmd> — how to reach me
+        <Bullet marker="-">
+          <Cmd>cat contact.md</Cmd> - how to reach me
         </Bullet>
       </ul>
       <Hint>
-        Not a terminal person? Every command has a page — try <Cmd>open projects</Cmd>, or use the links up top.
+        Not a terminal person? Every command has a page. Try <Cmd>open projects</Cmd>, or use the links up top.
       </Hint>
     </Doc>
   );
@@ -131,7 +131,7 @@ export function ExperienceDoc() {
                 <span>{job.location}</span>
                 <span aria-hidden>·</span>
                 <span>
-                  {job.start} — {job.end}
+                  {job.start} to {job.end}
                 </span>
               </div>
             </header>
@@ -293,7 +293,7 @@ export function EducationDoc() {
               <span>{entry.location}</span>
               <span aria-hidden>·</span>
               <span>
-                {entry.start} — {entry.end}
+                {entry.start} to {entry.end}
               </span>
               <span aria-hidden>·</span>
               <span className="text-term-green">GPA {entry.gpa}</span>
@@ -346,7 +346,7 @@ export function ResumeDoc() {
     <Doc>
       <DocHeading level={1}>resume.pdf</DocHeading>
       <Para>
-        This is a binary file. Your pager will not enjoy it — but your browser will.
+        This is a binary file. Your pager will not enjoy it, but your browser will.
       </Para>
       <div className="flex flex-wrap gap-2">
         <a

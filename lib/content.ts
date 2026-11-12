@@ -20,9 +20,9 @@ export const profile = {
   summary:
     "Software Engineer working on public research infrastructure for reproducible cybersecurity experimentation. MSCS from Northeastern. Most of my time goes to backend design: message queues, sharded consumers, connection pooling, and the unglamorous work of making a system survive its own load.",
   bio: [
-    "I'm a software engineer in Boston. I work on SPHERE, an NSF-backed public research infrastructure that lets security researchers run reproducible experiments on real hardware. The interesting part isn't any single service — it's that other people's science depends on the thing staying up and behaving identically on Tuesday as it did on Friday.",
+    "I'm a software engineer in Boston. I work on SPHERE, an NSF-backed public research infrastructure that lets security researchers run reproducible experiments on real hardware. The interesting part isn't any single service. It's that other people's science depends on the thing staying up and behaving identically on Tuesday as it did on Friday.",
     "Before that I was a Software Engineer Co-op at Northeastern's Network Science Institute, where I reworked fragment navigation into a tag-based system and cut API response times by pooling connections instead of re-paying for TLS handshakes. Prior to Boston I was a backend intern at Gupshup in San Francisco, wiring Kafka for client-facing messaging and RabbitMQ for internal traffic between microservices, and a software engineering intern at Chance App in Mumbai building a match-making service on MERN.",
-    "I finished my M.S. in Computer Science at Northeastern in December 2025 with a 3.97 GPA, and spent a year of it as a Teaching Assistant for Full-Stack Web Development — running tutorials, reviewing code, and writing the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
+    "I finished my M.S. in Computer Science at Northeastern in December 2025 with a 3.97 GPA, and spent a year of it as a Teaching Assistant for Full-Stack Web Development. I ran tutorials, reviewed code, and wrote the E2E tests I then graded people against. Teaching a thing is still the fastest way I know to find out whether I actually understand it.",
     "My default stack is Python and TypeScript, with Java when the problem wants a type system with sharp edges. Postgres and Redis for state, Docker and Kubernetes for shipping, and a strong preference for boring, observable architecture over clever architecture.",
     "Away from the keyboard I travel whenever the calendar allows it, and I play an unreasonable amount of Valorant.",
   ],
@@ -58,6 +58,8 @@ export interface Experience {
   highlights: string[];
   stack: string[];
   url?: string;
+  /** Headline numbers for the experience card. Every value must trace to a highlight. */
+  metrics?: { value: string; label: string }[];
 }
 
 export const experience: Experience[] = [
@@ -76,9 +78,14 @@ export const experience: Experience[] = [
       "Built multi-threaded load clients, message queues and sharded consumers for high-throughput services handling experiment orchestration.",
       "Stream real-time microphone audio from users to smart speakers over SRT via MediaMTX, so experiments drive voice assistants with live input instead of prerecorded audio.",
       "Co-author on the ACSAC 2026 paper describing the platform's architecture and its reproducibility guarantees.",
-      "Work spans cloud-native architecture and developer tooling — the interfaces researchers actually touch when they define an experiment.",
+      "Work spans cloud-native architecture and developer tooling: the interfaces researchers actually touch when they define an experiment.",
     ],
     stack: ["Python", "Distributed Systems", "Message Queues", "MediaMTX", "SRT", "RTSP", "Docker", "Kubernetes", "Linux"],
+    metrics: [
+      { value: "ACSAC 2026", label: "Co-authored platform paper" },
+      { value: "Live SRT", label: "Mic audio to smart speakers" },
+      { value: "NSF", label: "Backed public research infra" },
+    ],
     url: "https://sphere-project.net",
   },
   {
@@ -97,6 +104,11 @@ export const experience: Experience[] = [
       "The whole job is unattended reliability: nobody is watching at 3am, and a participant whose data went missing cannot be asked to re-live the week.",
     ],
     stack: ["Python", "Flask", "Gunicorn", "Nginx", "Linux", "PostgreSQL", "Mobile Sensing"],
+    metrics: [
+      { value: "60+", label: "Active study participants" },
+      { value: "+10%", label: "Dataset completeness" },
+      { value: "12", label: "Releases verified pre-ship" },
+    ],
   },
   {
     slug: "netsi",
@@ -112,6 +124,10 @@ export const experience: Experience[] = [
       "Applied connection pooling to cut the overhead of repeated SSL/TLS handshakes, improving API response times by 25%.",
     ],
     stack: ["Python", "REST APIs", "PostgreSQL", "Connection Pooling"],
+    metrics: [
+      { value: "−30%", label: "Duplicate fragment instances" },
+      { value: "−25%", label: "API response time" },
+    ],
   },
   {
     slug: "gupshup",
@@ -129,11 +145,16 @@ export const experience: Experience[] = [
       "Ran Agile sprints through Jira, streamlining delivery and increasing team throughput by 22% while keeping SDLC compliance intact.",
     ],
     stack: ["Java", "Spring Boot", "Apache Kafka", "RabbitMQ", "Redis", "Jira"],
+    metrics: [
+      { value: "+15%", label: "Revenue from better targeting" },
+      { value: "−35%", label: "Database load with Redis" },
+      { value: "+15%", label: "Message processing efficiency" },
+    ],
   },
   {
     slug: "neu-ta",
     company: "Northeastern University",
-    role: "Teaching Assistant — Full-Stack Web Development",
+    role: "Teaching Assistant, Full-Stack Web Development",
     location: "Boston, MA",
     start: "Jan 2024",
     end: "Dec 2024",
@@ -145,6 +166,10 @@ export const experience: Experience[] = [
       "Graded assignments against self-authored E2E and unit test suites rather than eyeballing submissions.",
     ],
     stack: ["React", "Node.js", "TypeScript", "Express", "Jest", "Cypress", "MongoDB", "Docker"],
+    metrics: [
+      { value: "2", label: "Semesters teaching" },
+      { value: "E2E", label: "Self-written grading suites" },
+    ],
   },
   {
     slug: "chance-app",
@@ -161,6 +186,11 @@ export const experience: Experience[] = [
       "Implemented a CI/CD pipeline with GitHub Actions and Jenkins, reducing deployment time by 40%.",
     ],
     stack: ["React", "Express.js", "Node.js", "MongoDB", "Jest", "GitHub Actions", "Jenkins"],
+    metrics: [
+      { value: "30k", label: "App installs" },
+      { value: "+20%", label: "Successful matches" },
+      { value: "−40%", label: "Deployment time" },
+    ],
   },
 ];
 
@@ -588,7 +618,7 @@ export const projects: Project[] = [
     status: "shipped",
     description: [
       "Tinder, but the thing you're swiping on is dinner. Users join a private group, swipe through nearby restaurants, and the moment every member of the group has liked the same place, everyone gets a real-time match notification.",
-      "The hard part isn't the swiping — it's the group consensus. Matches have to be evaluated as swipes land, pushed to every connected member immediately, and stay correct when someone joins mid-session or drops off the network.",
+      "The hard part isn't the swiping. It's the group consensus. Matches have to be evaluated as swipes land, pushed to every connected member immediately, and stay correct when someone joins mid-session or drops off the network.",
     ],
     highlights: [
       "NestJS backend with PostgreSQL and Prisma, Redis for hot session state, and Socket.IO for match fan-out.",
@@ -602,7 +632,7 @@ export const projects: Project[] = [
   },
   {
     slug: "bsds",
-    name: "BSDS — Building Scalable Distributed Systems",
+    name: "BSDS: Building Scalable Distributed Systems",
     tagline: "A replicated C++ robot-factory service over raw TCP sockets.",
     year: "2025",
     featured: true,
@@ -650,7 +680,7 @@ export const projects: Project[] = [
     featured: true,
     status: "shipped",
     description: [
-      "An online inventory and purchasing platform for a chemicals business — stock levels, order tracking and purchasing in one place, with AI assistance layered over the catalogue so staff can query inventory in plain language.",
+      "An online inventory and purchasing platform for a chemicals business, with stock levels, order tracking and purchasing in one place, plus AI assistance layered over the catalogue so staff can query inventory in plain language.",
     ],
     highlights: [
       "Expo + TypeScript app with file-based routing, running on iOS, Android and web.",
@@ -709,12 +739,12 @@ export const projects: Project[] = [
     status: "shipped",
     description: [
       "A desktop image processing application with three ways in: a Swing GUI, an interactive text UI, and batch execution of command scripts. All three drive the same model.",
-      "It was as much an exercise in design as in image processing — the Command and Command Callback patterns keep the controller and view from knowing anything about each other.",
+      "It was as much an exercise in design as in image processing. The Command and Command Callback patterns keep the controller and view from knowing anything about each other.",
     ],
     highlights: [
       "MVC architecture with a Swing view, Command Callback pattern for the view and Command pattern for the controller.",
       "Component extraction (red/green/blue/value/luma/intensity), flips, brightness, sepia, greyscale, blur and sharpen.",
-      "Three interaction modes — GUI, interactive text commands, and scripted batch runs via `run <script>`.",
+      "Three interaction modes: GUI, interactive text commands, and scripted batch runs via `run <script>`.",
       "JUnit coverage across the model and controller, written against SOLID boundaries.",
     ],
     stack: ["Java", "Swing", "JUnit", "MVC", "Design Patterns"],
@@ -729,7 +759,7 @@ export const projects: Project[] = [
     featured: true,
     status: "shipped",
     description: [
-      "An hourly car rental platform with three distinct user tiers — anonymous visitors who can browse, standard users who can book, subscription users who get a 40% discount, and admins who manage the fleet.",
+      "An hourly car rental platform with distinct user tiers: anonymous visitors who can browse, standard users who can book, subscription users who get a 40% discount, and admins who manage the fleet.",
       "The deployment side mattered as much as the app: containerized, pushed to a Kubernetes cluster on AWS, and instrumented so problems showed up in CloudWatch instead of in support tickets.",
     ],
     highlights: [
@@ -771,7 +801,7 @@ export const projects: Project[] = [
     featured: false,
     status: "shipped",
     description: [
-      "A Stack Overflow clone built to spec — questions, answers, tags, votes and search — with the test discipline of a production codebase.",
+      "A Stack Overflow clone built to spec (questions, answers, tags, votes and search) with the test discipline of a production codebase.",
     ],
     highlights: [
       "Tag-based browsing and full-text search across questions and answers.",
@@ -949,6 +979,38 @@ export const education: Education[] = [
     ],
   },
 ];
+
+/** Year-by-year path shown in the home page hero. */
+export const journey: { year: string; title: string; detail: string }[] = [
+  { year: "2019", title: "K. J. Somaiya", detail: "B.Tech, Information Technology" },
+  { year: "2022", title: "Chance App", detail: "Full-stack intern, Mumbai" },
+  { year: "2023", title: "Northeastern", detail: "M.S. Computer Science, Boston" },
+  { year: "2024", title: "Gupshup", detail: "Backend intern, Kafka + RabbitMQ" },
+  { year: "2025", title: "NetSI + UbiWell", detail: "Research data platforms" },
+  { year: "Now", title: "SPHERE", detail: "Software Engineer" },
+];
+
+/** "How I work" steps on the home page. */
+export const principles: { title: string; body: string }[] = [
+  {
+    title: "Measure before changing",
+    body: "I put numbers on a system first (p50 and p95 latency, rows per second, test counts) so every change has something to beat.",
+  },
+  {
+    title: "Make failure boring",
+    body: "Idempotent writes, leases, retries with backoff and dead-letter queues, so a crash at 3am is a retry, not an incident.",
+  },
+  {
+    title: "Say what didn't work",
+    body: "Benchmarks include the cases where the standard library wins, and write-ups state the limitations next to the results.",
+  },
+];
+
+/**
+ * Extra facts for the chat assistant only (not shown on the page). Anything
+ * here becomes something the assistant can tell visitors, so keep it public.
+ */
+export const chatNotes: string[] = [];
 
 export const featuredProjects = projects.filter((p) => p.featured);
 
