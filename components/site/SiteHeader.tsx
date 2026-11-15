@@ -69,6 +69,17 @@ export default function SiteHeader() {
 
         <div className="ml-auto flex items-center gap-2 md:ml-2">
           <Link
+            href="/play"
+            className="play-cta font-label relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
+            title="Play my portfolio as a game"
+          >
+            <span aria-hidden className="play-cta-ping" />
+            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
+              <path d="M2 1l7 4-7 4z" fill="currentColor" />
+            </svg>
+            Play
+          </Link>
+          <Link
             href="/terminal"
             className="font-label fx-btn-ghost hidden rounded-full px-3 py-1.5 text-xs text-ed-muted hover:text-ed-ink sm:inline-block"
             title="The terminal version of this site"
@@ -117,6 +128,11 @@ export default function SiteHeader() {
                 </a>
               </li>
             ))}
+            <li>
+              <Link href="/play" className="font-label block rounded-lg px-3 py-2.5 text-sm font-semibold text-[var(--c2)] hover:bg-ed-sunken">
+                ▶ Play the game
+              </Link>
+            </li>
             <li>
               <Link href="/terminal" className="font-label block rounded-lg px-3 py-2.5 text-sm text-ed-muted hover:bg-ed-sunken">
                 &gt;_ Terminal version

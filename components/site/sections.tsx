@@ -246,6 +246,17 @@ export function Hero() {
             >
               View work
             </a>
+            <Link
+              href="/play"
+              data-magnetic
+              className="play-cta inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold"
+            >
+              <span aria-hidden className="play-cta-ping" />
+              <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden>
+                <path d="M2 1l7 4-7 4z" fill="currentColor" />
+              </svg>
+              Play the game
+            </Link>
             <a
               href="#contact"
               data-magnetic

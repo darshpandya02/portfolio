@@ -12,6 +12,7 @@ const tabs = [
   { href: "/publications", label: "publications" },
   { href: "/education", label: "education" },
   { href: "/contact", label: "contact" },
+  { href: "/play", label: "▶ play" },
 ];
 
 export default function Navbar() {

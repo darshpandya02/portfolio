@@ -37,6 +37,8 @@ export const routes: Record<string, string> = {
   "~": "/terminal",
   site: "/",
   main: "/",
+  play: "/play",
+  game: "/play",
   about: "/about",
   whoami: "/about",
   experience: "/experience",
@@ -446,6 +448,17 @@ export const commands: Command[] = [
     summary: "open the PDF",
     group: "read",
     run: () => renderDoc("resume"),
+  },
+  {
+    name: "play",
+    aliases: ["game"],
+    usage: "play",
+    summary: "walk around the portfolio as a pixel city",
+    group: "fun",
+    run: (_args, ctx) => {
+      ctx.navigate("/play");
+      return <Line tone="green">loading the city…</Line>;
+    },
   },
   {
     name: "social",

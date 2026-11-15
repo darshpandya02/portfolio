@@ -1091,3 +1091,38 @@ html.fx-ready .ed [data-reveal].fx-now {
   transform: translate3d(-50%, -50%, 0) scale(0.86);
   will-change: transform, opacity;
 }
+
+/* ---------- Play the game CTA (header, hero, nudge) ---------- */
+.play-cta {
+  position: relative;
+  color: #0b0717;
+  background: linear-gradient(135deg, #5ff3ff, #22d3ee 45%, #a78bfa);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25) inset, 0 6px 24px -6px #22d3ee;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s;
+  isolation: isolate;
+}
+.play-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.35) inset, 0 10px 32px -6px #22d3ee;
+}
+.play-cta-ping {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #22d3ee;
+  animation: play-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes play-ping {
+  0% { transform: scale(1); opacity: 0.55; }
+  70%, 100% { transform: scale(1.35, 1.6); opacity: 0; }
+}
+.play-nudge { animation: play-nudge-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes play-nudge-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .play-cta-ping { animation: none; opacity: 0; }
+  .play-nudge { animation: none; }
+}
