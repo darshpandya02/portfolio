@@ -208,6 +208,7 @@ export default function CityGame({ fonts }: { fonts: Fonts }) {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", fit);
       engine.sfx.laser(false);
+      engine.sfx.theme(false);
     };
   }, [fonts, pushToast]);
 
@@ -227,7 +228,10 @@ export default function CityGame({ fonts }: { fonts: Fonts }) {
     const e = engineRef.current;
     if (!e) return;
     e.sfx.enabled = !e.sfx.enabled;
-    if (!e.sfx.enabled) e.sfx.laser(false);
+    if (!e.sfx.enabled) {
+      e.sfx.laser(false);
+      e.sfx.theme(false);
+    }
     setSound(e.sfx.enabled);
     save({ sound: e.sfx.enabled });
   }, []);

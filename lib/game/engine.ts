@@ -203,6 +203,8 @@ class Sfx {
   ctx: AudioContext | null = null;
   enabled = true;
   laserNode: { osc: OscillatorNode; gain: GainNode } | null = null;
+  noiseBuf: AudioBuffer | null = null;
+  music: { gain: GainNode; timer: number; next: number; step: number } | null = null;
 
   unlock() {
     if (this.ctx || typeof window === "undefined") return;
@@ -230,10 +232,10 @@ class Sfx {
   }
 
   /** A brassy note: two detuned saws through a lowpass that opens on the attack. */
-  brass(freq: number, at: number, dur: number, vol = 0.05) {
+  brass(freq: number, at: number, dur: number, vol = 0.05, out?: AudioNode, abs = false) {
     if (!this.enabled || !this.ctx) return;
     const c = this.ctx;
-    const t = c.currentTime + at;
+    const t = abs ? at : c.currentTime + at;
     const filter = c.createBiquadFilter();
     filter.type = "lowpass";
     filter.Q.value = 2;
@@ -245,7 +247,7 @@ class Sfx {
     gain.gain.linearRampToValueAtTime(vol, t + 0.03);
     gain.gain.setValueAtTime(vol * 0.85, t + Math.max(0.04, dur - 0.12));
     gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    filter.connect(gain).connect(c.destination);
+    filter.connect(gain).connect(out ?? c.destination);
     [-6, 6].forEach((cents) => {
       const osc = c.createOscillator();
       osc.type = "sawtooth";
@@ -258,15 +260,17 @@ class Sfx {
   }
 
   /** Filtered noise: a rising whoosh, or a short drum hit. */
-  noise(at: number, dur: number, from: number, to: number, vol = 0.08) {
+  noise(at: number, dur: number, from: number, to: number, vol = 0.08, out?: AudioNode, abs = false) {
     if (!this.enabled || !this.ctx) return;
     const c = this.ctx;
-    const t = c.currentTime + at;
-    const buf = c.createBuffer(1, Math.ceil(c.sampleRate * dur), c.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const t = abs ? at : c.currentTime + at;
+    if (!this.noiseBuf) {
+      this.noiseBuf = c.createBuffer(1, c.sampleRate, c.sampleRate);
+      const data = this.noiseBuf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    }
     const src = c.createBufferSource();
-    src.buffer = buf;
+    src.buffer = this.noiseBuf;
     const filter = c.createBiquadFilter();
     filter.type = "bandpass";
     filter.Q.value = 1.2;
@@ -276,9 +280,9 @@ class Sfx {
     gain.gain.setValueAtTime(0.0001, t);
     gain.gain.linearRampToValueAtTime(vol, t + dur * 0.6);
     gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    src.connect(filter).connect(gain).connect(c.destination);
+    src.connect(filter).connect(gain).connect(out ?? c.destination);
     src.start(t);
-    src.stop(t + dur);
+    src.stop(t + Math.min(dur, 1));
   }
 
   /** Cape on: a whoosh, a rising brass call, then a big major chord with a drum hit. */
@@ -326,6 +330,84 @@ class Sfx {
         return this.beep(180, 0.06, "triangle", 0.02);
       case "deny":
         return this.beep(150, 0.18, "square", 0.04, -40);
+    }
+  }
+
+  /**
+   * Super-mode theme: an original four-bar march (C, Ab, Bb, C) that loops
+   * while the cape is on. Notes are scheduled a little ahead on the audio
+   * clock so the tempo holds steady even when frames drop.
+   */
+  theme(on: boolean) {
+    const c = this.ctx;
+    if (!c) return;
+    const want = on && this.enabled;
+    if (want && !this.music) {
+      const gain = c.createGain();
+      gain.gain.setValueAtTime(0.0001, c.currentTime);
+      gain.gain.exponentialRampToValueAtTime(1, c.currentTime + 0.6);
+      gain.connect(c.destination);
+      // Start after the cape-on fanfare has had its moment.
+      const m = { gain, timer: 0, next: c.currentTime + 1.6, step: 0 };
+      m.timer = window.setInterval(() => this.scheduleTheme(), 50);
+      this.music = m;
+      this.scheduleTheme();
+    } else if (!want && this.music) {
+      const m = this.music;
+      this.music = null;
+      window.clearInterval(m.timer);
+      m.gain.gain.cancelScheduledValues(c.currentTime);
+      m.gain.gain.setValueAtTime(m.gain.gain.value, c.currentTime);
+      m.gain.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + 0.4);
+      window.setTimeout(() => m.gain.disconnect(), 600);
+    }
+  }
+
+  private scheduleTheme() {
+    const c = this.ctx;
+    const m = this.music;
+    if (!c || !m) return;
+    const beat = 60 / 132;
+    const sixteenth = beat / 4;
+    const hz = (n: number) => 440 * Math.pow(2, (n - 69) / 12);
+    // Bar roots (MIDI): C, Ab, Bb, C. Chords are root, third, fifth.
+    const roots = [48, 44, 46, 48];
+    const thirds = [4, 4, 4, 4];
+    // Melody per bar: [start beat, length in beats, MIDI note]
+    const melody: [number, number, number][][] = [
+      [[0, 1.5, 67], [1.5, 0.5, 72], [2, 1, 76], [3, 1, 79]],
+      [[0, 1.5, 77], [1.5, 0.5, 75], [2, 2, 72]],
+      [[0, 1.5, 77], [1.5, 0.5, 74], [2, 1, 70], [3, 1, 74]],
+      [[0, 3, 72], [3, 0.5, 67], [3.5, 0.5, 71]],
+    ];
+    while (m.next < c.currentTime + 0.25) {
+      const t = m.next;
+      const step = m.step % 64;
+      const bar = Math.floor(step / 16);
+      const inBar = step % 16;
+      const root = roots[bar];
+      // Driving bass: root on eighth notes, octave jump on the off-beats.
+      if (inBar % 2 === 0) {
+        const n = inBar % 4 === 0 ? root - 12 : root;
+        this.brass(hz(n), t, sixteenth * 1.8, 0.03, m.gain, true);
+      }
+      // Pad: the full chord at the top of each bar.
+      if (inBar === 0) {
+        [root, root + thirds[bar], root + 7].forEach((n) =>
+          this.brass(hz(n + 12), t, beat * 3.8, 0.011, m.gain, true),
+        );
+        this.noise(t, 0.2, 160, 60, 0.07, m.gain, true);
+      }
+      // Marching snare on 2 and 4, with a roll into the next loop.
+      if (inBar === 4 || inBar === 12 || (bar === 3 && inBar >= 13)) {
+        this.noise(t, 0.12, 2400, 1500, 0.035, m.gain, true);
+      }
+      // Melody.
+      for (const [start, len, n] of melody[bar]) {
+        if (Math.round(start * 4) === inBar) this.brass(hz(n), t, len * beat * 0.95, 0.03, m.gain, true);
+      }
+      m.next += sixteenth;
+      m.step++;
     }
   }
 
@@ -701,10 +783,12 @@ export class GameEngine {
       this.pressed.clear();
       this.mouse.justDown = this.mouse.justUp = false;
       this.sfx.laser(false);
+      this.sfx.theme(false);
       return;
     }
 
     const p = this.p;
+    this.sfx.theme(p.mode === "super");
     const left = this.down("a", "arrowleft");
     const right = this.down("d", "arrowright");
     const up = this.down("w", "arrowup");
