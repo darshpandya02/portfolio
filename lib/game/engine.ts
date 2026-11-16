@@ -229,6 +229,75 @@ class Sfx {
     osc.stop(t + dur + 0.02);
   }
 
+  /** A brassy note: two detuned saws through a lowpass that opens on the attack. */
+  brass(freq: number, at: number, dur: number, vol = 0.05) {
+    if (!this.enabled || !this.ctx) return;
+    const c = this.ctx;
+    const t = c.currentTime + at;
+    const filter = c.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.Q.value = 2;
+    filter.frequency.setValueAtTime(400, t);
+    filter.frequency.linearRampToValueAtTime(3200, t + 0.06);
+    filter.frequency.exponentialRampToValueAtTime(1200, t + dur);
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.linearRampToValueAtTime(vol, t + 0.03);
+    gain.gain.setValueAtTime(vol * 0.85, t + Math.max(0.04, dur - 0.12));
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    filter.connect(gain).connect(c.destination);
+    [-6, 6].forEach((cents) => {
+      const osc = c.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(freq, t);
+      osc.detune.value = cents;
+      osc.connect(filter);
+      osc.start(t);
+      osc.stop(t + dur + 0.05);
+    });
+  }
+
+  /** Filtered noise: a rising whoosh, or a short drum hit. */
+  noise(at: number, dur: number, from: number, to: number, vol = 0.08) {
+    if (!this.enabled || !this.ctx) return;
+    const c = this.ctx;
+    const t = c.currentTime + at;
+    const buf = c.createBuffer(1, Math.ceil(c.sampleRate * dur), c.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource();
+    src.buffer = buf;
+    const filter = c.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.Q.value = 1.2;
+    filter.frequency.setValueAtTime(from, t);
+    filter.frequency.exponentialRampToValueAtTime(to, t + dur);
+    const gain = c.createGain();
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.linearRampToValueAtTime(vol, t + dur * 0.6);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    src.connect(filter).connect(gain).connect(c.destination);
+    src.start(t);
+    src.stop(t + dur);
+  }
+
+  /** Cape on: a whoosh, a rising brass call, then a big major chord with a drum hit. */
+  hero() {
+    if (!this.enabled || !this.ctx) return;
+    this.noise(0, 0.45, 300, 4000, 0.09);
+    // G3, C4, E4 rising, then a held C5 on top of a C major chord
+    const call: [number, number, number][] = [
+      [196.0, 0.42, 0.14],
+      [261.63, 0.58, 0.14],
+      [329.63, 0.74, 0.14],
+    ];
+    call.forEach(([f, at, d]) => this.brass(f, at, d, 0.05));
+    [261.63, 329.63, 392.0, 523.25].forEach((f) => this.brass(f, 0.9, 1.1, 0.035));
+    this.brass(130.81, 0.9, 1.1, 0.04);
+    this.noise(0.9, 0.25, 180, 60, 0.12);
+    setTimeout(() => this.beep(70, 0.35, "sine", 0.12, -30), 900);
+  }
+
   play(name: string) {
     switch (name) {
       case "jump":
@@ -248,6 +317,8 @@ class Sfx {
         return;
       case "boom":
         return this.beep(90, 0.3, "sawtooth", 0.07, -60);
+      case "hero":
+        return this.hero();
       case "power":
         [220, 330, 440, 660, 880].forEach((f, i) => setTimeout(() => this.beep(f, 0.12, "sawtooth", 0.04), i * 70));
         return;
@@ -1098,7 +1169,7 @@ export class GameEngine {
           p.platform = null;
           p.vy = -200;
           this.carrying = false;
-          this.sfx.play("power");
+          this.sfx.play("hero");
           this.burst(p.x, p.y - 30, "#ff5fa8", 30, 260);
           this.ev.toast("SUPER MODE", "WASD fly · Shift rocket · Mouse laser · F grab & throw · X power down");
           this.emitProgress();
