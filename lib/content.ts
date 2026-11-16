@@ -74,11 +74,9 @@ export const experience: Experience[] = [
     summary:
       "Building an NSF-backed public research infrastructure for reproducible cybersecurity experimentation, used by security researchers to run experiments on real hardware.",
     highlights: [
-      "Engineer on SPHERE, public research infrastructure that gives cybersecurity researchers reproducible experiments on real, isolated hardware.",
       "Built multi-threaded load clients, message queues and sharded consumers for high-throughput services handling experiment orchestration.",
       "Stream real-time microphone audio from users to smart speakers over SRT via MediaMTX, so experiments drive voice assistants with live input instead of prerecorded audio.",
       "Co-author on the ACSAC 2026 paper describing the platform's architecture and its reproducibility guarantees.",
-      "Work spans cloud-native architecture and developer tooling: the interfaces researchers actually touch when they define an experiment.",
     ],
     stack: ["Python", "Distributed Systems", "Message Queues", "MediaMTX", "SRT", "RTSP", "Docker", "Kubernetes", "Linux"],
     metrics: [

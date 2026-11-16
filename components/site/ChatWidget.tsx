@@ -294,7 +294,7 @@ export default function ChatWidget() {
         }}
         aria-expanded={open}
         data-magnetic
-        className="fx-ring flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-ed-ink shadow-[0_10px_40px_-10px_var(--c1)]"
+        className="fx-ring flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-ed-ink shadow-[0_10px_30px_-12px_var(--glow)]"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>
           <path

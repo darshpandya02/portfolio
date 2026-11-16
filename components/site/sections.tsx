@@ -9,9 +9,7 @@ import { articles, readMinutes } from "@/lib/writing";
 import {
   education,
   experience,
-  journey,
   links,
-  principles,
   profile,
   projects,
   publications,
@@ -196,7 +194,7 @@ export function Hero() {
               ))}
               <span
                 aria-hidden
-                className="pointer-events-none absolute -inset-x-6 -bottom-4 top-1/2 -z-10 rounded-full bg-gradient-to-r from-[var(--c1)] via-[var(--c2)] to-[var(--c3)] opacity-25 blur-3xl"
+                className="pointer-events-none absolute -inset-x-6 -bottom-4 top-1/2 -z-10 rounded-full bg-gradient-to-r from-[var(--c1)] via-[var(--c2)] to-[var(--c3)] hidden opacity-25 blur-3xl"
               />
             </span>
           </h1>
@@ -221,18 +219,6 @@ export function Hero() {
             in Mumbai.
           </p>
 
-          <ul
-            className="mt-8 flex flex-wrap gap-2"
-            aria-label="Focus areas"
-            data-reveal
-            style={delay(6)}
-          >
-            {profile.interests.slice(0, 4).map((interest) => (
-              <li key={interest}>
-                <Chip>{interest}</Chip>
-              </li>
-            ))}
-          </ul>
 
           <div
             className="mt-10 flex flex-wrap items-center gap-3"
@@ -347,45 +333,6 @@ export function Hero() {
   );
 }
 
-function Journey() {
-  return (
-    <div className="fx-card rounded-3xl p-6 sm:p-8" data-reveal>
-      <h3 className="font-label mb-7 text-xs font-medium uppercase tracking-[0.18em] text-ed-faint">
-        Journey
-      </h3>
-      <ol className="relative space-y-6 pl-7">
-        <span className="fx-line" aria-hidden />
-        {journey.map((step, i) => {
-          const last = i === journey.length - 1;
-          return (
-            <li key={step.year + step.title} className="relative">
-              <span
-                aria-hidden
-                className={`absolute -left-[33px] top-1.5 h-2.5 w-2.5 rounded-full ${
-                  last
-                    ? "fx-pulse bg-[var(--c2)]"
-                    : "border border-ed-line bg-[var(--ed-surface-solid)]"
-                }`}
-              />
-              <div className="flex items-baseline gap-4">
-                <span
-                  className={`font-label w-10 shrink-0 text-xs ${last ? "fx-gradient-text font-semibold" : "text-ed-faint"}`}
-                >
-                  {step.year}
-                </span>
-                <div>
-                  <p className="text-sm font-semibold">{step.title}</p>
-                  <p className="text-sm text-ed-muted">{step.detail}</p>
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
-    </div>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 /* Stack strip                                                         */
 /* ------------------------------------------------------------------ */
@@ -472,9 +419,9 @@ export function StackStrip() {
 /* ------------------------------------------------------------------ */
 
 export function About() {
-  // The last bio paragraph (hobbies) reads better as a short aside than as body copy.
-  const body = profile.bio.slice(0, -1);
-  const aside = profile.bio[profile.bio.length - 1];
+  // Recruiter cut: who I am and what I build with. Career and education
+  // paragraphs repeat the Experience and Education blocks, so they are left out.
+  const body = [profile.bio[0], profile.bio[3]].filter(Boolean);
 
   return (
     <Section id="about">
@@ -495,19 +442,11 @@ export function About() {
               {p}
             </p>
           ))}
-          <p
-            className="border-l-2 border-[var(--c3)] pl-4 text-sm italic text-ed-muted"
-            data-reveal
-            style={delay(body.length)}
-          >
-            {aside}
-          </p>
         </div>
 
         <div className="space-y-4">
-          <Journey />
           <h3
-            className="font-label pt-4 text-xs font-medium uppercase tracking-[0.18em] text-ed-faint"
+            className="font-label text-xs font-medium uppercase tracking-[0.18em] text-ed-faint"
             data-reveal
           >
             Education
@@ -531,13 +470,6 @@ export function About() {
                   {entry.gpa}
                 </span>
               </p>
-              <ul className="mt-4 flex flex-wrap gap-1.5">
-                {entry.coursework.map((course) => (
-                  <li key={course}>
-                    <Chip>{course}</Chip>
-                  </li>
-                ))}
-              </ul>
             </article>
           ))}
         </div>
@@ -555,31 +487,9 @@ export function Capabilities() {
     <Section id="skills">
       <SectionHeading
         eyebrow="Capabilities"
-        title="Boring, observable systems |over clever ones."
-        lede="How I usually work, and the tools I reach for."
+        title="Skills"
+        lede="The tools I use most, grouped by where they sit in a system."
       />
-
-      <ol className="mb-14 grid gap-4 md:grid-cols-3">
-        {principles.map((step, i) => (
-          <li
-            key={step.title}
-            className="fx-card rounded-3xl p-7"
-            data-reveal
-            style={delay(i)}
-          >
-            <span
-              className="font-display fx-gradient-text inline-block text-5xl"
-              data-parallax={0.06 + i * 0.03}
-            >
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <h3 className="font-display mt-5 text-xl">{step.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-ed-muted">
-              {step.body}
-            </p>
-          </li>
-        ))}
-      </ol>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {skills.map((group, i) => (
@@ -597,7 +507,7 @@ export function Capabilities() {
               {group.name}
             </h3>
             <ul className="flex flex-wrap gap-1.5">
-              {group.items.map((item) => (
+              {group.items.slice(0, 8).map((item) => (
                 <li key={item}>
                   <Chip>{item}</Chip>
                 </li>
@@ -615,6 +525,7 @@ export function Capabilities() {
 /* ------------------------------------------------------------------ */
 
 const logos: Record<string, string> = {
+  sphere: "/images/experiences/sphere.jpeg",
   gupshup: "/images/experiences/gupshup.jpeg",
   "chance-app": "/images/experiences/chance.jpeg",
   netsi: "/images/experiences/netsi.jpeg",
@@ -693,7 +604,7 @@ function ExperienceCard({ job }: { job: Experience }) {
 
           <p className="mt-6 leading-relaxed">{job.summary}</p>
           <ul className="mt-4 space-y-2.5">
-            {job.highlights.map((h) => (
+            {job.highlights.slice(0, 3).map((h) => (
               <li
                 key={h}
                 className="flex gap-3 text-sm leading-relaxed text-ed-muted"
@@ -748,7 +659,7 @@ export function ExperienceSection() {
       <SectionHeading
         eyebrow="Experience"
         title="Built in production. |Kept up in research."
-        lede="Reverse chronological. The numbers on the right come straight from the work on the left."
+        lede="Most recent first."
       />
       {/* Each card pins under the header and the next one slides over it. */}
       <div data-stack-group>
@@ -855,13 +766,21 @@ function ProjectCard({
 }
 
 export function ProjectsSection() {
-  // Gallery order comes from `showcase`: distributed systems and low-level first, AI next.
+  // Gallery order comes from `showcase`; the home page shows only the top few per area.
+  const perArea: Record<ProjectArea, number> = {
+    "Distributed systems": 3,
+    "Low-level": 1,
+    "AI / ML": 2,
+    Product: 2,
+  };
+  const taken: Partial<Record<ProjectArea, number>> = {};
   const featured = showcase.flatMap(({ slug, area }) => {
     const project = projects.find((p) => p.slug === slug);
-    return project ? [{ project, area }] : [];
+    const n = taken[area] ?? 0;
+    if (!project || n >= perArea[area]) return [];
+    taken[area] = n + 1;
+    return [{ project, area }];
   });
-  const shown = new Set(showcase.map((s) => s.slug));
-  const archive = projects.filter((p) => !shown.has(p.slug));
 
   return (
     <section id="projects">
@@ -878,7 +797,7 @@ export function ProjectsSection() {
                 <SectionHeading
                   eyebrow="Projects"
                   title="Things I built, |with the numbers to back them."
-                  lede="Distributed systems and low-level work first, then AI and ML. Each card leads with its headline measurement. Keep scrolling to move through them."
+                  lede="A selection. Distributed systems first, then low-level, AI and product work."
                 />
               </div>
               {featured.map(({ project, area }, i) => (
@@ -906,42 +825,9 @@ export function ProjectsSection() {
       </div>
 
       <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 sm:pb-32">
-        <div className="mt-8 lg:mt-24" data-reveal>
-          <h3 className="font-label fx-eyebrow mb-5 text-xs font-medium uppercase tracking-[0.18em] text-ed-faint">
-            Project archive
-          </h3>
-          <ul
-            className="fx-card divide-y divide-ed-line overflow-hidden rounded-3xl"
-            data-tilt="off"
-          >
-            {archive.map((project) => (
-              <li
-                key={project.slug}
-                className="group/row flex flex-col gap-2 px-6 py-4 transition-colors hover:bg-ed-accent-soft sm:flex-row sm:items-center sm:gap-6"
-              >
-                <span className="font-label w-12 shrink-0 text-xs text-ed-faint">
-                  {project.year}
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium transition-transform duration-300 group-hover/row:translate-x-1">
-                    {project.name}
-                  </p>
-                  <p className="text-sm text-ed-muted">{project.tagline}</p>
-                </div>
-                <div className="flex shrink-0 gap-5">
-                  {project.demo ? (
-                    <TextLink href={project.demo}>Demo</TextLink>
-                  ) : null}
-                  {project.github ? (
-                    <TextLink href={project.github}>Code</TextLink>
-                  ) : null}
-                </div>
-              </li>
-            ))}
-            <li className="px-6 py-4">
-              <TextLink href={links.github}>More on GitHub</TextLink>
-            </li>
-          </ul>
+        <div className="mt-8 flex flex-wrap gap-6 lg:mt-24" data-reveal>
+          <TextLink href="/projects">All projects</TextLink>
+          <TextLink href={links.github}>More on GitHub</TextLink>
         </div>
       </div>
     </section>
@@ -1110,16 +996,16 @@ export function Contact() {
           data-tilt="off"
           data-reveal
         >
-          {/* Local aurora so the closing card glows on its own. */}
+          {/* Decorative glows, hidden in the corporate theme. */}
           <span
             aria-hidden
             data-parallax="0.25"
-            className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-[var(--c1)] opacity-30 blur-[100px]"
+            className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 hidden rounded-full bg-[var(--c1)] opacity-30 blur-[100px]"
           />
           <span
             aria-hidden
             data-parallax="-0.2"
-            className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-[var(--c2)] opacity-20 blur-[100px]"
+            className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 hidden rounded-full bg-[var(--c2)] opacity-20 blur-[100px]"
           />
 
           <p className="font-label fx-eyebrow relative mb-4 text-xs font-medium uppercase tracking-[0.18em] text-ed-muted">

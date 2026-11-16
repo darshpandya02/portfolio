@@ -372,36 +372,36 @@ mark {
 }
 
 /* ---------------------------------------------------------------
-   Home page ("deep space" theme). Scoped under .ed so the terminal
+   Home page (plain corporate theme). Scoped under .ed so the terminal
    pages keep their own palettes. Mode and type style come from data
    attributes on <html>, set before paint by siteBootScript.
    --------------------------------------------------------------- */
 
 .ed {
-  /* Dark is the default look. */
-  --ed-bg: #06060c;
-  --ed-surface: rgb(22 20 40 / 0.62);
-  --ed-surface-solid: #100f1c;
-  --ed-sunken: rgb(255 255 255 / 0.02);
-  --ed-ink: #eeedf9;
-  --ed-muted: #a3a2bd;
-  --ed-faint: #6c6b88;
+  /* Dark mode: slate navy. Light is the default, set by siteBootScript. */
+  --ed-bg: #0b1220;
+  --ed-surface: #111a2b;
+  --ed-surface-solid: #111a2b;
+  --ed-sunken: rgb(255 255 255 / 0.03);
+  --ed-ink: #e5e9f0;
+  --ed-muted: #9aa6b8;
+  --ed-faint: #64748b;
   --ed-line: rgb(255 255 255 / 0.09);
-  --ed-accent: #a78bfa;
-  --ed-accent-ink: #0b0717;
-  --ed-accent-soft: rgb(167 139 250 / 0.14);
+  --ed-accent: #6ea8fe;
+  --ed-accent-ink: #0b1220;
+  --ed-accent-soft: rgb(110 168 254 / 0.12);
   --ed-good: #34d399;
-  --c1: #8b5cf6; /* violet */
-  --c2: #22d3ee; /* cyan */
-  --c3: #f472b6; /* pink */
-  --aurora-opacity: 0.55;
-  --grid-line: rgb(255 255 255 / 0.045);
-  --glow: rgb(139 92 246 / 0.35);
-  --ed-display: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --c1: #3b82f6;
+  --c2: #6ea8fe;
+  --c3: #93c5fd;
+  --aurora-opacity: 0;
+  --grid-line: transparent;
+  --glow: rgb(0 0 0 / 0.35);
+  --ed-display: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --ed-body: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --ed-label: var(--font-mono), ui-monospace, monospace;
+  --ed-label: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --ed-display-weight: 600;
-  --ed-display-tracking: -0.035em;
+  --ed-display-tracking: -0.025em;
   color-scheme: dark;
   background: var(--ed-bg);
   color: var(--ed-ink);
@@ -410,24 +410,24 @@ mark {
 }
 
 html[data-mode="light"] .ed {
-  --ed-bg: #f5f4fb;
-  --ed-surface: rgb(255 255 255 / 0.78);
+  --ed-bg: #f7f8fa;
+  --ed-surface: #ffffff;
   --ed-surface-solid: #ffffff;
-  --ed-sunken: rgb(15 10 40 / 0.025);
-  --ed-ink: #14122b;
-  --ed-muted: #55526f;
-  --ed-faint: #8c89a6;
-  --ed-line: rgb(20 15 60 / 0.1);
-  --ed-accent: #6d28d9;
+  --ed-sunken: rgb(15 23 42 / 0.03);
+  --ed-ink: #0f172a;
+  --ed-muted: #475569;
+  --ed-faint: #94a3b8;
+  --ed-line: rgb(15 23 42 / 0.1);
+  --ed-accent: #1e40af;
   --ed-accent-ink: #ffffff;
-  --ed-accent-soft: rgb(109 40 217 / 0.09);
-  --ed-good: #059669;
-  --c1: #7c3aed;
-  --c2: #0891b2;
-  --c3: #db2777;
-  --aurora-opacity: 0.22;
-  --grid-line: rgb(20 15 60 / 0.05);
-  --glow: rgb(124 58 237 / 0.18);
+  --ed-accent-soft: rgb(30 64 175 / 0.07);
+  --ed-good: #047857;
+  --c1: #1e40af;
+  --c2: #1d4ed8;
+  --c3: #1e3a8a;
+  --aurora-opacity: 0;
+  --grid-line: transparent;
+  --glow: rgb(15 23 42 / 0.1);
   color-scheme: light;
 }
 
@@ -1114,8 +1114,8 @@ html.fx-ready .ed [data-reveal].fx-now {
   animation: play-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 @keyframes play-ping {
-  0% { transform: scale(1); opacity: 0.55; }
-  70%, 100% { transform: scale(1.35, 1.6); opacity: 0; }
+  0% { transform: scale(1); opacity: 0.4; }
+  70%, 100% { transform: scale(1.15, 1.35); opacity: 0; }
 }
 .play-nudge { animation: play-nudge-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @keyframes play-nudge-in {
@@ -1126,3 +1126,133 @@ html.fx-ready .ed [data-reveal].fx-now {
   .play-cta-ping { animation: none; opacity: 0; }
   .play-nudge { animation: none; }
 }
+
+
+/* ---------------------------------------------------------------
+   Corporate overrides: flat colour, no glow, no neon. The effects
+   above stay defined so they can be brought back, but these rules
+   turn them into quiet, solid versions. Motion is kept to fades
+   and gentle slides.
+   --------------------------------------------------------------- */
+
+.fx-aurora,
+.fx-grid-mask,
+.fx-grain,
+.fx-spotlight {
+  display: none;
+}
+
+.ed ::selection { background: var(--ed-accent-soft); }
+.ed :focus-visible { outline-color: var(--ed-accent); }
+
+.fx-progress {
+  background: var(--ed-accent);
+  box-shadow: none;
+}
+
+.fx-gradient-text,
+h1 .fx-gradient-text,
+h2 .fx-gradient-text,
+.fx-rotator .fx-gradient-text {
+  background: none;
+  color: var(--ed-accent);
+  animation: none;
+}
+
+.fx-letter {
+  transform: translateY(0.25em);
+  filter: none;
+  animation-duration: 0.7s;
+  animation-delay: calc(var(--i) * 25ms + 100ms);
+}
+.fx-rotator > span { filter: none; }
+
+.fx-card,
+html.fx-ready .ed .fx-card[data-reveal].in {
+  transform: none;
+}
+.fx-card::before,
+.fx-card::after { display: none; }
+.fx-card:hover {
+  border-color: color-mix(in srgb, var(--ed-ink) 18%, transparent);
+  box-shadow: 0 12px 32px -18px var(--glow);
+}
+[data-stack] .fx-card { box-shadow: 0 -10px 36px -24px var(--glow); }
+
+.fx-btn-primary {
+  color: var(--ed-accent-ink);
+  background: var(--ed-accent);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.12);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.fx-btn-primary::after { display: none; }
+.fx-btn-primary:hover {
+  background: color-mix(in srgb, var(--ed-accent) 86%, #000);
+  box-shadow: 0 4px 14px -6px var(--glow);
+}
+.fx-btn-ghost:hover,
+.fx-chip:hover {
+  border-color: color-mix(in srgb, var(--ed-ink) 25%, transparent);
+  background: var(--ed-sunken);
+}
+[data-magnetic] { transform: none; }
+
+.fx-ring::before {
+  background: var(--ed-line);
+  animation: none;
+}
+.fx-photo-ring::before {
+  background: var(--ed-line);
+  animation: none;
+}
+.fx-photo-ring::after { display: none; }
+.fx-float { animation: none; }
+
+.fx-eyebrow::before { background: var(--ed-accent); }
+.fx-line { background: var(--ed-line); }
+
+.fx-logo-pill:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--ed-ink) 20%, transparent);
+  box-shadow: 0 8px 20px -14px var(--glow);
+}
+
+/* Deep dives: a solid navy band instead of the night-sky backdrop. */
+.dive {
+  background: #0f2340;
+  --c1: #9cc3ff;
+  --c2: #9cc3ff;
+  --c3: #c7dcff;
+  --ed-accent: #9cc3ff;
+}
+.dive-bg,
+.dive-shade { display: none; }
+.dive-pin::before,
+.dive-pin::after { display: none; }
+.dive-intro,
+.dive-intro .fx-gradient-text {
+  text-shadow: none;
+  filter: none;
+}
+.dive-card {
+  background: rgb(255 255 255 / 0.05);
+  border-color: rgb(255 255 255 / 0.12);
+}
+.dive-card::before { display: none; }
+.dive-card:hover {
+  transform: translateY(-3px);
+  border-color: rgb(255 255 255 / 0.28);
+  box-shadow: 0 16px 40px -24px rgb(0 0 0 / 0.6);
+}
+
+/* Play button: solid brand blue, still with a soft pulse so it gets noticed. */
+.play-cta {
+  color: #fff;
+  background: #1e40af;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.15);
+}
+.play-cta:hover {
+  background: #1b3a9e;
+  box-shadow: 0 6px 18px -8px rgb(30 64 175 / 0.6);
+}
+.play-cta-ping { background: #1e40af; }

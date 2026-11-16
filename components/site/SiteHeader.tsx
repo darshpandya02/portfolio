@@ -39,7 +39,7 @@ export default function SiteHeader() {
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
         <a href={to("#home")} className="flex shrink-0 items-center gap-2.5" onClick={() => setOpen(false)}>
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-[var(--c1)] via-[var(--c2)] to-[var(--c3)] text-xs font-bold text-white shadow-[0_0_24px_-4px_var(--c1)]">
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-[var(--ed-accent)] text-xs font-bold text-[var(--ed-accent-ink)]">
             DP
           </span>
           <span className="leading-tight">

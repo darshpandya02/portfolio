@@ -13,7 +13,7 @@ export interface TypeStyle {
 }
 
 export const typeStyles: TypeStyle[] = [
-  { key: "grotesk", label: "Grotesk", description: "Space Grotesk headings, mono labels" },
+  { key: "grotesk", label: "Clean", description: "Inter throughout" },
   { key: "editorial", label: "Editorial", description: "Newsreader headings, Inter body" },
   { key: "system", label: "System", description: "Your device's own UI font" },
 ];
@@ -27,14 +27,14 @@ export const siteBootScript = `
   var d = document.documentElement;
   try {
     var m = localStorage.getItem(${JSON.stringify(MODE_STORAGE_KEY)});
-    // Dark is the designed default; light is an opt-in from the footer switch.
-    if (m !== "light" && m !== "dark") m = "dark";
+    // Light is the default; dark is an opt-in from the footer switch.
+    if (m !== "light" && m !== "dark") m = "light";
     d.dataset.mode = m;
     var t = localStorage.getItem(${JSON.stringify(TYPE_STORAGE_KEY)});
     var valid = ${JSON.stringify(typeStyles.map((s) => s.key))};
     d.dataset.type = valid.indexOf(t) > -1 ? t : ${JSON.stringify(defaultTypeStyle)};
   } catch (e) {
-    d.dataset.mode = "dark";
+    d.dataset.mode = "light";
     d.dataset.type = ${JSON.stringify(defaultTypeStyle)};
   }
 })();

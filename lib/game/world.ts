@@ -254,6 +254,7 @@ export const TOWER_ROOF = GY - TOWER.floorH * careerFloors.length;
 export const MACHINE = { x: 6620, y: TOWER_ROOF };
 
 export const LOGOS: Record<string, string> = {
+  sphere: "/images/experiences/sphere.jpeg",
   "chance-app": "/images/experiences/chance.jpeg",
   gupshup: "/images/experiences/gupshup.jpeg",
   netsi: "/images/experiences/netsi.jpeg",

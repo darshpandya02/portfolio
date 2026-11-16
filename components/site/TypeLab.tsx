@@ -14,12 +14,12 @@ function save(key: string, value: string) {
 
 /** Font style and light/dark switcher. State lives on <html> data attributes. */
 export default function TypeLab() {
-  const [mode, setMode] = useState<Mode>("dark");
+  const [mode, setMode] = useState<Mode>("light");
   const [type, setType] = useState(defaultTypeStyle);
 
   useEffect(() => {
     const d = document.documentElement;
-    setMode(d.dataset.mode === "light" ? "light" : "dark");
+    setMode(d.dataset.mode === "dark" ? "dark" : "light");
     setType(d.dataset.type ?? defaultTypeStyle);
   }, []);
 

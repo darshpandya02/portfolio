@@ -9,7 +9,6 @@ import {
   Hero,
   ProjectsSection,
   Research,
-  StackStrip,
   Writing,
 } from "@/components/site/sections";
 import { SITE_URL } from "@/lib/content";
@@ -22,7 +21,6 @@ export default function Home() {
   return (
     <SiteShell>
       <Hero />
-      <StackStrip />
       <About />
       <Capabilities />
       <ExperienceSection />
