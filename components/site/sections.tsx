@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 
 import Link from "next/link";
 
+import BlueprintBackdrop from "@/components/site/BlueprintBackdrop";
 import MoreDetail from "@/components/site/MoreDetail";
 import { articles, readMinutes } from "@/lib/writing";
 import {
@@ -613,36 +614,81 @@ export function ProjectsSection() {
 /* Writing (deep dives)                                                */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Pinned "dive": the blueprint backdrop zooms in as you scroll, the title fades
+ * away, and the write-ups rise into view together. FxRuntime drives it
+ * ([data-dive]); on small screens, with reduced motion or without JS it is a
+ * normal section with every card visible.
+ */
 export function Writing() {
   return (
-    <Section id="writing">
-      <SectionHeading
-        title="Writing"
-        lede="Longer write-ups on consensus, event-driven pipelines, database concurrency, routing and applied ML."
-      />
-      <ul className="-mt-5 divide-y divide-ed-line border-b border-ed-line">
-        {articles.map((article) => (
-          <li key={article.slug} data-reveal>
-            <Link
-              href={`/writing/${article.slug}`}
-              className="group/w grid gap-1 py-5 sm:grid-cols-[1fr_auto] sm:gap-8"
-            >
-              <div>
-                <h3 className="font-semibold leading-snug group-hover/w:text-ed-accent group-hover/w:underline group-hover/w:underline-offset-4">
-                  {article.title}
-                </h3>
-                <p className="mt-1 max-w-3xl text-sm leading-relaxed text-ed-muted">
-                  {article.dek}
-                </p>
-              </div>
-              <p className="font-label text-xs text-ed-faint sm:pt-1 sm:text-right">
-                {article.category} · {readMinutes(article)} min
-              </p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </Section>
+    <section id="writing">
+      <div data-dive className="dive relative isolate">
+        <div data-dive-pin className="dive-pin relative">
+          <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
+            <div data-dive-bg className="dive-bg absolute inset-0">
+              <BlueprintBackdrop />
+            </div>
+            <div data-dive-shade className="dive-shade absolute inset-0" />
+          </div>
+
+          <div
+            data-dive-intro
+            className="dive-intro mx-auto w-full max-w-6xl px-4 pt-20 text-center sm:px-6 sm:pt-24"
+          >
+            <h2 className="font-display text-4xl leading-tight text-white sm:text-5xl">
+              Writing
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-white/70">
+              Longer write-ups on consensus, event-driven pipelines, database
+              concurrency, routing and applied ML.
+            </p>
+            <p className="dive-hint font-label mt-10 text-[11px] uppercase tracking-[0.2em] text-white/45">
+              Scroll ↓
+            </p>
+          </div>
+
+          <div
+            data-dive-cards
+            className="dive-cards mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6"
+          >
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
+              {articles.map((article, i) => (
+                <Link
+                  key={article.slug}
+                  href={`/writing/${article.slug}`}
+                  className={`dive-card group/dive relative flex flex-col rounded-lg p-6 ${
+                    i < 3 ? "lg:col-span-2" : "lg:col-span-3"
+                  }`}
+                >
+                  <div className="font-label flex items-center justify-between gap-4 text-[11px]">
+                    <span className="uppercase tracking-wide text-white/55">
+                      {article.category}
+                    </span>
+                    <span className="text-white/45">{readMinutes(article)} min read</span>
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold leading-snug text-white">
+                    {article.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-white/65">
+                    {article.dek}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-medium text-[#9cc3ff]">
+                    Read
+                    <span
+                      aria-hidden
+                      className="transition-transform duration-300 group-hover/dive:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

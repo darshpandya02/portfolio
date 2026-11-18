@@ -1225,18 +1225,20 @@ html.fx-ready .ed .fx-card[data-reveal].in {
   --c3: #c7dcff;
   --ed-accent: #9cc3ff;
 }
-.dive-bg,
-.dive-shade { display: none; }
+/* Blueprint backdrop: navy vignette over the grid, deepening as cards arrive. */
+.dive-shade {
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 48%, rgb(15 35 64 / 0), rgb(10 24 46 / 0.92)),
+    linear-gradient(rgb(15 35 64 / 0.5), transparent 25%, transparent 75%, rgb(15 35 64 / 0.6));
+}
 .dive-pin::before,
 .dive-pin::after { display: none; }
-.dive-intro,
-.dive-intro .fx-gradient-text {
-  text-shadow: none;
-  filter: none;
+.dive-intro {
+  text-shadow: 0 0 24px rgb(15 35 64), 0 0 8px rgb(15 35 64), 0 0 2px rgb(15 35 64);
 }
 .dive-card {
-  background: rgb(255 255 255 / 0.05);
-  border-color: rgb(255 255 255 / 0.12);
+  background: rgb(15 35 64 / 0.88);
+  border-color: rgb(156 195 255 / 0.18);
 }
 .dive-card::before { display: none; }
 .dive-card:hover {
