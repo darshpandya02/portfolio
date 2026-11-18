@@ -39,23 +39,6 @@ export default function ChatWidget() {
     logRef.current?.scrollTo({ top: logRef.current.scrollHeight });
   }, [turns]);
 
-  // A one-time nudge, a few seconds in, so visitors notice the assistant exists.
-  useEffect(() => {
-    let seen = false;
-    try {
-      seen = sessionStorage.getItem(TEASER_KEY) === "1";
-    } catch {
-      /* storage blocked: show it anyway */
-    }
-    if (seen) return;
-    const show = window.setTimeout(() => setTeaser(true), 3500);
-    const hide = window.setTimeout(() => setTeaser(false), 14000);
-    return () => {
-      window.clearTimeout(show);
-      window.clearTimeout(hide);
-    };
-  }, []);
-
   const dismissTeaser = () => {
     setTeaser(false);
     try {
@@ -137,7 +120,7 @@ export default function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-[70] flex flex-col items-end gap-3 font-[family-name:var(--ed-body)] sm:bottom-6 sm:right-6">
       {teaser && !open ? (
-        <div className="fx-float flex max-w-[16rem] items-start gap-2 rounded-2xl border border-ed-line bg-[var(--ed-surface-solid)] px-4 py-3 text-sm text-ed-ink shadow-[0_20px_50px_-20px_var(--glow)]">
+        <div className="fx-float flex max-w-[16rem] items-start gap-2 rounded-md border border-ed-line bg-[var(--ed-surface-solid)] px-4 py-3 text-sm text-ed-ink shadow-[0_20px_50px_-20px_var(--glow)]">
           <button
             type="button"
             className="text-left"
@@ -165,7 +148,7 @@ export default function ChatWidget() {
         <div
           role="dialog"
           aria-label="Ask about Darsh's work"
-          className="flex h-[min(560px,calc(100dvh-7rem))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-3xl border border-ed-line bg-[var(--ed-surface-solid)] shadow-[0_30px_80px_-20px_var(--glow)]"
+          className="flex h-[min(560px,calc(100dvh-7rem))] w-[min(380px,calc(100vw-2rem))] flex-col overflow-hidden rounded-lg border border-ed-line bg-[var(--ed-surface-solid)] shadow-[0_30px_80px_-20px_var(--glow)]"
         >
           <div className="flex items-center gap-3 border-b border-ed-line px-4 py-3">
             <span
@@ -208,7 +191,7 @@ export default function ChatWidget() {
                 className={turn.role === "user" ? "flex justify-end" : "flex"}
               >
                 <p
-                  className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                  className={`max-w-[85%] whitespace-pre-wrap rounded-md px-3.5 py-2.5 text-sm leading-relaxed ${
                     turn.role === "user"
                       ? "bg-gradient-to-br from-[var(--c1)] to-[color-mix(in_srgb,var(--c1)_60%,var(--c3))] text-white"
                       : "border border-ed-line bg-ed-sunken"
@@ -293,8 +276,7 @@ export default function ChatWidget() {
           setOpen((v) => !v);
         }}
         aria-expanded={open}
-        data-magnetic
-        className="fx-ring flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-ed-ink shadow-[0_10px_30px_-12px_var(--glow)]"
+        className="flex items-center gap-2 rounded-md border border-ed-line bg-[var(--ed-surface-solid)] px-4 py-2.5 text-sm font-medium text-ed-ink shadow-sm hover:bg-ed-sunken"
       >
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden>
           <path
@@ -305,13 +287,7 @@ export default function ChatWidget() {
             strokeLinejoin="round"
           />
         </svg>
-        {open ? "Close" : "Ask AI about me"}
-        {!open ? (
-          <span
-            className="fx-pulse ml-0.5 h-2 w-2 rounded-full bg-[var(--c2)]"
-            aria-hidden
-          />
-        ) : null}
+        {open ? "Close" : "Ask about my work"}
       </button>
     </div>
   );

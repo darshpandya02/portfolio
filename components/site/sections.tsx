@@ -4,7 +4,6 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 
 import MoreDetail from "@/components/site/MoreDetail";
-import WordRotator from "@/components/site/WordRotator";
 import { articles, readMinutes } from "@/lib/writing";
 import {
   education,
@@ -27,28 +26,12 @@ import {
 /** Stagger index for [data-reveal]; FxRuntime multiplies it into a delay. */
 const delay = (d: number) => ({ "--d": d }) as CSSProperties;
 
-/** `title` may contain one "|": the text after it is drawn in the animated gradient. */
-function SectionHeading({
-  eyebrow,
-  title,
-  lede,
-}: {
-  eyebrow: string;
-  title: string;
-  lede?: string;
-}) {
-  const [plain, glow] = title.split("|");
+function SectionHeading({ title, lede }: { title: string; lede?: string }) {
   return (
-    <div className="mb-12 max-w-3xl sm:mb-14" data-reveal>
-      <p className="font-label fx-eyebrow mb-4 text-xs font-medium uppercase tracking-[0.18em] text-ed-muted">
-        {eyebrow}
-      </p>
-      <h2 className="font-display text-4xl leading-[1.05] sm:text-[3.25rem]">
-        {plain}
-        {glow ? <span className="fx-gradient-text">{glow}</span> : null}
-      </h2>
+    <div className="mb-10 border-b border-ed-line pb-4" data-reveal>
+      <h2 className="font-display text-2xl leading-tight sm:text-3xl">{title}</h2>
       {lede ? (
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-ed-muted sm:text-lg">
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ed-muted sm:text-base">
           {lede}
         </p>
       ) : null}
@@ -58,7 +41,7 @@ function SectionHeading({
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="font-label fx-chip inline-flex items-center rounded-full border border-ed-line bg-ed-surface px-2.5 py-1 text-[11px] text-ed-muted">
+    <span className="font-label fx-chip inline-flex items-center rounded border border-ed-line bg-ed-surface px-1.5 py-0.5 text-[11px] text-ed-muted">
       {children}
     </span>
   );
@@ -67,7 +50,7 @@ function Chip({ children }: { children: React.ReactNode }) {
 function Section({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <section id={id}>
-      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         {children}
       </div>
     </section>
@@ -112,7 +95,7 @@ function TextLink({
       {children}
       <ArrowIcon />
       <span
-        className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-gradient-to-r from-[var(--c1)] to-[var(--c2)] transition-transform duration-300 group-hover/link:scale-x-100"
+        className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-300 group-hover/link:scale-x-100"
         aria-hidden
       />
     </a>
@@ -125,208 +108,94 @@ const socials = [
   { label: "Email", href: links.email },
 ];
 
-/** Renders "+15%" as "+", a count-up "15", and "%". Non-numeric values render as-is. */
-function MetricValue({ value }: { value: string }) {
-  const m = value.match(/^([+−-]?)(\d+)(.*)$/);
-  if (!m) return <>{value}</>;
-  return (
-    <>
-      {m[1]}
-      <span data-count={m[2]}>{m[2]}</span>
-      {m[3]}
-    </>
-  );
-}
-
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
 
-const heroWords = [
-  "distributed systems",
-  "backend services",
-  "message pipelines",
-  "research infrastructure",
-];
-
 export function Hero() {
   const current = experience.find((job) => job.current) ?? experience[0];
-  const city = profile.location.split(",")[0];
-  const ms = education[0];
 
   return (
     <section
       id="home"
-      className="mx-auto max-w-6xl px-4 pb-20 pt-14 sm:px-6 sm:pb-28 sm:pt-24"
+      className="mx-auto max-w-6xl px-4 pb-16 pt-14 sm:px-6 sm:pb-20 sm:pt-20"
     >
-      <div className="grid items-center gap-16 lg:grid-cols-[1.3fr_1fr] lg:gap-12">
-        <div data-hero-out="0.18">
-          <p
-            data-reveal
-            style={delay(0)}
-            className="font-label mb-8 inline-flex items-center gap-2.5 rounded-full border border-ed-line bg-ed-surface px-3.5 py-1.5 text-xs text-ed-muted"
-          >
-            <span
-              className="fx-pulse h-2 w-2 rounded-full bg-[var(--c2)]"
-              aria-hidden
-            />
-            {city}, MA · {current.role} @ SPHERE
-          </p>
-
-          <h1 className="font-display text-[3.4rem] leading-[0.98] sm:text-[5.5rem]">
-            <span
-              className="block text-2xl font-normal tracking-normal text-ed-muted sm:text-3xl"
-              data-reveal
-              style={delay(1)}
-            >
-              Hi, I&apos;m
-            </span>
-            <span className="relative mt-2 block" aria-label={profile.name}>
-              {profile.name.split("").map((ch, i) => (
-                <span
-                  key={i}
-                  aria-hidden
-                  className="fx-letter"
-                  style={{ "--i": i } as CSSProperties}
-                >
-                  {ch === " " ? " " : ch}
-                </span>
-              ))}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -inset-x-6 -bottom-4 top-1/2 -z-10 rounded-full bg-gradient-to-r from-[var(--c1)] via-[var(--c2)] to-[var(--c3)] hidden opacity-25 blur-3xl"
-              />
-            </span>
+      <div className="grid items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
+        <div>
+          <h1 className="font-display text-5xl leading-none sm:text-6xl" data-reveal>
+            {profile.name}
           </h1>
-
-          <p
-            className="mt-8 max-w-xl text-xl leading-snug sm:text-2xl"
-            data-reveal
-            style={delay(4)}
-          >
-            I build <WordRotator words={heroWords} />
-            <br />
-            that keep working under their own load.
-          </p>
-          <p
-            className="mt-5 max-w-xl leading-relaxed text-ed-muted"
-            data-reveal
-            style={delay(5)}
-          >
-            Right now that means research infrastructure for reproducible
-            cybersecurity experiments. Before that: messaging pipelines at
-            Gupshup, research data platforms at Northeastern, and a consumer app
-            in Mumbai.
+          <p className="mt-3 text-lg text-ed-muted" data-reveal style={delay(1)}>
+            {current.role} at SPHERE · {profile.location.split(",")[0]}, MA
           </p>
 
+          <p
+            className="mt-8 max-w-xl text-lg leading-relaxed"
+            data-reveal
+            style={delay(2)}
+          >
+            I build backend services and distributed systems. Right now that
+            means research infrastructure for reproducible cybersecurity
+            experiments. Before that: messaging pipelines at Gupshup, research
+            data platforms at Northeastern, and a consumer app in Mumbai.
+          </p>
 
           <div
-            className="mt-10 flex flex-wrap items-center gap-3"
+            className="mt-8 flex flex-wrap items-center gap-3"
             data-reveal
-            style={delay(7)}
+            style={delay(3)}
           >
             <a
-              href="#projects"
-              data-magnetic
-              className="fx-btn-primary rounded-full px-6 py-3 text-sm font-semibold"
+              href="#experience"
+              className="fx-btn-primary rounded-md px-5 py-2.5 text-sm font-semibold"
             >
-              View work
+              View experience
             </a>
-            <Link
-              href="/play"
-              data-magnetic
-              className="play-cta inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold"
-            >
-              <span aria-hidden className="play-cta-ping" />
-              <svg width="12" height="12" viewBox="0 0 10 10" aria-hidden>
-                <path d="M2 1l7 4-7 4z" fill="currentColor" />
-              </svg>
-              Play the game
-            </Link>
             <a
-              href="#contact"
-              data-magnetic
-              className="fx-btn-ghost rounded-full px-6 py-3 text-sm font-medium"
+              href={links.resume}
+              target="_blank"
+              rel="noreferrer"
+              className="fx-btn-ghost rounded-md px-5 py-2.5 text-sm font-medium"
             >
-              Get in touch
+              Resume (PDF)
             </a>
-            <span
-              className="mx-1 hidden h-5 w-px bg-ed-line sm:block"
-              aria-hidden
-            />
-            <div className="flex w-full gap-5 pt-1 sm:w-auto sm:pt-0">
+            <div className="flex w-full gap-5 pt-2 sm:ml-3 sm:w-auto sm:pt-0">
               {socials.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   target={s.href.startsWith("http") ? "_blank" : undefined}
                   rel="noreferrer noopener"
-                  className="text-sm text-ed-muted transition-colors hover:text-ed-ink"
+                  className="text-sm text-ed-muted underline-offset-4 transition-colors hover:text-ed-ink hover:underline"
                 >
                   {s.label}
                 </a>
               ))}
             </div>
           </div>
+          <p className="mt-6 text-sm text-ed-faint" data-reveal style={delay(4)}>
+            There&apos;s also a{" "}
+            <Link href="/play" className="text-ed-muted underline underline-offset-4 hover:text-ed-ink">
+              pixel-city version
+            </Link>{" "}
+            of this site, and a{" "}
+            <Link href="/terminal" className="text-ed-muted underline underline-offset-4 hover:text-ed-ink">
+              terminal
+            </Link>
+            .
+          </p>
         </div>
 
-        {/* Photo: drifts slower than the text as the hero scrolls away. */}
-        <div
-          data-hero-out="0.05"
-          className="mx-auto w-full max-w-[22rem] lg:max-w-none"
-        >
-          <div
-            data-reveal
-            style={delay(3)}
-            className="relative mx-auto w-[78%] max-w-[23rem] sm:w-[70%] lg:w-[86%]"
-          >
-            <div className="fx-photo-ring">
-              <Image
-                src={profile.avatar}
-                alt={profile.avatarAlt}
-                width={800}
-                height={800}
-                priority
-                sizes="(min-width: 1024px) 360px, 70vw"
-                className="aspect-square w-full rounded-[2.1rem] object-cover"
-              />
-            </div>
-
-            <div
-              className="fx-float absolute -left-6 top-[12%] rounded-2xl border border-ed-line bg-[var(--ed-surface-solid)] px-3.5 py-2.5 shadow-[0_16px_40px_-16px_var(--glow)] sm:-left-12"
-              style={{ "--fd": "0s" } as CSSProperties}
-            >
-              <p className="font-display fx-gradient-text text-xl leading-none">
-                {ms.gpa.split(" ")[0]}
-              </p>
-              <p className="font-label mt-1 text-[10px] uppercase tracking-wider text-ed-muted">
-                M.S. GPA
-              </p>
-            </div>
-            <div
-              className="fx-float absolute -right-4 top-[48%] rounded-2xl border border-ed-line bg-[var(--ed-surface-solid)] px-3.5 py-2.5 shadow-[0_16px_40px_-16px_var(--glow)] sm:-right-10"
-              style={{ "--fd": "-2s" } as CSSProperties}
-            >
-              <p className="font-display fx-gradient-text text-xl leading-none">
-                ACSAC &apos;26
-              </p>
-              <p className="font-label mt-1 text-[10px] uppercase tracking-wider text-ed-muted">
-                Co-author
-              </p>
-            </div>
-            <div
-              className="fx-float absolute -bottom-5 left-[14%] flex items-center gap-2 rounded-full border border-ed-line bg-[var(--ed-surface-solid)] px-3.5 py-2 shadow-[0_16px_40px_-16px_var(--glow)]"
-              style={{ "--fd": "-4s" } as CSSProperties}
-            >
-              <span
-                className="fx-pulse h-2 w-2 rounded-full bg-[var(--ed-good)]"
-                aria-hidden
-              />
-              <span className="font-label text-[11px] text-ed-muted">
-                Open to conversations
-              </span>
-            </div>
-          </div>
+        <div data-reveal style={delay(2)} className="mx-auto w-full max-w-[18rem] lg:max-w-[20rem]">
+          <Image
+            src={profile.avatar}
+            alt={profile.avatarAlt}
+            width={800}
+            height={800}
+            priority
+            sizes="(min-width: 1024px) 320px, 70vw"
+            className="aspect-square w-full rounded-lg border border-ed-line object-cover"
+          />
         </div>
       </div>
     </section>
@@ -425,20 +294,11 @@ export function About() {
 
   return (
     <Section id="about">
-      <SectionHeading
-        eyebrow="About"
-        title="Backend engineer, |measured in uptime and numbers."
-      />
+      <SectionHeading title="About" />
       <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
         <div className="space-y-5 text-[1.05rem] leading-relaxed">
-          <p
-            className="font-display text-2xl leading-snug sm:text-[1.7rem]"
-            data-scrub-text
-          >
-            {body[0]}
-          </p>
-          {body.slice(1).map((p, i) => (
-            <p key={i} className="text-ed-muted" data-reveal style={delay(i)}>
+          {body.map((p, i) => (
+            <p key={i} className={i ? "text-ed-muted" : ""} data-reveal style={delay(i)}>
               {p}
             </p>
           ))}
@@ -454,7 +314,7 @@ export function About() {
           {education.map((entry, i) => (
             <article
               key={entry.school}
-              className="fx-card rounded-3xl p-6"
+              className="fx-card rounded-lg p-5"
               data-reveal
               style={delay(i + 1)}
             >
@@ -466,9 +326,7 @@ export function About() {
               </div>
               <p className="mt-1 text-sm text-ed-muted">
                 {entry.degree} · GPA{" "}
-                <span className="fx-gradient-text font-semibold">
-                  {entry.gpa}
-                </span>
+                <span className="font-medium text-ed-ink">{entry.gpa}</span>
               </p>
             </article>
           ))}
@@ -485,27 +343,17 @@ export function About() {
 export function Capabilities() {
   return (
     <Section id="skills">
-      <SectionHeading
-        eyebrow="Capabilities"
-        title="Skills"
-        lede="The tools I use most, grouped by where they sit in a system."
-      />
+      <SectionHeading title="Skills" />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {skills.map((group, i) => (
           <div
             key={group.key}
-            className="fx-card rounded-3xl p-5"
+            className="fx-card rounded-lg p-5"
             data-reveal
             style={delay(i % 4)}
           >
-            <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-              <span
-                className="h-1.5 w-1.5 rounded-full bg-gradient-to-br from-[var(--c1)] to-[var(--c2)]"
-                aria-hidden
-              />
-              {group.name}
-            </h3>
+            <h3 className="mb-3 text-sm font-semibold">{group.name}</h3>
             <ul className="flex flex-wrap gap-1.5">
               {group.items.slice(0, 8).map((item) => (
                 <li key={item}>
@@ -542,13 +390,13 @@ function CompanyMark({ job }: { job: Experience }) {
         alt=""
         width={48}
         height={48}
-        className="h-12 w-12 shrink-0 rounded-2xl border border-ed-line bg-white object-contain"
+        className="h-11 w-11 shrink-0 rounded border border-ed-line bg-white object-contain"
       />
     );
   }
   return (
     <span
-      className="font-display grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--c1)] to-[var(--c2)] text-lg text-white"
+      className="font-display grid h-11 w-11 shrink-0 place-items-center rounded border border-ed-line bg-ed-sunken text-lg text-ed-muted"
       aria-hidden
     >
       {job.company.charAt(0)}
@@ -559,7 +407,7 @@ function CompanyMark({ job }: { job: Experience }) {
 function ExperienceCard({ job }: { job: Experience }) {
   return (
     <article
-      className="fx-card rounded-3xl p-6 shadow-[0_-20px_60px_-30px_rgb(0_0_0/0.6)] sm:p-9"
+      className="fx-card rounded-lg p-6 sm:p-8"
       data-reveal
     >
       <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr]">
@@ -572,13 +420,7 @@ function ExperienceCard({ job }: { job: Experience }) {
                   {job.role}
                 </h3>
                 {job.current ? (
-                  <span className="font-label flex items-center gap-1.5 rounded-full border border-ed-line bg-ed-accent-soft px-2.5 py-0.5 text-[11px] font-medium text-[var(--c2)]">
-                    <span
-                      className="fx-pulse h-1.5 w-1.5 rounded-full bg-[var(--c2)]"
-                      aria-hidden
-                    />
-                    Current
-                  </span>
+                  <span className="font-label text-xs text-ed-faint">(current)</span>
                 ) : null}
               </div>
               <p className="text-sm text-ed-muted">
@@ -609,10 +451,9 @@ function ExperienceCard({ job }: { job: Experience }) {
                 key={h}
                 className="flex gap-3 text-sm leading-relaxed text-ed-muted"
               >
-                <span
-                  className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--c2)]"
-                  aria-hidden
-                />
+                <span className="shrink-0 text-ed-faint" aria-hidden>
+                  –
+                </span>
                 <span>{h}</span>
               </li>
             ))}
@@ -627,23 +468,11 @@ function ExperienceCard({ job }: { job: Experience }) {
         </div>
 
         {job.metrics?.length ? (
-          <dl className="grid content-start gap-3 self-start">
+          <dl className="content-start self-start divide-y divide-ed-line border-y border-ed-line text-sm lg:border-l lg:border-y-0 lg:pl-6">
             {job.metrics.map((m) => (
-              <div
-                key={m.label}
-                className="relative overflow-hidden rounded-2xl border border-ed-line bg-ed-sunken px-5 py-4"
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-[var(--c1)] via-[var(--c2)] to-[var(--c3)]"
-                />
-                <dt className="sr-only">{m.label}</dt>
-                <dd>
-                  <span className="font-display fx-gradient-text block text-3xl tabular-nums">
-                    <MetricValue value={m.value} />
-                  </span>
-                  <span className="text-xs text-ed-muted">{m.label}</span>
-                </dd>
+              <div key={m.label} className="flex items-baseline justify-between gap-4 py-2.5">
+                <dt className="text-ed-muted">{m.label}</dt>
+                <dd className="font-semibold tabular-nums">{m.value}</dd>
               </div>
             ))}
           </dl>
@@ -656,20 +485,10 @@ function ExperienceCard({ job }: { job: Experience }) {
 export function ExperienceSection() {
   return (
     <Section id="experience">
-      <SectionHeading
-        eyebrow="Experience"
-        title="Built in production. |Kept up in research."
-        lede="Most recent first."
-      />
-      {/* Each card pins under the header and the next one slides over it. */}
-      <div data-stack-group>
+      <SectionHeading title="Experience" />
+      <div className="space-y-4">
         {experience.map((job) => (
-          <div key={job.slug} data-stack className="z-10">
-            <div className="relative rounded-3xl">
-              <ExperienceCard job={job} />
-              <span data-stack-shade aria-hidden />
-            </div>
-          </div>
+          <ExperienceCard key={job.slug} job={job} />
         ))}
       </div>
     </Section>
@@ -681,9 +500,9 @@ export function ExperienceSection() {
 /* ------------------------------------------------------------------ */
 
 const areaStyle: Record<ProjectArea, string> = {
-  "Distributed systems": "text-[var(--c2)]",
-  "Low-level": "text-[var(--c2)]",
-  "AI / ML": "text-[var(--c3)]",
+  "Distributed systems": "text-ed-muted",
+  "Low-level": "text-ed-muted",
+  "AI / ML": "text-ed-muted",
   Product: "text-ed-muted",
 };
 
@@ -698,14 +517,13 @@ function ProjectCard({
 }) {
   return (
     <article
-      className="fx-card flex flex-col rounded-3xl p-6"
+      className="fx-card flex flex-col rounded-lg p-6"
       data-reveal
-      data-hscroll-item
       style={delay(index % 3)}
     >
       <div className="font-label mb-4 flex items-center justify-between text-xs text-ed-faint">
         <span
-          className={`rounded-full border border-ed-line px-2 py-0.5 font-semibold ${areaStyle[area]}`}
+          className={`uppercase tracking-wide ${areaStyle[area]}`}
         >
           {area}
         </span>
@@ -713,18 +531,12 @@ function ProjectCard({
           {project.year} · {project.stack[0]}
         </span>
       </div>
-      <h3 className="font-display text-2xl leading-snug">{project.name}</h3>
+      <h3 className="font-display text-xl leading-snug">{project.name}</h3>
       <p className="mt-2 text-sm leading-relaxed text-ed-muted">
         {project.tagline}
       </p>
 
-      <p className="relative mt-5 overflow-hidden rounded-2xl border border-ed-line bg-ed-sunken px-4 py-3.5 text-[13px] leading-relaxed">
-        <span
-          aria-hidden
-          className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-[var(--c1)] to-[var(--c2)]"
-        />
-        {project.highlights[0]}
-      </p>
+      <p className="mt-4 text-[13px] leading-relaxed">{project.highlights[0]}</p>
 
       <MoreDetail>
         {project.description.map((d) => (
@@ -733,10 +545,9 @@ function ProjectCard({
         <ul className="space-y-2">
           {project.highlights.slice(1).map((h) => (
             <li key={h} className="flex gap-2.5">
-              <span
-                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--c2)]"
-                aria-hidden
-              />
+              <span className="shrink-0 text-ed-faint" aria-hidden>
+                –
+              </span>
               <span>{h}</span>
             </li>
           ))}
@@ -783,54 +594,18 @@ export function ProjectsSection() {
   });
 
   return (
-    <section id="projects">
-      {/* On desktop this block pins and vertical scroll moves the track sideways.
-          FxRuntime sizes it; below lg it stays a plain grid. */}
-      <div data-hscroll className="relative">
-        <div data-hscroll-pin>
-          <div className="mx-auto w-full max-w-6xl px-4 pt-24 sm:px-6 sm:pt-32 lg:pt-0">
-            <div
-              data-hscroll-track
-              className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
-            >
-              <div data-hscroll-intro className="md:col-span-2 lg:col-span-3">
-                <SectionHeading
-                  eyebrow="Projects"
-                  title="Things I built, |with the numbers to back them."
-                  lede="A selection. Distributed systems first, then low-level, AI and product work."
-                />
-              </div>
-              {featured.map(({ project, area }, i) => (
-                <ProjectCard
-                  key={project.slug}
-                  project={project}
-                  area={area}
-                  index={i}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="hs-only mx-auto mt-8 w-full max-w-6xl items-center gap-4 px-6">
-            <span
-              data-hscroll-counter
-              className="font-label w-16 text-xs tabular-nums text-ed-muted"
-            >
-              {`01 / ${String(featured.length).padStart(2, "0")}`}
-            </span>
-            <span className="relative h-px flex-1 overflow-hidden bg-ed-line">
-              <span className="hs-bar absolute inset-0 bg-gradient-to-r from-[var(--c1)] via-[var(--c2)] to-[var(--c3)]" />
-            </span>
-          </div>
-        </div>
+    <Section id="projects">
+      <SectionHeading title="Selected projects" />
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {featured.map(({ project, area }, i) => (
+          <ProjectCard key={project.slug} project={project} area={area} index={i} />
+        ))}
       </div>
-
-      <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6 sm:pb-32">
-        <div className="mt-8 flex flex-wrap gap-6 lg:mt-24" data-reveal>
-          <TextLink href="/projects">All projects</TextLink>
-          <TextLink href={links.github}>More on GitHub</TextLink>
-        </div>
+      <div className="mt-8 flex flex-wrap gap-6" data-reveal>
+        <TextLink href="/projects">All projects</TextLink>
+        <TextLink href={links.github}>More on GitHub</TextLink>
       </div>
-    </section>
+    </Section>
   );
 }
 
@@ -838,112 +613,36 @@ export function ProjectsSection() {
 /* Writing (deep dives)                                                */
 /* ------------------------------------------------------------------ */
 
-/**
- * Pinned "dive": the futuristic backdrop zooms in as you scroll, the title
- * fades away, and every deep dive rises into view at the same time. FxRuntime
- * drives it ([data-dive]); on small screens, with reduced motion or without
- * JS, it is a normal section with all cards visible and a gently zooming
- * backdrop.
- */
 export function Writing() {
   return (
-    <section id="writing">
-      <div data-dive className="dive relative isolate">
-        <div data-dive-pin className="dive-pin relative">
-          {/* Backdrop: the image, a colour wash and a vignette that deepens as the cards arrive. */}
-          <div aria-hidden className="absolute inset-0 -z-10 overflow-hidden">
-            <div data-dive-bg className="dive-bg absolute inset-0">
-              <Image
-                src="/images/deep-dive-bg.jpg"
-                alt=""
-                fill
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-            <div data-dive-shade className="dive-shade absolute inset-0" />
-          </div>
-
-          <div
-            data-dive-intro
-            className="dive-intro mx-auto w-full max-w-6xl px-4 pt-24 text-center sm:px-6 sm:pt-28"
-          >
-            <p className="font-label fx-eyebrow justify-center text-xs font-medium uppercase tracking-[0.22em] text-white/70">
-              Deep dives
-            </p>
-            <h2 className="font-display mx-auto mt-5 max-w-4xl text-5xl leading-[1.02] text-white sm:text-7xl">
-              Where the deep work{" "}
-              <span className="fx-gradient-text">shows up.</span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/70 sm:text-lg">
-              Engineering write-ups on the hardest problems in my systems:
-              distributed consensus, event-driven pipelines, database
-              concurrency, routing engines and applied AI.
-            </p>
-            <p className="dive-hint font-label mt-10 text-[11px] uppercase tracking-[0.2em] text-white/50">
-              Scroll to dive in ↓
-            </p>
-          </div>
-
-          <div
-            data-dive-cards
-            className="dive-cards mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6"
-          >
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-              {articles.map((article, i) => (
-                <Link
-                  key={article.slug}
-                  href={`/writing/${article.slug}`}
-                  data-tilt="off"
-                  className={`dive-card group/dive relative flex flex-col overflow-hidden rounded-3xl p-6 ${
-                    i < 3 ? "lg:col-span-2" : "lg:col-span-3"
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="font-label rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-[var(--c2)]">
-                      {article.category}
-                    </span>
-                    <span className="font-display fx-gradient-text text-2xl leading-none">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <h3 className="font-display mt-5 text-xl leading-snug text-white sm:text-[1.35rem]">
-                    {article.title}
-                  </h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-white/65">
-                    {article.dek}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {article.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-label rounded-full border border-white/10 px-2 py-0.5 text-[10px] text-white/60"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="mt-auto flex items-center justify-between pt-5 text-sm">
-                    <span className="font-label text-[11px] text-white/45">
-                      {readMinutes(article)} min read
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 font-semibold text-[var(--c2)]">
-                      Read the deep dive
-                      <span
-                        aria-hidden
-                        className="transition-transform duration-300 group-hover/dive:translate-x-1"
-                      >
-                        →
-                      </span>
-                    </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <Section id="writing">
+      <SectionHeading
+        title="Writing"
+        lede="Longer write-ups on consensus, event-driven pipelines, database concurrency, routing and applied ML."
+      />
+      <ul className="-mt-5 divide-y divide-ed-line border-b border-ed-line">
+        {articles.map((article) => (
+          <li key={article.slug} data-reveal>
+            <Link
+              href={`/writing/${article.slug}`}
+              className="group/w grid gap-1 py-5 sm:grid-cols-[1fr_auto] sm:gap-8"
+            >
+              <div>
+                <h3 className="font-semibold leading-snug group-hover/w:text-ed-accent group-hover/w:underline group-hover/w:underline-offset-4">
+                  {article.title}
+                </h3>
+                <p className="mt-1 max-w-3xl text-sm leading-relaxed text-ed-muted">
+                  {article.dek}
+                </p>
+              </div>
+              <p className="font-label text-xs text-ed-faint sm:pt-1 sm:text-right">
+                {article.category} · {readMinutes(article)} min
+              </p>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Section>
   );
 }
 
@@ -954,23 +653,20 @@ export function Writing() {
 export function Research() {
   return (
     <Section id="research">
-      <SectionHeading
-        eyebrow="Research"
-        title="Where the deeper work |is written down."
-      />
+      <SectionHeading title="Publications" />
       <ol className="grid gap-4 md:grid-cols-2">
         {publications.map((pub, i) => (
           <li
             key={pub.title}
-            className="fx-card rounded-3xl p-7"
+            className="fx-card rounded-lg p-5"
             data-reveal
             style={delay(i % 2)}
           >
             <p className="font-label text-xs text-ed-faint">
-              <span className="fx-gradient-text font-semibold">{pub.year}</span>{" "}
+              <span className="font-semibold text-ed-muted">{pub.year}</span>{" "}
               · {pub.venue}
             </p>
-            <h3 className="font-display mt-4 text-xl leading-snug">
+            <h3 className="mt-2 text-base font-semibold leading-snug">
               {pub.title}
             </h3>
             {pub.note ? (
@@ -990,9 +686,9 @@ export function Research() {
 export function Contact() {
   return (
     <section id="contact">
-      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
         <div
-          className="fx-card relative overflow-hidden rounded-[2rem] p-8 sm:p-16"
+          className="fx-card relative overflow-hidden rounded-lg p-6 sm:p-10"
           data-tilt="off"
           data-reveal
         >
@@ -1008,21 +704,17 @@ export function Contact() {
             className="pointer-events-none absolute -bottom-32 left-1/3 h-80 w-80 hidden rounded-full bg-[var(--c2)] opacity-20 blur-[100px]"
           />
 
-          <p className="font-label fx-eyebrow relative mb-4 text-xs font-medium uppercase tracking-[0.18em] text-ed-muted">
+          <h2 className="font-display relative text-2xl leading-tight sm:text-3xl">
             Contact
-          </p>
-          <h2 className="font-display relative max-w-3xl text-5xl leading-[1] sm:text-7xl">
-            Let&apos;s build something{" "}
-            <span className="fx-gradient-text">reliable.</span>
           </h2>
-          <p className="relative mt-6 max-w-xl text-ed-muted">
+          <p className="relative mt-3 max-w-xl text-ed-muted">
             {profile.availability}
           </p>
-          <div className="relative mt-10 flex flex-wrap gap-3">
+          <div className="relative mt-6 flex flex-wrap gap-3">
             <a
               href={links.email}
-              data-magnetic
-              className="fx-btn-primary rounded-full px-6 py-3 text-sm font-semibold"
+             
+              className="fx-btn-primary rounded-md px-6 py-3 text-sm font-semibold"
             >
               Email me
             </a>
@@ -1030,20 +722,20 @@ export function Contact() {
               href={links.resume}
               target="_blank"
               rel="noreferrer"
-              data-magnetic
-              className="fx-btn-ghost rounded-full px-6 py-3 text-sm font-medium"
+             
+              className="fx-btn-ghost rounded-md px-6 py-3 text-sm font-medium"
             >
               Download resume
             </a>
             <a
               href="/contact"
-              data-magnetic
-              className="fx-btn-ghost rounded-full px-6 py-3 text-sm font-medium"
+             
+              className="fx-btn-ghost rounded-md px-6 py-3 text-sm font-medium"
             >
               Send a message
             </a>
           </div>
-          <dl className="relative mt-14 grid gap-6 border-t border-ed-line pt-8 text-sm sm:grid-cols-3">
+          <dl className="relative mt-10 grid gap-6 border-t border-ed-line pt-8 text-sm sm:grid-cols-3">
             <div>
               <dt className="font-label text-xs text-ed-faint">Location</dt>
               <dd className="mt-1">{profile.location}</dd>

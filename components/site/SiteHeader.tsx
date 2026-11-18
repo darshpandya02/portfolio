@@ -54,12 +54,12 @@ export default function SiteHeader() {
               <li key={item.href}>
                 <a
                   href={to(item.href)}
-                  className="group/nav relative rounded-full px-3 py-1.5 text-sm text-ed-muted transition-colors hover:text-ed-ink"
+                  className="group/nav relative rounded-md px-3 py-1.5 text-sm text-ed-muted transition-colors hover:text-ed-ink"
                 >
                   {item.label}
                   <span
                     aria-hidden
-                    className="absolute inset-x-3 -bottom-0.5 h-px origin-center scale-x-0 bg-gradient-to-r from-[var(--c1)] to-[var(--c2)] transition-transform duration-300 group-hover/nav:scale-x-100"
+                    className="absolute inset-x-3 -bottom-0.5 h-px origin-center scale-x-0 bg-ed-ink transition-transform duration-300 group-hover/nav:scale-x-100"
                   />
                 </a>
               </li>
@@ -70,18 +70,14 @@ export default function SiteHeader() {
         <div className="ml-auto flex items-center gap-2 md:ml-2">
           <Link
             href="/play"
-            className="play-cta font-label relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold"
+            className="font-label fx-btn-ghost hidden rounded-md px-3 py-1.5 text-xs text-ed-muted hover:text-ed-ink sm:inline-block"
             title="Play my portfolio as a game"
           >
-            <span aria-hidden className="play-cta-ping" />
-            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
-              <path d="M2 1l7 4-7 4z" fill="currentColor" />
-            </svg>
-            Play
+            play
           </Link>
           <Link
             href="/terminal"
-            className="font-label fx-btn-ghost hidden rounded-full px-3 py-1.5 text-xs text-ed-muted hover:text-ed-ink sm:inline-block"
+            className="font-label fx-btn-ghost hidden rounded-md px-3 py-1.5 text-xs text-ed-muted hover:text-ed-ink sm:inline-block"
             title="The terminal version of this site"
           >
             &gt;_ terminal
@@ -90,14 +86,13 @@ export default function SiteHeader() {
             href={links.resume}
             target="_blank"
             rel="noreferrer"
-            data-magnetic
-            className="fx-btn-primary rounded-full px-4 py-1.5 text-sm font-semibold"
+            className="fx-btn-primary rounded-md px-4 py-1.5 text-sm font-semibold"
           >
             Resume
           </a>
           <button
             type="button"
-            className="fx-btn-ghost grid h-9 w-9 place-items-center rounded-full md:hidden"
+            className="fx-btn-ghost grid h-9 w-9 place-items-center rounded-md md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}

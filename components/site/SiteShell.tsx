@@ -1,6 +1,5 @@
 import Backdrop from "@/components/site/Backdrop";
 import FxRuntime from "@/components/site/FxRuntime";
-import PlayNudge from "@/components/site/PlayNudge";
 import SiteHeader from "@/components/site/SiteHeader";
 import TypeLab from "@/components/site/TypeLab";
 import { SiteFooter } from "@/components/site/sections";
@@ -29,7 +28,6 @@ export default function SiteShell({ children }: { children: React.ReactNode }) {
           <TypeLab />
         </SiteFooter>
       </div>
-      <PlayNudge />
     </div>
   );
 }
