@@ -127,7 +127,7 @@ export function Hero() {
             {profile.name}
           </h1>
           <p className="mt-3 text-lg text-ed-muted" data-reveal style={delay(1)}>
-            {current.role} at SPHERE · {profile.location.split(",")[0]}, MA
+            {current.role} at SPHERE · {profile.location.split(",")[0]}, CA
           </p>
 
           <p

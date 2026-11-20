@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     "Distributed Systems",
     "SPHERE Research Infrastructure",
     "Northeastern University",
-    "Boston",
+    "San Francisco",
     "Portfolio",
     "Python",
     "TypeScript",

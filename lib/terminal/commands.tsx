@@ -616,7 +616,7 @@ export const commands: Command[] = [
             {profile.handle}@{profile.host}
           </Line>
           <Line tone="faint">──────────────────────</Line>
-          <Field k="OS">Boston, MA (x86_64)</Field>
+          <Field k="OS">San Francisco, CA (x86_64)</Field>
           <Field k="Host">{profile.company}</Field>
           <Field k="Kernel">{profile.role}</Field>
           <Field k="Uptime">{uptimeString(ctx.bootedAt)} this session</Field>

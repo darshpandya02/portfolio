@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "Resume",
-  description: "Download or read the resume of Darsh Pandya, software engineer in Boston.",
+  description: "Download or read the resume of Darsh Pandya, software engineer in San Francisco.",
   path: "/resume",
 });
 
